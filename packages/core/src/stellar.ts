@@ -1,4 +1,7 @@
+import { randomBytes } from "node:crypto";
 import {
+  Account,
+  Address,
   Asset,
   AuthClawbackEnabledFlag,
   AuthRequiredFlag,
@@ -10,6 +13,7 @@ import {
   Transaction,
   TransactionBuilder,
   rpc,
+  scValToNative,
   xdr,
   type AuthFlag,
 } from "@stellar/stellar-sdk";
@@ -18,7 +22,7 @@ import { PASSPHRASE, RPC_URL } from "./env.js";
 let _server: rpc.Server | undefined;
 export const server = () => (_server ??= new rpc.Server(RPC_URL()));
 
-export type Submitted = { hash: string; ledger: number; envelopeXdr: string };
+export type Submitted = { hash: string; ledger: number; envelopeXdr: string; returnValue?: xdr.ScVal };
 
 async function sendAndPoll(tx: Transaction): Promise<Submitted> {
   const sent = await server().sendTransaction(tx);
@@ -28,7 +32,7 @@ async function sendAndPoll(tx: Transaction): Promise<Submitted> {
   for (let i = 0; i < 60; i++) {
     const res = await server().getTransaction(sent.hash);
     if (res.status === rpc.Api.GetTransactionStatus.SUCCESS) {
-      return { hash: sent.hash, ledger: res.ledger, envelopeXdr: tx.toEnvelope().toXDR("base64") };
+      return { hash: sent.hash, ledger: res.ledger, envelopeXdr: tx.toEnvelope().toXDR("base64"), returnValue: res.returnValue };
     }
     if (res.status === rpc.Api.GetTransactionStatus.FAILED) {
       throw new Error(`transaction ${sent.hash} FAILED: ${res.resultXdr?.toXDR("base64")}`);
@@ -139,4 +143,41 @@ export async function trustline(address: string, asset: Asset): Promise<{ balanc
   const tl = res.entries[0]?.val.trustLine();
   if (!tl) return null;
   return { balance: BigInt(tl.balance().toString()), authorized: (tl.flags() & 1) !== 0 };
+}
+
+/** Upload a wasm and create a contract instance with constructor args. Returns the new contract ID. */
+export async function deployContract(
+  source: Keypair,
+  wasm: Buffer,
+  constructorArgs: xdr.ScVal[] = [],
+): Promise<{ contractId: string; wasmHash: string; tx: Submitted }> {
+  const upload = await submitSoroban(source, Operation.uploadContractWasm({ wasm }));
+  const wasmHash = Buffer.from(upload.returnValue!.bytes());
+  const tx = await submitSoroban(
+    source,
+    Operation.createCustomContract({
+      address: new Address(source.publicKey()),
+      wasmHash,
+      constructorArgs,
+      salt: randomBytes(32),
+    }),
+  );
+  return { contractId: Address.fromScVal(tx.returnValue!).toString(), wasmHash: wasmHash.toString("hex"), tx };
+}
+
+/** Invoke a contract function; the source account signs and covers any source-account auth. */
+export const invoke = (source: Keypair, contractId: string, fn: string, args: xdr.ScVal[] = []) =>
+  submitSoroban(source, Operation.invokeContractFunction({ contract: contractId, function: fn, args }));
+
+/** Read-only call via simulation. */
+export async function view(contractId: string, fn: string, args: xdr.ScVal[] = []): Promise<unknown> {
+  const src = await server().getAccount(Keypair.random().publicKey()).catch(() => null);
+  const account = src ?? new Account(Keypair.random().publicKey(), "0");
+  const tx = new TransactionBuilder(account, { fee: BASE_FEE, networkPassphrase: PASSPHRASE() })
+    .addOperation(Operation.invokeContractFunction({ contract: contractId, function: fn, args }))
+    .setTimeout(30)
+    .build();
+  const sim = await server().simulateTransaction(tx);
+  if (rpc.Api.isSimulationError(sim)) throw new Error(sim.error);
+  return sim.result ? scValToNative(sim.result.retval) : undefined;
 }
