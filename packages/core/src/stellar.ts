@@ -126,3 +126,17 @@ export function memoHashFromEnvelope(envelopeXdr: string): string | null {
   if (tx.memo.type !== "hash" || !tx.memo.value) return null;
   return Buffer.from(tx.memo.value as Buffer).toString("hex");
 }
+
+/** Trustline state for (account, asset), or null when no trustline exists. Balance in base units (7 decimals). */
+export async function trustline(address: string, asset: Asset): Promise<{ balance: bigint; authorized: boolean } | null> {
+  const key = xdr.LedgerKey.trustline(
+    new xdr.LedgerKeyTrustLine({
+      accountId: Keypair.fromPublicKey(address).xdrAccountId(),
+      asset: asset.toTrustLineXDRObject(),
+    }),
+  );
+  const res = await server().getLedgerEntries(key);
+  const tl = res.entries[0]?.val.trustLine();
+  if (!tl) return null;
+  return { balance: BigInt(tl.balance().toString()), authorized: (tl.flags() & 1) !== 0 };
+}
