@@ -6,3 +6,4 @@ dist/
 data/store/*
 !data/store/.gitkeep
 .DS_Store
+apps/dashboard/public/public-store.json
