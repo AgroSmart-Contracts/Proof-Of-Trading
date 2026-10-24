@@ -1,0 +1,8 @@
+.env
+node_modules/
+target/
+dist/
+.next/
+data/store/*
+!data/store/.gitkeep
+.DS_Store
