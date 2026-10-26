@@ -8,7 +8,15 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["packages/*/src", "packages/*/test", "scripts"]
+  "include": [
+    "packages/*/src",
+    "packages/*/test",
+    "scripts"
+  ]
 }
