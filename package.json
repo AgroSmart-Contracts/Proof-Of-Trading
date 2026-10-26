@@ -2,7 +2,10 @@
   "name": "proof-of-trading",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json",
@@ -11,7 +14,14 @@
     "samples:check": "tsx scripts/check-samples.ts",
     "attest": "tsx scripts/attest.ts",
     "verify": "tsx scripts/verify.ts",
-    "issue:shares": "tsx scripts/issue-share-assets.ts"
+    "issue:shares": "tsx scripts/issue-share-assets.ts",
+    "offering": "tsx scripts/offering.ts",
+    "demo": "tsx scripts/demo.ts",
+    "demo:failure": "tsx scripts/demo-failure.ts",
+    "demo:refund": "tsx scripts/refund-demo.ts",
+    "spike": "tsx scripts/spike.ts",
+    "export": "tsx scripts/export-public.ts",
+    "topup": "tsx scripts/topup-xlm.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
