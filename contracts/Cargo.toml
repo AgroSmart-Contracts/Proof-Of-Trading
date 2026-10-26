@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["share-admin-spike"]
+members = ["share-admin-spike", "offering"]
 
 [workspace.dependencies]
 soroban-sdk = "28"
