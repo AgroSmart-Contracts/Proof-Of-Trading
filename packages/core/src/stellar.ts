@@ -4,6 +4,7 @@ import {
   Address,
   Asset,
   AuthClawbackEnabledFlag,
+  FeeBumpTransaction,
   AuthRequiredFlag,
   AuthRevocableFlag,
   BASE_FEE,
@@ -24,7 +25,7 @@ export const server = () => (_server ??= new rpc.Server(RPC_URL()));
 
 export type Submitted = { hash: string; ledger: number; envelopeXdr: string; returnValue?: xdr.ScVal };
 
-async function sendAndPoll(tx: Transaction): Promise<Submitted> {
+async function sendAndPoll(tx: Transaction | FeeBumpTransaction): Promise<Submitted> {
   const sent = await server().sendTransaction(tx);
   if (sent.status === "ERROR") {
     throw new Error(`sendTransaction ERROR: ${sent.errorResult?.toXDR("base64") ?? "unknown"}`);
@@ -57,16 +58,45 @@ export async function submitClassic(
   return sendAndPoll(tx);
 }
 
-/** Build, simulate (fills footprint + auth for source-account auth), sign and submit one Soroban op. */
+const U32_MAX = 4_294_967_295n;
+
+/**
+ * Build, simulate (fills footprint + auth for source-account auth), sign and submit one Soroban op.
+ * A classic tx fee is a u32 (~429 XLM). Wasm uploads can need more on testnet, because the fee
+ * scales with the module's parsed size. Those go out as a fee bump, whose fee is an i64.
+ */
 export async function submitSoroban(source: Keypair, op: xdr.Operation): Promise<Submitted> {
   const account = await server().getAccount(source.publicKey());
   const tx = new TransactionBuilder(account, { fee: BASE_FEE, networkPassphrase: PASSPHRASE() })
     .addOperation(op)
     .setTimeout(60)
     .build();
-  const prepared = await server().prepareTransaction(tx);
-  prepared.sign(source);
-  return sendAndPoll(prepared);
+  const sim = await server().simulateTransaction(tx);
+  if (rpc.Api.isSimulationError(sim)) throw new Error(sim.error);
+  const resourceFee = BigInt(sim.minResourceFee);
+  if (resourceFee + BigInt(BASE_FEE) <= U32_MAX) {
+    const prepared = rpc.assembleTransaction(tx, sim).build();
+    prepared.sign(source);
+    return sendAndPoll(prepared);
+  }
+  if (sim.result?.auth.length) op.body().invokeHostFunctionOp().auth(sim.result.auth);
+  // The builder would fold the resource fee into the inner u32 fee, so attach sorobanData at the XDR level.
+  const plain = new TransactionBuilder(await server().getAccount(source.publicKey()), {
+    fee: BASE_FEE,
+    networkPassphrase: PASSPHRASE(),
+  })
+    .addOperation(op)
+    .setTimeout(60)
+    .build();
+  const envelope = plain.toEnvelope();
+  envelope.v1().tx().ext(new xdr.TransactionExt(1, sim.transactionData.build()));
+  const inner = new Transaction(envelope, PASSPHRASE());
+  inner.sign(source);
+  // Outer fee = baseFee * (ops + 1) and must cover the resource fee plus inclusion.
+  const baseFee = ((resourceFee + 2n * BigInt(BASE_FEE)) / 2n + 1n).toString();
+  const bump = TransactionBuilder.buildFeeBumpTransaction(source, baseFee, inner, PASSPHRASE());
+  bump.sign(source);
+  return sendAndPoll(bump);
 }
 
 export const deriveSacId = (code: string, issuer: string): string =>
