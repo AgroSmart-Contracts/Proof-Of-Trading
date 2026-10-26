@@ -1,0 +1,1953 @@
+{
+  "generated_at": "2026-10-25T19:07:59.272Z",
+  "shipments": [
+    {
+      "shipment_ref": "SHP-0247",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "commodity": "blueberry",
+      "destination_region": "US",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0258",
+      "commodity": "grape",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0263",
+      "commodity": "avocado",
+      "destination_region": "US",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0270",
+      "commodity": "mango",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0212",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0219",
+      "commodity": "blueberry",
+      "destination_region": "UK",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0224",
+      "commodity": "grape",
+      "destination_region": "US",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0229",
+      "commodity": "asparagus",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0233",
+      "commodity": "blueberry",
+      "destination_region": "ASIA",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0238",
+      "commodity": "avocado",
+      "destination_region": "US",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0241",
+      "commodity": "grape",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": false
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0281",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "epoch": "2026-Q4",
+      "financed": true
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "commodity": "blueberry",
+      "destination_region": "US",
+      "epoch": "2026-Q4",
+      "financed": true
+    }
+  ],
+  "offering_contract": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+  "accounts": {
+    "A": {
+      "role": "investor_a",
+      "public_key": "GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG",
+      "tusdc": "1004130136984"
+    },
+    "B": {
+      "role": "investor_b",
+      "public_key": "GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD",
+      "tusdc": "1002753424656"
+    },
+    "U": {
+      "role": "unapproved",
+      "public_key": "GBF5V63D2QN5QCOLVABLFOSAXNIZIOE6ZRQ5DEWIPYLPOLOTV3IT2HNT",
+      "tusdc": "1000000000000"
+    },
+    "treasury": {
+      "role": "spv_treasury",
+      "public_key": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+      "tusdc": "493116438360"
+    },
+    "issuer": {
+      "role": "issuer",
+      "public_key": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "tusdc": "0"
+    },
+    "registrar": {
+      "role": "attestor",
+      "public_key": "GBI6NQWAPIYVQRHNBPPRPFNDTFOUEWFCI5SGZ3246CKDOJZVDOHTOVTQ",
+      "tusdc": "0"
+    }
+  },
+  "deals": [
+    {
+      "shipment_ref": "SHP-0247",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "face_value_usd": 100000,
+      "term_days": 120,
+      "apy_bps": 1200,
+      "cram_band": "B",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0247",
+        "code": "TM0247",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE",
+        "proof_hash": "64901e64eed610c58f0c731182de00fa1093c0c5158e5aa5b7c41428e3e63d74",
+        "attestation_tx": "88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad",
+        "sac_deploy_tx": "f106cf550b490d85fdb5ed3890233d8c79b7ad27fc2af62bf44acbb3229b8364",
+        "created_at": "2026-10-24T22:34:47.249Z"
+      },
+      "has_offering": true,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "commodity": "blueberry",
+      "destination_region": "US",
+      "face_value_usd": 60000,
+      "term_days": 90,
+      "apy_bps": 1100,
+      "cram_band": "A",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0251",
+        "code": "TM0251",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CDBZJSLOF4CSBIWN6WPV7B5KO5TQAPJT2OCBCEHUKOQVBQUUUU72OXJX",
+        "proof_hash": "9612fccc8f1de9ba1370f05e0757cb05389fa954f55060d102e6f16d2010e461",
+        "attestation_tx": "38cc4ef09771a616c6141d9cf418450d3fb166997b3f8ada17ccbe63c9a81dde",
+        "sac_deploy_tx": "535dfebdc097cfce2452c6f0de3744f815d06dcb8c8577f247d4abe47383ce06",
+        "created_at": "2026-10-24T22:34:52.560Z"
+      },
+      "has_offering": true,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0258",
+      "commodity": "grape",
+      "destination_region": "EU",
+      "face_value_usd": 150000,
+      "term_days": 120,
+      "apy_bps": 1300,
+      "cram_band": "C",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0258",
+        "code": "TM0258",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CA66HDEMZOSMNHPYQZ4CXLDYG7J4JFJ5VZTIA22SYU6GQ7IBIIRCC4C5",
+        "proof_hash": "e7baf5398b4bdf0bbf59290278ef94530680e5a2b9aae194bbaee1342853642f",
+        "attestation_tx": "25fe2ff823789f6d94f78b0b3c69576e30b024d94972f3d32712393f38b2c4b1",
+        "sac_deploy_tx": "e7f39b5a2bc8576f31dc82fee24c2f950a6b684cf81b9376a597f91b5e24a87b",
+        "created_at": "2026-10-24T22:34:57.297Z"
+      },
+      "has_offering": true,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0263",
+      "commodity": "avocado",
+      "destination_region": "US",
+      "face_value_usd": 80000,
+      "term_days": 100,
+      "apy_bps": 1200,
+      "cram_band": "B",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0263",
+        "code": "TM0263",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CB4G37UY7QMZQCHGC57JWE63K5A3OUTI33US6LA2JRQ43UMOM6RCSSG2",
+        "proof_hash": "38a2a124bd18acc0eefefc71355178d6a7a1641a41972d30557b8b7f4348d03e",
+        "attestation_tx": "1307d8004067ce76c4716b6616c49d02aaceef40088e7bb56d8509ca06178b51",
+        "sac_deploy_tx": "a6a9d3da714bc9efc4649d2a24de4bfc080f8d215ef67032e5548328ed6a75f2",
+        "created_at": "2026-10-24T22:35:03.265Z"
+      },
+      "has_offering": false,
+      "stuck": true
+    },
+    {
+      "shipment_ref": "SHP-0270",
+      "commodity": "mango",
+      "destination_region": "EU",
+      "face_value_usd": 45000,
+      "term_days": 90,
+      "apy_bps": 1250,
+      "cram_band": "B",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0270",
+        "code": "TM0270",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CCG2RER3UVIYLDUFAOARFS57RNJ2WQ4W2PEEJL7P6FIZJNEJCC7RJXHD",
+        "proof_hash": "539085193407170fcbaf5b88c767fec4e99e15952654e4c224fdcbb6cd72f393",
+        "attestation_tx": "ae32f1a4ae481fc66e01f1a97176dd9f03eb5e6888aaa1e419937ee1065caff7",
+        "sac_deploy_tx": "52cca40d734d0d7c97555724d1f0eb25ddad405c4103e056d2ad86e25464d4b1",
+        "created_at": "2026-10-24T22:35:07.894Z"
+      },
+      "has_offering": true,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "face_value_usd": 100000,
+      "term_days": 120,
+      "apy_bps": 1200,
+      "cram_band": "B",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0280",
+        "code": "TM0280",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CCQ4VJIEK2PNB2SS7LXD33ZDOPPGK7HA2ON7ZLDUHXNDE3EKTL65T2AQ",
+        "proof_hash": "efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc",
+        "attestation_tx": "80e1c4e227118f2ae7100da035b07baac8e096f51e4f4f28882670a2e407f133",
+        "sac_deploy_tx": "e2b37d93f916d1807d631259022efe097b70afaf91c6d92620d396ca872922be",
+        "created_at": "2026-10-25T14:12:52.930Z"
+      },
+      "has_offering": false,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0281",
+      "commodity": "avocado",
+      "destination_region": "EU",
+      "face_value_usd": 100000,
+      "term_days": 120,
+      "apy_bps": 1200,
+      "cram_band": "B",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0281",
+        "code": "TM0281",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CAJIBZPY7DMDEUXDMU6FWBJRMDQDIOSSNCRWZFWIDMTGYSWDWJUZUR7Y",
+        "proof_hash": "5d49d04e54579dc75d3e8ae966ac15661a5fb05934cc21aae78905eafc377aad",
+        "attestation_tx": "168839a02edc23cff38e6074bca95cb8be7e99534faa3613f1b9301b50020b46",
+        "sac_deploy_tx": "10743aef9278d67e4181dbd469d3c921df58c6da290d396b9a413600802e3503",
+        "created_at": "2026-10-25T14:12:58.120Z"
+      },
+      "has_offering": false,
+      "stuck": false
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "commodity": "blueberry",
+      "destination_region": "US",
+      "face_value_usd": 50000,
+      "term_days": 90,
+      "apy_bps": 1100,
+      "cram_band": "A",
+      "epoch": "2026-Q4",
+      "share": {
+        "shipment_ref": "SHP-0282",
+        "code": "TM0282",
+        "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+        "sac_id": "CCOERLKU7QFBN4TZASPYYJI6OZNHKDGHWL6RZ3MX3THAK77USTWABX3S",
+        "proof_hash": "8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1",
+        "attestation_tx": "73188f542485732766ed6c96d8089576f4cc2fd5887ea45465c0d52c463f0d27",
+        "sac_deploy_tx": "2006e7110d4aabf16501db37496e07a378abf000f1b2998c57c678b64a7b7650",
+        "created_at": "2026-10-25T18:52:37.299Z"
+      },
+      "has_offering": true,
+      "stuck": false
+    }
+  ],
+  "attestations": [
+    {
+      "shipment_ref": "SHP-0247",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0247",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "5593f427f35dc6ca2a08b08875f820b354345408ad3defbee86b9688c0ed815e",
+        "buyer_pseudonym": "b82bdf7c09aba3b6c09304f30337f5e0d14ba9028cbd804935ead37512d8f71f",
+        "customs": {
+          "record_id": "CUS-0247",
+          "record_version": 1,
+          "record_digest": "996ee7a159aef2ad52c3e208a498ab23190ae0148fee6808e1df13364915fea2"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-247"
+        },
+        "insurance": {
+          "assignment_digest": "0ef2435d3ae177d71e99c6c9bb0b2ed3a65d356156750b5983107651ed4e6e4e"
+        },
+        "cram_band": "B"
+      },
+      "proof_hash": "64901e64eed610c58f0c731182de00fa1093c0c5158e5aa5b7c41428e3e63d74",
+      "tx_hash": "88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad",
+      "ledger": 5371388,
+      "arc_stub": true,
+      "created_at": "2026-10-24T22:22:07.335Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0251",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "44bc93184785a1dfaebf02f182ae84ceef8241c8ecb48e9e09299a5f9974f99e",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0251",
+          "record_version": 1,
+          "record_digest": "0598c84141520df690767ed637cb542ea6bc25082604ae7075b594acdd71fdb6"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-251"
+        },
+        "insurance": {
+          "assignment_digest": "6df4f212ca4a44fa29ceb68f68d3a72273afac994eae11b4895fbd6f8f2c2e53"
+        },
+        "cram_band": "A"
+      },
+      "proof_hash": "9612fccc8f1de9ba1370f05e0757cb05389fa954f55060d102e6f16d2010e461",
+      "tx_hash": "38cc4ef09771a616c6141d9cf418450d3fb166997b3f8ada17ccbe63c9a81dde",
+      "ledger": 5371389,
+      "arc_stub": true,
+      "created_at": "2026-10-24T22:22:12.529Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0258",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0258",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "96e4880a51c079acb43df8dd0498fb6e411186e3d4a49f8816e3851c29263468",
+        "buyer_pseudonym": "18371f650b12fe5af03c6df0724f91e7573f5f69e1103afb745ad313ac4eca84",
+        "customs": {
+          "record_id": "CUS-0258",
+          "record_version": 1,
+          "record_digest": "abbe5a894e23478eedbe2e1b7250c29fc089091d6ec61c0dc5ff4b11aab35dd5"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-258"
+        },
+        "insurance": {
+          "assignment_digest": "4c92f5e9a94d02fe93232503f6c4636a1bb37b170b6b32e0a9d0d22fbb2813f3"
+        },
+        "cram_band": "C"
+      },
+      "proof_hash": "e7baf5398b4bdf0bbf59290278ef94530680e5a2b9aae194bbaee1342853642f",
+      "tx_hash": "25fe2ff823789f6d94f78b0b3c69576e30b024d94972f3d32712393f38b2c4b1",
+      "ledger": 5371390,
+      "arc_stub": true,
+      "created_at": "2026-10-24T22:22:17.720Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0263",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0263",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "110efa0c0b8360d59abe1eaa0e9219ab54f3815e05b154f964e9c00ee453c804",
+        "buyer_pseudonym": "0a6c684e8a15bee57276743161b723691c3f006a1a95cadb382fddf901a7d7f3",
+        "customs": {
+          "record_id": "CUS-0263",
+          "record_version": 1,
+          "record_digest": "b0186524464b0733833693d5eb0b2b8fad263623ee997f42029d30693918aa53"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-263"
+        },
+        "insurance": {
+          "assignment_digest": "c045b935d98b88b709c707b1e1588e5f2949cb97a28fe5255c3e0950623b0e9c"
+        },
+        "cram_band": "B"
+      },
+      "proof_hash": "38a2a124bd18acc0eefefc71355178d6a7a1641a41972d30557b8b7f4348d03e",
+      "tx_hash": "1307d8004067ce76c4716b6616c49d02aaceef40088e7bb56d8509ca06178b51",
+      "ledger": 5371391,
+      "arc_stub": true,
+      "created_at": "2026-10-24T22:22:22.698Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0270",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0270",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "9f9366221308a22c9f1553be4cc04ed42226e29d5eb00df5b02bffd41de50353",
+        "buyer_pseudonym": "3d701a0cbfc3512ac9fb4061ea615947491cc3c68e14d5150621f4bacb605850",
+        "customs": {
+          "record_id": "CUS-0270",
+          "record_version": 1,
+          "record_digest": "81fb1bed1d03bab9c6f747271e3595e8d664d888b61bab23149313dfe324a1a1"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-270"
+        },
+        "insurance": {
+          "assignment_digest": "8ad0a059f657cd3fa87a85324347a468d42e1555e7bcb87f955e0d061b082b9a"
+        },
+        "cram_band": "B"
+      },
+      "proof_hash": "539085193407170fcbaf5b88c767fec4e99e15952654e4c224fdcbb6cd72f393",
+      "tx_hash": "ae32f1a4ae481fc66e01f1a97176dd9f03eb5e6888aaa1e419937ee1065caff7",
+      "ledger": 5371392,
+      "arc_stub": true,
+      "created_at": "2026-10-24T22:22:27.809Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0212",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0212",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "e79a5c442e078c36721266966625bc7c0daf34fa4e110faa9d9f69d9a10a6640",
+        "buyer_pseudonym": "b82bdf7c09aba3b6c09304f30337f5e0d14ba9028cbd804935ead37512d8f71f",
+        "customs": {
+          "record_id": "CUS-0212",
+          "record_version": 1,
+          "record_digest": "d8130c4fcd8169f50bf89665cbfb56e514f5353b2405147ea80c319c4cc51980"
+        }
+      },
+      "proof_hash": "1c67fc5be04d6634f15c744dd69e936ee6cfcd7f7d84a2dcc1b78566b1737197",
+      "tx_hash": "b501e4eebf6fec05977b64992a87971c22aa69c9c035148e7e9c8b1bcf58c59b",
+      "ledger": 5371393,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:32.968Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0219",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0219",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "5593f427f35dc6ca2a08b08875f820b354345408ad3defbee86b9688c0ed815e",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0219",
+          "record_version": 1,
+          "record_digest": "d6ce026fb70720ab803cfbf07195cceea936d5ef6e57e5b09de1f741a56a995f"
+        }
+      },
+      "proof_hash": "01b28eb6b8ae248e20accd29f7a33e92f874f63d594603ceefd987a6bf5c99ff",
+      "tx_hash": "fc5c79ca6e0ed103e82f19d599c8307febdc537df09ab23a15327915fed73870",
+      "ledger": 5371394,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:38.012Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0224",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0224",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "44bc93184785a1dfaebf02f182ae84ceef8241c8ecb48e9e09299a5f9974f99e",
+        "buyer_pseudonym": "18371f650b12fe5af03c6df0724f91e7573f5f69e1103afb745ad313ac4eca84",
+        "customs": {
+          "record_id": "CUS-0224",
+          "record_version": 1,
+          "record_digest": "4cc49bb87499f0cf88155511f25b998a13ed35dd84cd609a7b63ff2ceedd8993"
+        }
+      },
+      "proof_hash": "024b9ba2a39baa836027fc3023fd23ff30d4e25c5df152963379dc80842feea4",
+      "tx_hash": "e64026849f886b125786837787e823713acea455371d52a1dbbb29e1ead57c63",
+      "ledger": 5371395,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:43.064Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0229",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0229",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "96e4880a51c079acb43df8dd0498fb6e411186e3d4a49f8816e3851c29263468",
+        "buyer_pseudonym": "0a6c684e8a15bee57276743161b723691c3f006a1a95cadb382fddf901a7d7f3",
+        "customs": {
+          "record_id": "CUS-0229",
+          "record_version": 1,
+          "record_digest": "88ba04942ab7e4bb663c98046b27fffe2b20b32e8780eb00966651ca067350f8"
+        }
+      },
+      "proof_hash": "a328d4ddbb2570a0595be11bc8bf4f679b3a5e06855e24f69a3dba7c1949a26a",
+      "tx_hash": "7f2e060155cddbe3dcb888f1b0e4850be8c2b0274c5c2a9531193c818effaac9",
+      "ledger": 5371396,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:47.287Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0233",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0233",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "110efa0c0b8360d59abe1eaa0e9219ab54f3815e05b154f964e9c00ee453c804",
+        "buyer_pseudonym": "3d701a0cbfc3512ac9fb4061ea615947491cc3c68e14d5150621f4bacb605850",
+        "customs": {
+          "record_id": "CUS-0233",
+          "record_version": 1,
+          "record_digest": "7b74311d6316b5063d005ce8fd8fb37b032300f28f770a51d9c24073ea068d64"
+        }
+      },
+      "proof_hash": "289a479847b3cdb941ae0fc2c9e7cf03d40f3bbba08a38c5ba3d6be2e44a8bc0",
+      "tx_hash": "05953e1e22e1a07392d6aa84488bdfb8feae78c5627dcad8167c9206771cb34d",
+      "ledger": 5371397,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:52.520Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0238",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0238",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "9f9366221308a22c9f1553be4cc04ed42226e29d5eb00df5b02bffd41de50353",
+        "buyer_pseudonym": "b82bdf7c09aba3b6c09304f30337f5e0d14ba9028cbd804935ead37512d8f71f",
+        "customs": {
+          "record_id": "CUS-0238",
+          "record_version": 1,
+          "record_digest": "0fdf071c71dec1426c4f181c8476fe27220f60ee9614c8fad60a95812ef27b38"
+        }
+      },
+      "proof_hash": "0343dcfafbcc8848aaa636967af26e6f0a1251fced15dd4511697d74a9f7623e",
+      "tx_hash": "198ae429a7c29c563030bf866b12fc51fa4adb8cda2b6206d1e7fb7301ceab26",
+      "ledger": 5371398,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:22:57.824Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0241",
+      "event": "shipment_attested",
+      "payload": {
+        "v": 1,
+        "event": "shipment_attested",
+        "shipment_ref": "SHP-0241",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "e79a5c442e078c36721266966625bc7c0daf34fa4e110faa9d9f69d9a10a6640",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0241",
+          "record_version": 1,
+          "record_digest": "2589c85ceb2e35fa6d011fd75f16e55eb70461ccdefaab90885ace63b340748b"
+        }
+      },
+      "proof_hash": "1d06f085e079932faabe0a987fb47418ece6bce2a461000481fb5ba7a89e4ec0",
+      "tx_hash": "4933d3b170c3e9be4798c576f1e716e51215a91cd726d5bf7125b5d8c9274526",
+      "ledger": 5371399,
+      "arc_stub": false,
+      "created_at": "2026-10-24T22:23:03.037Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0270",
+      "event": "outcome",
+      "payload": {
+        "v": 1,
+        "event": "outcome",
+        "shipment_ref": "SHP-0270",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "9f9366221308a22c9f1553be4cc04ed42226e29d5eb00df5b02bffd41de50353",
+        "buyer_pseudonym": "3d701a0cbfc3512ac9fb4061ea615947491cc3c68e14d5150621f4bacb605850",
+        "customs": {
+          "record_id": "CUS-0270",
+          "record_version": 1,
+          "record_digest": "81fb1bed1d03bab9c6f747271e3595e8d664d888b61bab23149313dfe324a1a1"
+        },
+        "outcome": {
+          "code": 1,
+          "amount_collected": "472500000000",
+          "amount_owed": "463869863013",
+          "redemption_confirmation_digest": "63a3f57a54558a239fa74374b7ded2d8547ee44c959efd3cfe70e0d41ee661aa"
+        }
+      },
+      "proof_hash": "48b34b2d640510ea52f90d42a602d9a04a41134d9cc57d050b21646a0ef2efb5",
+      "tx_hash": "1a2875ce8e3f446db0a784c33bf7f2552613ac7536d656c4fccc7592ece6a590",
+      "ledger": 5380953,
+      "arc_stub": false,
+      "created_at": "2026-10-25T11:39:13.075Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "event": "outcome",
+      "payload": {
+        "v": 1,
+        "event": "outcome",
+        "shipment_ref": "SHP-0251",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "44bc93184785a1dfaebf02f182ae84ceef8241c8ecb48e9e09299a5f9974f99e",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0251",
+          "record_version": 1,
+          "record_digest": "0598c84141520df690767ed637cb542ea6bc25082604ae7075b594acdd71fdb6"
+        },
+        "outcome": {
+          "code": 4,
+          "amount_collected": "540000000000",
+          "amount_owed": "616273972602",
+          "redemption_confirmation_digest": "75e63a2247023e9d94f0b359215aeb504930c2f0f9e5b8d35ed7f3553a01e244"
+        }
+      },
+      "proof_hash": "3ec8177f1e1cc5e32845f2926eddb6d5a8ac052e8eaae8cce6f6a26623871ab5",
+      "tx_hash": "33246c5a3bdab4e257d43a8b3f2d88a0e4d79d3a1af6790f18280682cf0ab0c6",
+      "ledger": 5380974,
+      "arc_stub": false,
+      "created_at": "2026-10-25T11:40:58.213Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0247",
+      "event": "outcome",
+      "payload": {
+        "v": 1,
+        "event": "outcome",
+        "shipment_ref": "SHP-0247",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "5593f427f35dc6ca2a08b08875f820b354345408ad3defbee86b9688c0ed815e",
+        "buyer_pseudonym": "b82bdf7c09aba3b6c09304f30337f5e0d14ba9028cbd804935ead37512d8f71f",
+        "customs": {
+          "record_id": "CUS-0247",
+          "record_version": 1,
+          "record_digest": "996ee7a159aef2ad52c3e208a498ab23190ae0148fee6808e1df13364915fea2"
+        },
+        "outcome": {
+          "code": 1,
+          "amount_collected": "1050000000000",
+          "amount_owed": "1039452054794",
+          "redemption_confirmation_digest": "818fad2e59f5a5da419b3ffe090e63ae36223d5c1c71fe8d5de229c79c00f0b9"
+        }
+      },
+      "proof_hash": "102922feddc3d6183664fdbb8852697ad5062dff3d05bf298d79e1591acd5497",
+      "tx_hash": "784d41899a776068e1023361e4dc792ea6fadc3151f9ca21860b36ab45432030",
+      "ledger": 5382585,
+      "arc_stub": false,
+      "created_at": "2026-10-25T13:55:12.227Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0280",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "96e4880a51c079acb43df8dd0498fb6e411186e3d4a49f8816e3851c29263468",
+        "buyer_pseudonym": "3d701a0cbfc3512ac9fb4061ea615947491cc3c68e14d5150621f4bacb605850",
+        "customs": {
+          "record_id": "CUS-0280",
+          "record_version": 1,
+          "record_digest": "11dc1a0b297d4c5e24f6de8120ec32c56f5e458183233accd344870b53d4598d"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-280"
+        },
+        "insurance": {
+          "assignment_digest": "8afe10c4245ebbcc2f323ef802f095cee4df79cefc0f5a90cc050f62485a8158"
+        },
+        "cram_band": "B"
+      },
+      "proof_hash": "efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc",
+      "tx_hash": "80e1c4e227118f2ae7100da035b07baac8e096f51e4f4f28882670a2e407f133",
+      "ledger": 5382795,
+      "arc_stub": true,
+      "created_at": "2026-10-25T14:12:42.406Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0281",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0281",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "110efa0c0b8360d59abe1eaa0e9219ab54f3815e05b154f964e9c00ee453c804",
+        "buyer_pseudonym": "b82bdf7c09aba3b6c09304f30337f5e0d14ba9028cbd804935ead37512d8f71f",
+        "customs": {
+          "record_id": "CUS-0281",
+          "record_version": 1,
+          "record_digest": "cd72b3c143f8fed62c7d975f4b8f2869c1a6159efc73b479f95f645c42905fc0"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-281"
+        },
+        "insurance": {
+          "assignment_digest": "7f88d7ee03cfbd9b9053f43d74d5d694dfe1c328e900e823c4e9731571c41b47"
+        },
+        "cram_band": "B"
+      },
+      "proof_hash": "5d49d04e54579dc75d3e8ae966ac15661a5fb05934cc21aae78905eafc377aad",
+      "tx_hash": "168839a02edc23cff38e6074bca95cb8be7e99534faa3613f1b9301b50020b46",
+      "ledger": 5382796,
+      "arc_stub": true,
+      "created_at": "2026-10-25T14:12:47.826Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "event": "financed_attested",
+      "payload": {
+        "v": 1,
+        "event": "financed_attested",
+        "shipment_ref": "SHP-0282",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "9f9366221308a22c9f1553be4cc04ed42226e29d5eb00df5b02bffd41de50353",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0282",
+          "record_version": 1,
+          "record_digest": "346e2d918cfe0aadf2886a1b817570166f287af32f371d869a9b6ca6ca1100fa"
+        },
+        "arc": {
+          "chain_id": 5042002,
+          "deals_manager": "0xfA3D35C236CFe644786e9B360706eB97CF2836A7",
+          "nft_id": "stub-282"
+        },
+        "insurance": {
+          "assignment_digest": "44d7d8f4118aa5b987dfde8d85fdcdc79cc6e3520be0521c5cb05d7893e1214e"
+        },
+        "cram_band": "A"
+      },
+      "proof_hash": "8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1",
+      "tx_hash": "73188f542485732766ed6c96d8089576f4cc2fd5887ea45465c0d52c463f0d27",
+      "ledger": 5386152,
+      "arc_stub": true,
+      "created_at": "2026-10-25T18:52:27.896Z",
+      "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "event": "outcome",
+      "payload": {
+        "v": 1,
+        "event": "outcome",
+        "shipment_ref": "SHP-0282",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "9f9366221308a22c9f1553be4cc04ed42226e29d5eb00df5b02bffd41de50353",
+        "buyer_pseudonym": "fe96fc970e475cc62fd443048105b67d744cb9507c4e447ca4a2f088e82d3b7a",
+        "customs": {
+          "record_id": "CUS-0282",
+          "record_version": 1,
+          "record_digest": "346e2d918cfe0aadf2886a1b817570166f287af32f371d869a9b6ca6ca1100fa"
+        },
+        "outcome": {
+          "code": 1,
+          "amount_collected": "525000000000",
+          "amount_owed": "513561643835",
+          "redemption_confirmation_digest": "5f17b36c173684beda82104730b886fc0f5382cf7e7c727891627b5540599b6f"
+        }
+      },
+      "proof_hash": "fdad8dd14934cb4b377973b7fe11742167d0bfdf19203b5683f7c2aed56a33db",
+      "tx_hash": "97f8ccb363e9e8cd62ffd2d247cb25668283fbdec290f76a06b50651c64e63aa",
+      "ledger": 5386183,
+      "arc_stub": false,
+      "created_at": "2026-10-25T18:55:02.569Z",
+      "verified": true
+    }
+  ],
+  "tusdc": {
+    "code": "TUSDC",
+    "issuer": "GBV6QFVVWJHJHZUWCZPGEZFEEE74YKLWESZ5QP353V2PDZM3OPB2SVZM",
+    "sac_id": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+  },
+  "shares": [
+    {
+      "shipment_ref": "SHP-0247",
+      "code": "TM0247",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE",
+      "proof_hash": "64901e64eed610c58f0c731182de00fa1093c0c5158e5aa5b7c41428e3e63d74",
+      "attestation_tx": "88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad",
+      "sac_deploy_tx": "f106cf550b490d85fdb5ed3890233d8c79b7ad27fc2af62bf44acbb3229b8364",
+      "created_at": "2026-10-24T22:34:47.249Z"
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "code": "TM0251",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CDBZJSLOF4CSBIWN6WPV7B5KO5TQAPJT2OCBCEHUKOQVBQUUUU72OXJX",
+      "proof_hash": "9612fccc8f1de9ba1370f05e0757cb05389fa954f55060d102e6f16d2010e461",
+      "attestation_tx": "38cc4ef09771a616c6141d9cf418450d3fb166997b3f8ada17ccbe63c9a81dde",
+      "sac_deploy_tx": "535dfebdc097cfce2452c6f0de3744f815d06dcb8c8577f247d4abe47383ce06",
+      "created_at": "2026-10-24T22:34:52.560Z"
+    },
+    {
+      "shipment_ref": "SHP-0258",
+      "code": "TM0258",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CA66HDEMZOSMNHPYQZ4CXLDYG7J4JFJ5VZTIA22SYU6GQ7IBIIRCC4C5",
+      "proof_hash": "e7baf5398b4bdf0bbf59290278ef94530680e5a2b9aae194bbaee1342853642f",
+      "attestation_tx": "25fe2ff823789f6d94f78b0b3c69576e30b024d94972f3d32712393f38b2c4b1",
+      "sac_deploy_tx": "e7f39b5a2bc8576f31dc82fee24c2f950a6b684cf81b9376a597f91b5e24a87b",
+      "created_at": "2026-10-24T22:34:57.297Z"
+    },
+    {
+      "shipment_ref": "SHP-0263",
+      "code": "TM0263",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CB4G37UY7QMZQCHGC57JWE63K5A3OUTI33US6LA2JRQ43UMOM6RCSSG2",
+      "proof_hash": "38a2a124bd18acc0eefefc71355178d6a7a1641a41972d30557b8b7f4348d03e",
+      "attestation_tx": "1307d8004067ce76c4716b6616c49d02aaceef40088e7bb56d8509ca06178b51",
+      "sac_deploy_tx": "a6a9d3da714bc9efc4649d2a24de4bfc080f8d215ef67032e5548328ed6a75f2",
+      "created_at": "2026-10-24T22:35:03.265Z"
+    },
+    {
+      "shipment_ref": "SHP-0270",
+      "code": "TM0270",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CCG2RER3UVIYLDUFAOARFS57RNJ2WQ4W2PEEJL7P6FIZJNEJCC7RJXHD",
+      "proof_hash": "539085193407170fcbaf5b88c767fec4e99e15952654e4c224fdcbb6cd72f393",
+      "attestation_tx": "ae32f1a4ae481fc66e01f1a97176dd9f03eb5e6888aaa1e419937ee1065caff7",
+      "sac_deploy_tx": "52cca40d734d0d7c97555724d1f0eb25ddad405c4103e056d2ad86e25464d4b1",
+      "created_at": "2026-10-24T22:35:07.894Z"
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "code": "TM0280",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CCQ4VJIEK2PNB2SS7LXD33ZDOPPGK7HA2ON7ZLDUHXNDE3EKTL65T2AQ",
+      "proof_hash": "efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc",
+      "attestation_tx": "80e1c4e227118f2ae7100da035b07baac8e096f51e4f4f28882670a2e407f133",
+      "sac_deploy_tx": "e2b37d93f916d1807d631259022efe097b70afaf91c6d92620d396ca872922be",
+      "created_at": "2026-10-25T14:12:52.930Z"
+    },
+    {
+      "shipment_ref": "SHP-0281",
+      "code": "TM0281",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CAJIBZPY7DMDEUXDMU6FWBJRMDQDIOSSNCRWZFWIDMTGYSWDWJUZUR7Y",
+      "proof_hash": "5d49d04e54579dc75d3e8ae966ac15661a5fb05934cc21aae78905eafc377aad",
+      "attestation_tx": "168839a02edc23cff38e6074bca95cb8be7e99534faa3613f1b9301b50020b46",
+      "sac_deploy_tx": "10743aef9278d67e4181dbd469d3c921df58c6da290d396b9a413600802e3503",
+      "created_at": "2026-10-25T14:12:58.120Z"
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "code": "TM0282",
+      "issuer": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "sac_id": "CCOERLKU7QFBN4TZASPYYJI6OZNHKDGHWL6RZ3MX3THAK77USTWABX3S",
+      "proof_hash": "8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1",
+      "attestation_tx": "73188f542485732766ed6c96d8089576f4cc2fd5887ea45465c0d52c463f0d27",
+      "sac_deploy_tx": "2006e7110d4aabf16501db37496e07a378abf000f1b2998c57c678b64a7b7650",
+      "created_at": "2026-10-25T18:52:37.299Z"
+    }
+  ],
+  "offerings": [
+    {
+      "shipment_ref": "SHP-0270",
+      "offering_id": 270,
+      "share_code": "TM0270",
+      "share_sac": "CCG2RER3UVIYLDUFAOARFS57RNJ2WQ4W2PEEJL7P6FIZJNEJCC7RJXHD",
+      "on_chain": {
+        "funded_at": "1792928327",
+        "outcome_code": 1,
+        "p": {
+          "apy_bps": 1250,
+          "cap_shares": "450000000000",
+          "deadline": "1792935482",
+          "proof_hash": "539085193407170fcbaf5b88c767fec4e99e15952654e4c224fdcbb6cd72f393",
+          "share_token": "CCG2RER3UVIYLDUFAOARFS57RNJ2WQ4W2PEEJL7P6FIZJNEJCC7RJXHD",
+          "shipment_ref": "SHP-0270",
+          "term_secs": "7776000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+        },
+        "paid_out": "472500000000",
+        "redeemed_shares": "450000000000",
+        "shares_at_close": "450000000000",
+        "sold_shares": "450000000000",
+        "status": "Distributing",
+        "total_collected": "472500000000",
+        "owed": "463869863013"
+      },
+      "tokens": {
+        "minted": "450000000000",
+        "outstanding": "0",
+        "burned": "450000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 27000,
+          "shares_held": "0",
+          "pct_of_spv": 60,
+          "owed_at_apy": "278321917807",
+          "payout": "27,832.1917807",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "22f2886941112c7bbcc555bcf43031b6ac7644a1264f0b0f28a84d373d5bb055",
+              "hash": "b2f92c696aa65b1fcaa6410b05c4d008bfe7b29c2d87ba75d717fd789849416e",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "c44227a8c6cf8f31d955f44efcec6d8164b4b92ed9b268b04c3e651585a72553"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "eaa586d2890b8c837c61ba31cc0cbe3f4b49053fdd782c568ab2d5098c0226e5"
+            },
+            {
+              "step": "subscribe investor_a 27000",
+              "tx": "22f2886941112c7bbcc555bcf43031b6ac7644a1264f0b0f28a84d373d5bb055"
+            },
+            {
+              "step": "redeem investor_a",
+              "tx": "c5f2867f85a72a7c4996f845a90c770b3baffe9433f81ff79218f71fca8e21f7"
+            }
+          ]
+        },
+        "B": {
+          "subscribed_usd": 18000,
+          "shares_held": "0",
+          "pct_of_spv": 40,
+          "owed_at_apy": "185547945205",
+          "payout": "18,554.7945205",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "a7d4ca57e69962d2a62ce73e6bb9a6697f594f0e570a7c1a016cacc7f3d2a1c0",
+              "hash": "27f7b1694e0aa648d9c6de24d422fb8c71e60c010bea3d4572995f58cc3f1471",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_b",
+              "tx": "fe7015788f849c6471bd3c335c88f68ea4e858acfb60a582fdfc2e6571139f1c"
+            },
+            {
+              "step": "approve investor_b",
+              "tx": "7e9ba5b607204fd7d4272136937ee18829850e38377411599b0acd605a4c846a"
+            },
+            {
+              "step": "subscribe investor_b 18000",
+              "tx": "a7d4ca57e69962d2a62ce73e6bb9a6697f594f0e570a7c1a016cacc7f3d2a1c0"
+            },
+            {
+              "step": "redeem investor_b",
+              "tx": "3f137203a12b6e921c5db8c7aca1ca9f6433a0ae9edf74eb180a4c28989ae56d"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "c1f0124e20fb9f839f1371f5ae1b37b80946d0cab4357c38b7145ee0d22682bc",
+          "at": "2026-10-25T11:38:02.631Z",
+          "detail": {
+            "new_admin": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "302315eddea3fa200f20cfd7e5b027b75c7c0cb94bafe251fbfd7e3dc320cbc6",
+          "at": "2026-10-25T11:38:08.107Z",
+          "detail": {
+            "cap_usd": "45000",
+            "apy_bps": "1250",
+            "term_days": "90",
+            "deadline": "2026-10-25T13:38:02.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "c44227a8c6cf8f31d955f44efcec6d8164b4b92ed9b268b04c3e651585a72553",
+          "at": "2026-10-25T11:38:12.435Z"
+        },
+        {
+          "step": "trustline investor_b",
+          "tx": "fe7015788f849c6471bd3c335c88f68ea4e858acfb60a582fdfc2e6571139f1c",
+          "at": "2026-10-25T11:38:17.883Z"
+        },
+        {
+          "step": "trustline unapproved",
+          "tx": "9ed33209dc1487d96f0b5801858f931cdab1bb5e50c0fd44ff4c57fc8513fd88",
+          "at": "2026-10-25T11:38:22.330Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "eaa586d2890b8c837c61ba31cc0cbe3f4b49053fdd782c568ab2d5098c0226e5",
+          "at": "2026-10-25T11:38:27.771Z"
+        },
+        {
+          "step": "approve investor_b",
+          "tx": "7e9ba5b607204fd7d4272136937ee18829850e38377411599b0acd605a4c846a",
+          "at": "2026-10-25T11:38:33.325Z"
+        },
+        {
+          "step": "subscribe investor_a 27000",
+          "tx": "22f2886941112c7bbcc555bcf43031b6ac7644a1264f0b0f28a84d373d5bb055",
+          "at": "2026-10-25T11:38:37.330Z",
+          "detail": {
+            "agreement_hash": "b2f92c696aa65b1fcaa6410b05c4d008bfe7b29c2d87ba75d717fd789849416e",
+            "shares": "27,000"
+          }
+        },
+        {
+          "step": "subscribe investor_b 18000",
+          "tx": "a7d4ca57e69962d2a62ce73e6bb9a6697f594f0e570a7c1a016cacc7f3d2a1c0",
+          "at": "2026-10-25T11:38:42.785Z",
+          "detail": {
+            "agreement_hash": "27f7b1694e0aa648d9c6de24d422fb8c71e60c010bea3d4572995f58cc3f1471",
+            "shares": "18,000"
+          }
+        },
+        {
+          "step": "fund",
+          "tx": "dc6469ee87c8f7eb2ae689759c788e4adc52b28c7647c83b124f6695ab18ab51",
+          "at": "2026-10-25T11:38:46.996Z"
+        },
+        {
+          "step": "deposit_distribution 47250 outcome 1",
+          "tx": "67815353bcb6ca4824223209dd5d4e1786b49059c555cada6e6a49c3760a8da4",
+          "at": "2026-10-25T11:38:52.316Z"
+        },
+        {
+          "step": "redeem investor_a",
+          "tx": "c5f2867f85a72a7c4996f845a90c770b3baffe9433f81ff79218f71fca8e21f7",
+          "at": "2026-10-25T11:38:57.091Z",
+          "detail": {
+            "shares_burned": "27,000",
+            "payout": "27,832.1917807"
+          }
+        },
+        {
+          "step": "redeem investor_b",
+          "tx": "3f137203a12b6e921c5db8c7aca1ca9f6433a0ae9edf74eb180a4c28989ae56d",
+          "at": "2026-10-25T11:39:02.271Z",
+          "detail": {
+            "shares_burned": "18,000",
+            "payout": "18,554.7945205"
+          }
+        },
+        {
+          "step": "sweep_surplus",
+          "tx": "f421a948d06b9bcebf358fec593475d94e370ba99797d44e47405af0d1b2ac9c",
+          "at": "2026-10-25T11:39:07.904Z",
+          "detail": {
+            "amount": "863.0136988"
+          }
+        },
+        {
+          "step": "outcome attested (code 1)",
+          "tx": "1a2875ce8e3f446db0a784c33bf7f2552613ac7536d656c4fccc7592ece6a590",
+          "at": "2026-10-25T11:39:13.076Z",
+          "detail": {
+            "proof_hash": "48b34b2d640510ea52f90d42a602d9a04a41134d9cc57d050b21646a0ef2efb5"
+          }
+        }
+      ]
+    },
+    {
+      "shipment_ref": "SHP-0251",
+      "offering_id": 251,
+      "share_code": "TM0251",
+      "share_sac": "CDBZJSLOF4CSBIWN6WPV7B5KO5TQAPJT2OCBCEHUKOQVBQUUUU72OXJX",
+      "on_chain": {
+        "funded_at": "1792928437",
+        "outcome_code": 4,
+        "p": {
+          "apy_bps": 1100,
+          "cap_shares": "600000000000",
+          "deadline": "1792935592",
+          "proof_hash": "9612fccc8f1de9ba1370f05e0757cb05389fa954f55060d102e6f16d2010e461",
+          "share_token": "CDBZJSLOF4CSBIWN6WPV7B5KO5TQAPJT2OCBCEHUKOQVBQUUUU72OXJX",
+          "shipment_ref": "SHP-0251",
+          "term_secs": "7776000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+        },
+        "paid_out": "540000000000",
+        "redeemed_shares": "600000000000",
+        "shares_at_close": "600000000000",
+        "sold_shares": "600000000000",
+        "status": "Distributing",
+        "total_collected": "540000000000",
+        "owed": "616273972602"
+      },
+      "tokens": {
+        "minted": "600000000000",
+        "outstanding": "0",
+        "burned": "600000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 36000,
+          "shares_held": "0",
+          "pct_of_spv": 60,
+          "owed_at_apy": "369764383561",
+          "payout": "32,400",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "b2c83c02df56d8760c7aeb5fd5a03e2f7fe18a2a79ca80e1d6bd9f2b088ba615",
+              "hash": "b57bb2234f00c54ad1ba911ea11a90ab3a7367e36f146ac564bc81f13595da10",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "0cb90e25b6812c48fae9be996e337bf5ac47c6bc4754d0419c21bdf795fb091f"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "d4f47d3661e0959cbca4d8bc6ea9ac5e5b038222d4b4d15a263089d90ecf153e"
+            },
+            {
+              "step": "subscribe investor_a 36000",
+              "tx": "b2c83c02df56d8760c7aeb5fd5a03e2f7fe18a2a79ca80e1d6bd9f2b088ba615"
+            },
+            {
+              "step": "redeem investor_a",
+              "tx": "d565cacd2c76b83d8f6a0dc14997fa9a12c448b510adc4865b2ea63ee2840cc6"
+            }
+          ]
+        },
+        "B": {
+          "subscribed_usd": 24000,
+          "shares_held": "0",
+          "pct_of_spv": 40,
+          "owed_at_apy": "246509589040",
+          "payout": "21,600",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "46908996521405b43679c971664c9e307fe5baa797c4d7e957320181a4acf300",
+              "hash": "ca1e3dae1eeac1759ae8a31311c206d8f3249192725e19740bb3996255c1a4ae",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_b",
+              "tx": "a3df0957a634d8bde1fb809a9c6adee410105d0ae6d46576ef65adbe613ded9a"
+            },
+            {
+              "step": "approve investor_b",
+              "tx": "ad5e04190da9694db0d43ae0bf90dfe223c186f93ee6039e493429370890197e"
+            },
+            {
+              "step": "subscribe investor_b 24000",
+              "tx": "46908996521405b43679c971664c9e307fe5baa797c4d7e957320181a4acf300"
+            },
+            {
+              "step": "redeem investor_b",
+              "tx": "b744cd9fc8babb21eee0edac4bbffb45879ef4d39edb457efce509553b228f68"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "344ef2c935de08ec9924d9de16d9c2b1010eec277e9fdc97e52e1b0b7e7c69f8",
+          "at": "2026-10-25T11:39:52.946Z",
+          "detail": {
+            "new_admin": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "f0b4a0480478f81b0f357938b98c61eec98edca84be483a0a247d24c364f535c",
+          "at": "2026-10-25T11:39:57.180Z",
+          "detail": {
+            "cap_usd": "60000",
+            "apy_bps": "1100",
+            "term_days": "90",
+            "deadline": "2026-10-25T13:39:52.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "0cb90e25b6812c48fae9be996e337bf5ac47c6bc4754d0419c21bdf795fb091f",
+          "at": "2026-10-25T11:40:02.159Z"
+        },
+        {
+          "step": "trustline investor_b",
+          "tx": "a3df0957a634d8bde1fb809a9c6adee410105d0ae6d46576ef65adbe613ded9a",
+          "at": "2026-10-25T11:40:08.116Z"
+        },
+        {
+          "step": "trustline unapproved",
+          "tx": "67883dfae0292e4d6848b0e2d78697542727756b5f9209678729a605799d1881",
+          "at": "2026-10-25T11:40:12.494Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "d4f47d3661e0959cbca4d8bc6ea9ac5e5b038222d4b4d15a263089d90ecf153e",
+          "at": "2026-10-25T11:40:17.047Z"
+        },
+        {
+          "step": "approve investor_b",
+          "tx": "ad5e04190da9694db0d43ae0bf90dfe223c186f93ee6039e493429370890197e",
+          "at": "2026-10-25T11:40:22.602Z"
+        },
+        {
+          "step": "subscribe investor_a 36000",
+          "tx": "b2c83c02df56d8760c7aeb5fd5a03e2f7fe18a2a79ca80e1d6bd9f2b088ba615",
+          "at": "2026-10-25T11:40:27.957Z",
+          "detail": {
+            "agreement_hash": "b57bb2234f00c54ad1ba911ea11a90ab3a7367e36f146ac564bc81f13595da10",
+            "shares": "36,000"
+          }
+        },
+        {
+          "step": "subscribe investor_b 24000",
+          "tx": "46908996521405b43679c971664c9e307fe5baa797c4d7e957320181a4acf300",
+          "at": "2026-10-25T11:40:32.100Z",
+          "detail": {
+            "agreement_hash": "ca1e3dae1eeac1759ae8a31311c206d8f3249192725e19740bb3996255c1a4ae",
+            "shares": "24,000"
+          }
+        },
+        {
+          "step": "fund",
+          "tx": "986093fb0a3e8ae8584ec270d770f8f902603d502d743edf54277adcbcd99b06",
+          "at": "2026-10-25T11:40:37.678Z"
+        },
+        {
+          "step": "deposit_distribution 54000 outcome 4",
+          "tx": "1dc7c6badea78ee57035f6cb8c9651e8d2924ae063f22d048eca142188b4b6e5",
+          "at": "2026-10-25T11:40:42.887Z"
+        },
+        {
+          "step": "redeem investor_a",
+          "tx": "d565cacd2c76b83d8f6a0dc14997fa9a12c448b510adc4865b2ea63ee2840cc6",
+          "at": "2026-10-25T11:40:48.306Z",
+          "detail": {
+            "shares_burned": "36,000",
+            "payout": "32,400"
+          }
+        },
+        {
+          "step": "redeem investor_b",
+          "tx": "b744cd9fc8babb21eee0edac4bbffb45879ef4d39edb457efce509553b228f68",
+          "at": "2026-10-25T11:40:52.752Z",
+          "detail": {
+            "shares_burned": "24,000",
+            "payout": "21,600"
+          }
+        },
+        {
+          "step": "outcome attested (code 4)",
+          "tx": "33246c5a3bdab4e257d43a8b3f2d88a0e4d79d3a1af6790f18280682cf0ab0c6",
+          "at": "2026-10-25T11:40:58.214Z",
+          "detail": {
+            "proof_hash": "3ec8177f1e1cc5e32845f2926eddb6d5a8ac052e8eaae8cce6f6a26623871ab5"
+          }
+        }
+      ]
+    },
+    {
+      "shipment_ref": "SHP-0258",
+      "offering_id": 258,
+      "share_code": "TM0258",
+      "share_sac": "CA66HDEMZOSMNHPYQZ4CXLDYG7J4JFJ5VZTIA22SYU6GQ7IBIIRCC4C5",
+      "on_chain": {
+        "funded_at": "0",
+        "outcome_code": 0,
+        "p": {
+          "apy_bps": 1300,
+          "cap_shares": "1500000000000",
+          "deadline": "1792928768",
+          "proof_hash": "e7baf5398b4bdf0bbf59290278ef94530680e5a2b9aae194bbaee1342853642f",
+          "share_token": "CA66HDEMZOSMNHPYQZ4CXLDYG7J4JFJ5VZTIA22SYU6GQ7IBIIRCC4C5",
+          "shipment_ref": "SHP-0258",
+          "term_secs": "10368000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+        },
+        "paid_out": "0",
+        "redeemed_shares": "0",
+        "shares_at_close": "0",
+        "sold_shares": "100000000000",
+        "status": "Refunding",
+        "total_collected": "0",
+        "owed": "0"
+      },
+      "tokens": {
+        "minted": "100000000000",
+        "outstanding": "0",
+        "burned": "100000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 10000,
+          "shares_held": "0",
+          "pct_of_spv": 6.666666666666667,
+          "owed_at_apy": null,
+          "payout": null,
+          "refund": "10,000",
+          "agreements": [
+            {
+              "tx": "202e3ef3d22d2c4110ea5a26a6ee8adf950358e36968ee662c876ddd59778ad5",
+              "hash": "6be3fdf18531042255a40242ca067dfbf3b55d3612c90d3cc75a136fb2be16c2",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "961f9a8e8a982ba4d1f0a01356617aa9f09fe8d7e1af6e19c07ee71a344a166d"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "248fb25b757f84876e2182b9f48f787abb3234361ebd1850aaae936b91a8bd44"
+            },
+            {
+              "step": "subscribe investor_a 10000",
+              "tx": "202e3ef3d22d2c4110ea5a26a6ee8adf950358e36968ee662c876ddd59778ad5"
+            },
+            {
+              "step": "refund investor_a",
+              "tx": "f5631fc129e8ad998ddfafa606e975dc5de8e848763d4d21ea1f3493dd67cfa6"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "2edc550969a0bd96656de22e4cb7fb7737970162426f0f07bf6b6d45ffd2c7a9",
+          "at": "2026-10-25T11:41:08.059Z",
+          "detail": {
+            "new_admin": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "f87463ff8b978d9e82019444d3c849e53acda603d4d8512718c212cc813c689a",
+          "at": "2026-10-25T11:41:12.158Z",
+          "detail": {
+            "cap_usd": "150000",
+            "apy_bps": "1300",
+            "term_days": "120",
+            "deadline": "2026-10-25T11:46:08.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "961f9a8e8a982ba4d1f0a01356617aa9f09fe8d7e1af6e19c07ee71a344a166d",
+          "at": "2026-10-25T11:41:17.602Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "248fb25b757f84876e2182b9f48f787abb3234361ebd1850aaae936b91a8bd44",
+          "at": "2026-10-25T11:41:22.322Z"
+        },
+        {
+          "step": "subscribe investor_a 10000",
+          "tx": "202e3ef3d22d2c4110ea5a26a6ee8adf950358e36968ee662c876ddd59778ad5",
+          "at": "2026-10-25T11:41:27.658Z",
+          "detail": {
+            "agreement_hash": "6be3fdf18531042255a40242ca067dfbf3b55d3612c90d3cc75a136fb2be16c2",
+            "shares": "10,000"
+          }
+        },
+        {
+          "step": "start_refunds",
+          "tx": "1a9b4a29f2113e5148b004911f8ddb3a9cac7228499a8cbc41ac7f8143f53286",
+          "at": "2026-10-25T11:46:47.121Z"
+        },
+        {
+          "step": "refund investor_a",
+          "tx": "f5631fc129e8ad998ddfafa606e975dc5de8e848763d4d21ea1f3493dd67cfa6",
+          "at": "2026-10-25T11:46:52.084Z",
+          "detail": {
+            "usdc": "10,000"
+          }
+        }
+      ]
+    },
+    {
+      "shipment_ref": "SHP-0247",
+      "offering_id": 247,
+      "share_code": "TM0247",
+      "share_sac": "CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE",
+      "on_chain": {
+        "funded_at": "1792936487",
+        "outcome_code": 1,
+        "p": {
+          "apy_bps": 1200,
+          "cap_shares": "1000000000000",
+          "deadline": "1792943643",
+          "proof_hash": "64901e64eed610c58f0c731182de00fa1093c0c5158e5aa5b7c41428e3e63d74",
+          "share_token": "CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE",
+          "shipment_ref": "SHP-0247",
+          "term_secs": "10368000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+        },
+        "paid_out": "1050000000000",
+        "redeemed_shares": "1000000000000",
+        "shares_at_close": "1000000000000",
+        "sold_shares": "1000000000000",
+        "status": "Distributing",
+        "total_collected": "1050000000000",
+        "owed": "1039452054794"
+      },
+      "tokens": {
+        "minted": "1000000000000",
+        "outstanding": "0",
+        "burned": "1000000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 60000,
+          "shares_held": "0",
+          "pct_of_spv": 60,
+          "owed_at_apy": "623671232876",
+          "payout": "62,367.1232876",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99",
+              "hash": "e8c081c98992dd9b6b3b762a5760198995c7ad41af657dfadc771bf08fbfb35d",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "cfb5c397c3e7e0cbf6376f7837480ab1e09c2198d0c0d90928b1a13e1e91f68a"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "cd837b5d44d5bd395a78638fc42b8c044b372b1ca04ef1a296f8b6925a421ffa"
+            },
+            {
+              "step": "subscribe investor_a 60000",
+              "tx": "e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99"
+            },
+            {
+              "step": "redeem investor_a",
+              "tx": "fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc"
+            }
+          ]
+        },
+        "B": {
+          "subscribed_usd": 40000,
+          "shares_held": "0",
+          "pct_of_spv": 40,
+          "owed_at_apy": "415780821917",
+          "payout": "41,578.0821917",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "532e6b070f6fca891f46100550329f79df3e636789b187650d0e4b2039fc0ecb",
+              "hash": "076957a406531b556290b4279882eed8f89b4742c79be34e487691296f064ed0",
+              "text": null
+            }
+          ],
+          "certificates": [],
+          "txs": [
+            {
+              "step": "trustline investor_b",
+              "tx": "fc181fa06a9c77ed2224f8c44adacfba8ce78dbae5f3b4f616ff36cf2b10fb35"
+            },
+            {
+              "step": "approve investor_b",
+              "tx": "a969da474f746a31c445dbafc718fc544813b03380613c7647f510d5b115164d"
+            },
+            {
+              "step": "subscribe investor_b 40000",
+              "tx": "532e6b070f6fca891f46100550329f79df3e636789b187650d0e4b2039fc0ecb"
+            },
+            {
+              "step": "redeem investor_b",
+              "tx": "ccf1ad042f9ed269cd2f1789ddb02c4f5f600f05b3232570968cb0d18b5a7a77"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "2e75d825535503709cd484f675eff29e91e6154db120e45aa254e6f666900858",
+          "at": "2026-10-25T13:54:03.182Z",
+          "detail": {
+            "new_admin": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "c86fdc7a69d72be136c94615eab62f1030f849447b750eaef997bfe455e38bd7",
+          "at": "2026-10-25T13:54:07.300Z",
+          "detail": {
+            "cap_usd": "100000",
+            "apy_bps": "1200",
+            "term_days": "120",
+            "deadline": "2026-10-25T15:54:03.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "cfb5c397c3e7e0cbf6376f7837480ab1e09c2198d0c0d90928b1a13e1e91f68a",
+          "at": "2026-10-25T13:54:12.406Z"
+        },
+        {
+          "step": "trustline investor_b",
+          "tx": "fc181fa06a9c77ed2224f8c44adacfba8ce78dbae5f3b4f616ff36cf2b10fb35",
+          "at": "2026-10-25T13:54:17.387Z"
+        },
+        {
+          "step": "trustline unapproved",
+          "tx": "54dd82063b2acf7ec0ccff73dc72b63ddf11a0122f77a979ad4362f70232f6f5",
+          "at": "2026-10-25T13:54:22.477Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "cd837b5d44d5bd395a78638fc42b8c044b372b1ca04ef1a296f8b6925a421ffa",
+          "at": "2026-10-25T13:54:27.483Z"
+        },
+        {
+          "step": "approve investor_b",
+          "tx": "a969da474f746a31c445dbafc718fc544813b03380613c7647f510d5b115164d",
+          "at": "2026-10-25T13:54:32.234Z"
+        },
+        {
+          "step": "subscribe investor_a 60000",
+          "tx": "e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99",
+          "at": "2026-10-25T13:54:37.613Z",
+          "detail": {
+            "agreement_hash": "e8c081c98992dd9b6b3b762a5760198995c7ad41af657dfadc771bf08fbfb35d",
+            "shares": "60,000"
+          }
+        },
+        {
+          "step": "subscribe investor_b 40000",
+          "tx": "532e6b070f6fca891f46100550329f79df3e636789b187650d0e4b2039fc0ecb",
+          "at": "2026-10-25T13:54:42.621Z",
+          "detail": {
+            "agreement_hash": "076957a406531b556290b4279882eed8f89b4742c79be34e487691296f064ed0",
+            "shares": "40,000"
+          }
+        },
+        {
+          "step": "fund",
+          "tx": "5fd00fa661bc9782ec8bc7bf4952a658892c1cf751ce9ea1cb90ab15e8b0eaae",
+          "at": "2026-10-25T13:54:47.729Z"
+        },
+        {
+          "step": "deposit_distribution 105000 outcome 1",
+          "tx": "127fafb6262c1f6def0661eb077aa6a66e7a5de9472cd574adf9c11301b9c36d",
+          "at": "2026-10-25T13:54:52.672Z"
+        },
+        {
+          "step": "redeem investor_a",
+          "tx": "fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc",
+          "at": "2026-10-25T13:54:58.121Z",
+          "detail": {
+            "shares_burned": "60,000",
+            "payout": "62,367.1232876"
+          }
+        },
+        {
+          "step": "redeem investor_b",
+          "tx": "ccf1ad042f9ed269cd2f1789ddb02c4f5f600f05b3232570968cb0d18b5a7a77",
+          "at": "2026-10-25T13:55:02.834Z",
+          "detail": {
+            "shares_burned": "40,000",
+            "payout": "41,578.0821917"
+          }
+        },
+        {
+          "step": "sweep_surplus",
+          "tx": "9b458a45bccc16d418713d962da9a1864a1edf961a9eb6d4b7c910db78ba1362",
+          "at": "2026-10-25T13:55:07.946Z",
+          "detail": {
+            "amount": "1,054.7945207"
+          }
+        },
+        {
+          "step": "outcome attested (code 1)",
+          "tx": "784d41899a776068e1023361e4dc792ea6fadc3151f9ca21860b36ab45432030",
+          "at": "2026-10-25T13:55:12.230Z",
+          "detail": {
+            "proof_hash": "102922feddc3d6183664fdbb8852697ad5062dff3d05bf298d79e1591acd5497"
+          }
+        }
+      ]
+    },
+    {
+      "shipment_ref": "SHP-0282",
+      "offering_id": 282,
+      "share_code": "TM0282",
+      "share_sac": "CCOERLKU7QFBN4TZASPYYJI6OZNHKDGHWL6RZ3MX3THAK77USTWABX3S",
+      "on_chain": {
+        "funded_at": "1792954452",
+        "outcome_code": 1,
+        "p": {
+          "apy_bps": 1100,
+          "cap_shares": "500000000000",
+          "deadline": "1792961573",
+          "proof_hash": "8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1",
+          "share_token": "CCOERLKU7QFBN4TZASPYYJI6OZNHKDGHWL6RZ3MX3THAK77USTWABX3S",
+          "shipment_ref": "SHP-0282",
+          "term_secs": "7776000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+        },
+        "paid_out": "525000000000",
+        "redeemed_shares": "500000000000",
+        "shares_at_close": "500000000000",
+        "sold_shares": "500000000000",
+        "status": "Distributing",
+        "total_collected": "525000000000",
+        "owed": "513561643835"
+      },
+      "tokens": {
+        "minted": "500000000000",
+        "outstanding": "0",
+        "burned": "500000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 30000,
+          "shares_held": "0",
+          "pct_of_spv": 60,
+          "owed_at_apy": "308136986301",
+          "payout": "30,813.6986301",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "d8b72fe9fe707bbeb69ac80866bace19fcfa381b93a64a413e1ebe934be3af81",
+              "hash": "55d757e0c6e71770ac15d48555fec9dad6db316c13d28af3c8c257daaeac5f34",
+              "text": "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo, not a legal document)\nSPV: Proof of Trading SPV SHP-0282 (simulated; legal structure under counsel review)\nSubscriber wallet: GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG\nSubscription: 30000 USD (paid in TUSDC) for 30000 ordinary shares at 1.00 USD each\nReturn: fixed 11% APY over 90 days, paid from collections; pro rata if less is collected\nUnderlying: receivable and insurance of shipment SHP-0282; customs attestation proof hash 8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1\nOn-chain receipt: TM0282 tokens (issuer GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F)\nNonce: 4825e6cf27af3cf1\n"
+            }
+          ],
+          "certificates": [
+            {
+              "tx": "f9a5e5bc85a129c9780a1a34629b907670f2de0a7cdfdc54818d55194a7add5f",
+              "hash": "c9f91fcb29d9b3b63c7cde23aa83bf2ce0ef7ea1934453eeb2cca4806001ae4f",
+              "entry": "SHP-0282-001",
+              "text": "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo, not a legal document)\nIssuer: Proof of Trading SPV SHP-0282 (simulated)\nRegister entry: SHP-0282-001\nRegistered holder: GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG\nShares: 30000 ordinary shares, fully paid (1.00 USD each)\nSubscription agreement sha256: 55d757e0c6e71770ac15d48555fec9dad6db316c13d28af3c8c257daaeac5f34\nOn-chain receipt: TM0282 tokens minted in subscription tx d8b72fe9fe707bbeb69ac80866bace19fcfa381b93a64a413e1ebe934be3af81\nIssued: 2026-10-25T18:53:43.087Z\n"
+            }
+          ],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "a74409dcd4e504564398850dd5bfb4159243b3555144803b0ae2acda837c614c"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "575fb559b4a23672495aa7b117bd4797399e7d4b0ca02f207dadd2d8df402536"
+            },
+            {
+              "step": "subscribe investor_a 30000",
+              "tx": "d8b72fe9fe707bbeb69ac80866bace19fcfa381b93a64a413e1ebe934be3af81"
+            },
+            {
+              "step": "certificate investor_a",
+              "tx": "f9a5e5bc85a129c9780a1a34629b907670f2de0a7cdfdc54818d55194a7add5f"
+            },
+            {
+              "step": "redeem investor_a",
+              "tx": "51c21d990731690330126d5077425b645e945e634d19e5ac665ea23c2d7fa116"
+            }
+          ]
+        },
+        "B": {
+          "subscribed_usd": 20000,
+          "shares_held": "0",
+          "pct_of_spv": 40,
+          "owed_at_apy": "205424657534",
+          "payout": "20,542.4657534",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "ea680c0b910000c10bcbb3621344c87a5b87d35e9ef0cf02775acf8077d2cc25",
+              "hash": "f0685febe7bf5234e52d2bc518b770884c099bcd3de791d8aebe53b1c96dd9d0",
+              "text": "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo, not a legal document)\nSPV: Proof of Trading SPV SHP-0282 (simulated; legal structure under counsel review)\nSubscriber wallet: GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD\nSubscription: 20000 USD (paid in TUSDC) for 20000 ordinary shares at 1.00 USD each\nReturn: fixed 11% APY over 90 days, paid from collections; pro rata if less is collected\nUnderlying: receivable and insurance of shipment SHP-0282; customs attestation proof hash 8ec9377371ce26a5f044416497aea3e9d9ead45075859c8723b18af6d45ac6e1\nOn-chain receipt: TM0282 tokens (issuer GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F)\nNonce: 01a4b29297de4667\n"
+            }
+          ],
+          "certificates": [
+            {
+              "tx": "02d2013857ed6e1a9f2ad804356efb46580b73d8a45163d8038f717edbb9f9bf",
+              "hash": "29b506f9ddafbd0363f3c7eafddcc64ba4893cd490b61fb62327d67d61dba70b",
+              "entry": "SHP-0282-002",
+              "text": "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo, not a legal document)\nIssuer: Proof of Trading SPV SHP-0282 (simulated)\nRegister entry: SHP-0282-002\nRegistered holder: GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD\nShares: 20000 ordinary shares, fully paid (1.00 USD each)\nSubscription agreement sha256: f0685febe7bf5234e52d2bc518b770884c099bcd3de791d8aebe53b1c96dd9d0\nOn-chain receipt: TM0282 tokens minted in subscription tx ea680c0b910000c10bcbb3621344c87a5b87d35e9ef0cf02775acf8077d2cc25\nIssued: 2026-10-25T18:53:57.967Z\n"
+            }
+          ],
+          "txs": [
+            {
+              "step": "trustline investor_b",
+              "tx": "4969f01f5eee5328bc7502f6e992b8feaa22a42eee6d0d3544f50884a14bbc1a"
+            },
+            {
+              "step": "approve investor_b",
+              "tx": "3371834025d94570ed98ba8847666d09ffe986763ef12792723ddd335a8286e5"
+            },
+            {
+              "step": "subscribe investor_b 20000",
+              "tx": "ea680c0b910000c10bcbb3621344c87a5b87d35e9ef0cf02775acf8077d2cc25"
+            },
+            {
+              "step": "certificate investor_b",
+              "tx": "02d2013857ed6e1a9f2ad804356efb46580b73d8a45163d8038f717edbb9f9bf"
+            },
+            {
+              "step": "redeem investor_b",
+              "tx": "88b510c4eb51c3077bf81ec356b54d983768ae76403fe077e15907d6840c5025"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "a3f3b2415b5d71dadf838ea4575025e84740a88d88d9c46b604344ca0f7a45ba",
+          "at": "2026-10-25T18:52:52.510Z",
+          "detail": {
+            "new_admin": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "c94a75050aa08dbd7fdc2982781c2400f2467c697dd1b3f396c08d28fd438bf9",
+          "at": "2026-10-25T18:52:58.134Z",
+          "detail": {
+            "cap_usd": "50000",
+            "apy_bps": "1100",
+            "term_days": "90",
+            "deadline": "2026-10-25T20:52:53.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "a74409dcd4e504564398850dd5bfb4159243b3555144803b0ae2acda837c614c",
+          "at": "2026-10-25T18:53:07.405Z"
+        },
+        {
+          "step": "trustline investor_b",
+          "tx": "4969f01f5eee5328bc7502f6e992b8feaa22a42eee6d0d3544f50884a14bbc1a",
+          "at": "2026-10-25T18:53:13.059Z"
+        },
+        {
+          "step": "trustline unapproved",
+          "tx": "abfa47304e5702a0f17a530be70c94642182eaa9abc8f17a8df220edd26ea3a7",
+          "at": "2026-10-25T18:53:18.155Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "575fb559b4a23672495aa7b117bd4797399e7d4b0ca02f207dadd2d8df402536",
+          "at": "2026-10-25T18:53:22.476Z"
+        },
+        {
+          "step": "approve investor_b",
+          "tx": "3371834025d94570ed98ba8847666d09ffe986763ef12792723ddd335a8286e5",
+          "at": "2026-10-25T18:53:32.401Z"
+        },
+        {
+          "step": "subscribe investor_a 30000",
+          "tx": "d8b72fe9fe707bbeb69ac80866bace19fcfa381b93a64a413e1ebe934be3af81",
+          "at": "2026-10-25T18:53:43.085Z",
+          "detail": {
+            "agreement_hash": "55d757e0c6e71770ac15d48555fec9dad6db316c13d28af3c8c257daaeac5f34",
+            "agreement_file": "SHP-0282-investor_a-1792954420010.txt",
+            "shares": "30,000"
+          }
+        },
+        {
+          "step": "certificate investor_a",
+          "tx": "f9a5e5bc85a129c9780a1a34629b907670f2de0a7cdfdc54818d55194a7add5f",
+          "at": "2026-10-25T18:53:47.386Z",
+          "detail": {
+            "certificate_hash": "c9f91fcb29d9b3b63c7cde23aa83bf2ce0ef7ea1934453eeb2cca4806001ae4f",
+            "certificate_file": "SHP-0282-001-investor_a.txt",
+            "register_entry": "SHP-0282-001"
+          }
+        },
+        {
+          "step": "subscribe investor_b 20000",
+          "tx": "ea680c0b910000c10bcbb3621344c87a5b87d35e9ef0cf02775acf8077d2cc25",
+          "at": "2026-10-25T18:53:57.966Z",
+          "detail": {
+            "agreement_hash": "f0685febe7bf5234e52d2bc518b770884c099bcd3de791d8aebe53b1c96dd9d0",
+            "agreement_file": "SHP-0282-investor_b-1792954432570.txt",
+            "shares": "20,000"
+          }
+        },
+        {
+          "step": "certificate investor_b",
+          "tx": "02d2013857ed6e1a9f2ad804356efb46580b73d8a45163d8038f717edbb9f9bf",
+          "at": "2026-10-25T18:54:03.078Z",
+          "detail": {
+            "certificate_hash": "29b506f9ddafbd0363f3c7eafddcc64ba4893cd490b61fb62327d67d61dba70b",
+            "certificate_file": "SHP-0282-002-investor_b.txt",
+            "register_entry": "SHP-0282-002"
+          }
+        },
+        {
+          "step": "fund",
+          "tx": "050504702f82a564330904c379dab476bf505269ac4b9c8d2716e4f6dc294011",
+          "at": "2026-10-25T18:54:12.630Z"
+        },
+        {
+          "step": "deposit_distribution 52500 outcome 1",
+          "tx": "6653c7e5d58e366b50bfc5703a6410d1ca0056353f22fd26882c4c274e6aeddd",
+          "at": "2026-10-25T18:54:22.769Z"
+        },
+        {
+          "step": "redeem investor_a",
+          "tx": "51c21d990731690330126d5077425b645e945e634d19e5ac665ea23c2d7fa116",
+          "at": "2026-10-25T18:54:32.505Z",
+          "detail": {
+            "shares_burned": "30,000",
+            "payout": "30,813.6986301"
+          }
+        },
+        {
+          "step": "redeem investor_b",
+          "tx": "88b510c4eb51c3077bf81ec356b54d983768ae76403fe077e15907d6840c5025",
+          "at": "2026-10-25T18:54:42.574Z",
+          "detail": {
+            "shares_burned": "20,000",
+            "payout": "20,542.4657534"
+          }
+        },
+        {
+          "step": "sweep_surplus",
+          "tx": "e863e7f1c1c803acfc2519853068f5737fc04d11a1002ab09416b148d372c53a",
+          "at": "2026-10-25T18:54:53.065Z",
+          "detail": {
+            "amount": "1,143.8356165"
+          }
+        },
+        {
+          "step": "outcome attested (code 1)",
+          "tx": "97f8ccb363e9e8cd62ffd2d247cb25668283fbdec290f76a06b50651c64e63aa",
+          "at": "2026-10-25T18:55:02.572Z",
+          "detail": {
+            "proof_hash": "fdad8dd14934cb4b377973b7fe11742167d0bfdf19203b5683f7c2aed56a33db"
+          }
+        }
+      ]
+    }
+  ],
+  "spike_decision": "GO"
+}

@@ -1,0 +1,412 @@
+/*
+ * TruMarket design tokens and component classes, ported from
+ * trumarket/web/src/styles/globals.css (:root and the "Modern Design System"
+ * section). Keep the values identical to the web so both apps look the same;
+ * when the web changes a token, change it here too.
+ */
+:root {
+  /* TruMarket Brand Colors — login rebrand (deep green + mint CTA) */
+  --tm-primary: #0f9d6b;
+  --tm-primary-dark: #0b4732;
+  --tm-primary-light: #7fd3a6;
+  --tm-accent: #d9a93b;
+  --tm-accent-dark: #b8893f;
+  --tm-accent-light: #ffb619;
+  --tm-secondary: #0b6b4a;
+  --tm-secondary-dark: #d47404;
+  --tm-secondary-light: #ff9f1c;
+  --tm-danger: #f25e6b;
+  --tm-danger-dark: #d9486e;
+  --tm-danger-light: #ff7582;
+  --tm-neutral: #f4f6f9;
+  --tm-neutral-dark: #e0e0e0;
+  --tm-white: #ffffff;
+  --tm-text: #3a4550;
+  --tm-cream: #f4f1e6;
+
+  /* Space-separated channels for Tailwind `rgb(var(--x-ch) / <alpha-value>)` */
+  --tm-primary-ch: 15 157 107;
+  --tm-primary-dark-ch: 11 71 50;
+  --tm-primary-light-ch: 127 211 166;
+  --tm-accent-ch: 217 169 59;
+  --tm-accent-dark-ch: 184 137 63;
+  --tm-accent-light-ch: 255 182 25;
+  --tm-secondary-ch: 11 107 74;
+  --tm-secondary-dark-ch: 212 116 4;
+  --tm-secondary-light-ch: 255 159 28;
+  --tm-danger-ch: 242 94 107;
+  --tm-danger-dark-ch: 217 72 110;
+  --tm-danger-light-ch: 255 117 130;
+  --tm-neutral-ch: 244 246 249;
+  --tm-neutral-dark-ch: 224 224 224;
+  --tm-white-ch: 255 255 255;
+  --tm-text-ch: 58 69 80;
+  --tm-cream-ch: 244 241 230;
+  /* Chart palette — slot 1 is the TruMarket brand teal for identity;
+     remaining slots from deals-analytics-dashboard with max perceptual
+     distance: teal → amber → sky-blue → dark-olive → deep-navy.
+     Every adjacent pair in the donut ring is clearly distinguishable. */
+  --tm-chart-blue: #4ea4d9;   /* sky blue (legacy token, kept for SeasonalityLite) */
+  --tm-chart-gold: #f2a007;   /* amber  (legacy token) */
+  --tm-chart-1: #0f9d6b;      /* brand teal    — primary identity */
+  --tm-chart-2: #f2a007;      /* amber         — mandarina / medium-high */
+  --tm-chart-3: #4ea4d9;      /* sky blue      — asparagus */
+  --tm-chart-4: #3a6b2a;      /* dark olive    — avocado portfolio */
+  --tm-chart-5: #1f2d42;      /* deep navy     — ginger / dark accent */
+  --tm-chart-6: #5fa84a;      /* mid green     — avocado product / overflow */
+  --tm-bar-track: #edeff2;
+  --tm-tint-bg: #e6f6ef;
+  --tm-tint-text: #0b6b4a;
+
+  /* Secondary button / forest green — text, border tint, and banner CTA */
+  --tm-forest: #1e4a3a;
+  --tm-forest-ch: 30 74 58;
+  --tm-chart-blue-ch: 78 164 217;
+
+  /* Input / select focus ring (primary at 15% opacity) */
+  --tm-focus-ring: rgb(var(--tm-primary-ch) / 0.15);
+
+  /* Surfaces / ink — dashboard + auth shared (handoff light theme) */
+  --tm-ink: #102a40;
+  --tm-ink-muted: #6b7785;
+  --tm-ink-subtle: #94a3b8;
+  --tm-ink-soft: #8a93a2;
+  --tm-border: #e2e4e7;
+  --tm-border-input: #e2e4e7;
+  --tm-border-hover: #cbd5e1;
+  --tm-surface: #ffffff;
+  --tm-surface-muted: #f4f6f9;
+  --tm-surface-input: #f7f9fb;
+  --tm-surface-hover: #f1f5f9;
+  --tm-ink-ch: 16 42 64;
+  --tm-ink-muted-ch: 107 119 133;
+  --tm-ink-subtle-ch: 148 163 184;
+  --tm-ink-soft-ch: 138 147 162;
+  --tm-border-ch: 226 228 231;
+  --tm-border-hover-ch: 203 213 225;
+  --tm-surface-ch: 255 255 255;
+  --tm-surface-muted-ch: 244 246 249;
+  --tm-surface-input-ch: 247 249 251;
+  --tm-surface-hover-ch: 241 245 249;
+
+  /* Status — same hexes as before, now tokenized for opacity + one source */
+  --tm-status-neutral: #64748b;
+  --tm-status-neutral-light: #94a3b8;
+  --tm-status-progress: #2563eb;
+  --tm-status-critical: #dc2626;
+  --tm-status-critical-text: #b91c1c;
+  --tm-status-critical-bg: #fee2e2;
+  --tm-status-critical-border: #fecaca;
+  --tm-status-issue-text: #9a3412;
+  --tm-status-issue-bg: #ffedd5;
+  --tm-status-issue-icon: #ea580c;
+  --tm-status-flag-text: #92400e;
+  --tm-status-flag-bg: #fef3c7;
+  --tm-status-flag-border: #fde68a;
+  --tm-status-success-text: #166534;
+  --tm-status-success-bg: #ecfdf3;
+  --tm-status-neutral-ch: 100 116 139;
+  --tm-status-neutral-light-ch: 148 163 184;
+  --tm-status-progress-ch: 37 99 235;
+  --tm-status-critical-ch: 220 38 38;
+  --tm-status-critical-text-ch: 185 28 28;
+  --tm-status-critical-bg-ch: 254 226 226;
+  --tm-status-critical-border-ch: 254 202 202;
+  --tm-status-issue-text-ch: 154 52 18;
+  --tm-status-issue-bg-ch: 255 237 213;
+  --tm-status-issue-icon-ch: 234 88 12;
+  --tm-status-flag-text-ch: 146 64 14;
+  --tm-status-flag-bg-ch: 254 243 199;
+  --tm-status-flag-border-ch: 253 230 138;
+  --tm-status-success-text-ch: 22 101 52;
+  --tm-status-success-bg-ch: 236 253 243;
+
+  /* Radius */
+  --radius: 0.625rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Shadows (web tailwind.config.ts boxShadow) */
+  --tm-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --tm-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --tm-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --tm-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --tm-shadow-btn-secondary: 0 1px 4px rgba(0, 0, 0, 0.07);
+
+  --tm-font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --tm-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+body {
+  background-color: var(--tm-neutral);
+  color: var(--tm-text);
+  font-family: var(--tm-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================ */
+/* TruMarket Modern Design System (from web)    */
+/* ============================================ */
+
+/* === Gradients === */
+.tm-gradient-primary {
+  background: linear-gradient(135deg, var(--tm-primary) 0%, var(--tm-primary-dark) 100%);
+}
+
+.tm-gradient-accent {
+  background: linear-gradient(135deg, var(--tm-accent) 0%, var(--tm-secondary) 100%);
+}
+
+.tm-gradient-hero {
+  background: linear-gradient(135deg, var(--tm-primary) 0%, #4ea4d9 100%);
+}
+
+.tm-gradient-success {
+  background: linear-gradient(90deg, var(--tm-primary) 0%, var(--tm-primary-light) 100%);
+}
+
+.tm-text-gradient-primary {
+  background: linear-gradient(135deg, var(--tm-primary) 0%, var(--tm-primary-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tm-text-gradient-accent {
+  background: linear-gradient(135deg, var(--tm-accent) 0%, var(--tm-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Cards === */
+.tm-card {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tm-panel {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.tm-panel-muted {
+  background: var(--tm-surface-muted);
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+}
+
+.tm-section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: var(--tm-ink-muted);
+}
+
+
+.tm-card-hover:hover {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+}
+
+.tm-card-highlight {
+  border: 2px solid var(--tm-primary);
+  box-shadow: 0 4px 12px rgb(var(--tm-primary-ch) / 0.15);
+}
+
+.tm-card-accent {
+  background: linear-gradient(135deg, rgba(242, 160, 7, 0.1) 0%, rgba(242, 135, 5, 0.1) 100%);
+  border: 1px solid var(--tm-accent);
+}
+
+/* === Buttons === */
+.tm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+}
+
+.tm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tm-btn-primary {
+  background: var(--tm-primary);
+  color: var(--tm-white);
+  border: 2px solid var(--tm-primary);
+  box-shadow: 0 4px 14px 0 rgb(var(--tm-primary-ch) / 0.25);
+}
+
+.tm-btn-primary:not(:disabled):hover {
+  background: var(--tm-primary-dark);
+  border-color: var(--tm-primary-dark);
+  box-shadow: 0 8px 25px 0 rgb(var(--tm-primary-ch) / 0.35);
+  transform: translateY(-2px);
+}
+
+.tm-btn-secondary {
+  background: var(--tm-white);
+  color: var(--tm-primary);
+  border: 2px solid var(--tm-primary);
+}
+
+.tm-btn-secondary:not(:disabled):hover {
+  background: var(--tm-primary);
+  color: var(--tm-white);
+  transform: translateY(-2px);
+}
+
+.tm-btn-accent {
+  background: var(--tm-accent);
+  color: var(--tm-white);
+  border: 2px solid var(--tm-accent);
+  box-shadow: 0 4px 14px 0 rgba(242, 160, 7, 0.25);
+}
+
+.tm-btn-accent:not(:disabled):hover {
+  background: var(--tm-accent-dark);
+  border-color: var(--tm-accent-dark);
+  box-shadow: 0 8px 25px 0 rgba(242, 160, 7, 0.35);
+  transform: translateY(-2px);
+}
+
+.tm-btn-danger {
+  background: var(--tm-danger);
+  color: var(--tm-white);
+  border: 2px solid var(--tm-danger);
+}
+
+.tm-btn-danger:not(:disabled):hover {
+  background: var(--tm-danger-dark);
+  border-color: var(--tm-danger-dark);
+  transform: translateY(-2px);
+}
+
+.tm-btn-outline {
+  background: transparent;
+  color: var(--tm-text);
+  border: 2px solid #d1d5db;
+}
+
+.tm-btn-outline:not(:disabled):hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.tm-btn-lg {
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
+}
+
+.tm-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.813rem;
+}
+
+/* === Badges === */
+.tm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.tm-badge-primary {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tm-badge-accent {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tm-badge-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tm-badge-info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tm-badge-outline {
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+/* === Metrics === */
+.tm-metric-card {
+  background: var(--tm-white);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tm-metric-card:hover {
+  border-color: var(--tm-primary);
+  box-shadow: 0 4px 12px rgba(78, 140, 55, 0.15);
+}
+
+.tm-metric-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--tm-primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.tm-metric-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--tm-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === Progress Bar === */
+.tm-progress {
+  background: #e5e7eb;
+  border-radius: 9999px;
+  height: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tm-progress-fill {
+  background: linear-gradient(90deg, var(--tm-primary) 0%, var(--tm-primary-light) 100%);
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease;
+}

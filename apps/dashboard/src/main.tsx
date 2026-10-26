@@ -1,141 +1,165 @@
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, useCallback, useEffect, useState, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import "./theme/tokens.css";
+import "./theme/components.css";
 import "./style.css";
+import { AppCtx } from "./ctx";
+import { PERSONAS, X, isInteractive, postAction, short, txLinks, type ActionBody, type Persona, type Store } from "./lib";
+import { DealPage, Marketplace, Portfolio } from "./investor";
+import { Ops } from "./ops";
+import { ProofDetail, Proofs } from "./proofs";
+import { Showcase } from "./ui/Showcase";
 
-type Att = {
-  shipment_ref: string;
-  event: string;
-  payload: Record<string, any>;
-  proof_hash: string;
-  tx_hash: string;
-  ledger: number;
-  arc_stub: boolean;
-  created_at: string;
-  verified: boolean;
+type Activity = { id: number; label: string; state: "busy" | "ok" | "err"; log: string };
+
+const loadStore = (): Promise<Store> => fetch(`/public-store.json?t=${Date.now()}`).then((r) => r.json());
+const savedPersona = (): Persona => {
+  try {
+    const p = localStorage.getItem("pot-persona") as Persona | null;
+    return p && p in PERSONAS ? p : "A";
+  } catch {
+    return "A";
+  }
 };
-type Share = { shipment_ref: string; code: string; issuer: string; sac_id: string; proof_hash: string; attestation_tx: string };
-type Store = { attestations: Att[]; shares: Share[]; tusdc: { code: string; issuer: string; sac_id: string } | null; spike_decision: string | null };
 
-const X = "https://stellar.expert/explorer/testnet";
-const short = (s: string, n = 8) => (s.length > n * 2 ? `${s.slice(0, n)}…${s.slice(-4)}` : s);
-const useHash = () => {
-  const [h, setH] = useState(location.hash);
+function useHash() {
+  const [h, setH] = useState(location.hash || "#/invest");
   useEffect(() => {
-    const f = () => setH(location.hash);
+    const f = () => setH(location.hash || "#/invest");
     addEventListener("hashchange", f);
     return () => removeEventListener("hashchange", f);
   }, []);
   return h;
-};
-
-function Shipments({ store }: { store: Store }) {
-  return (
-    <>
-      <h2>Attested shipments</h2>
-      <div className="scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Ref</th><th>Financed</th><th>Epoch</th><th>Exporter</th><th>Buyer</th><th>Proof hash</th><th>Tx</th><th>Check</th>
-            </tr>
-          </thead>
-          <tbody>
-            {store.attestations.map((a) => (
-              <tr key={a.tx_hash}>
-                <td><a href={`#/shipment/${a.shipment_ref}`}>{a.shipment_ref}</a></td>
-                <td>{a.event === "financed_attested" ? <span className="tag gold">financed</span> : <span className="tag">no</span>}</td>
-                <td>{a.payload.epoch}</td>
-                <td className="mono">{short(a.payload.exporter_pseudonym, 6)}</td>
-                <td className="mono">{short(a.payload.buyer_pseudonym, 6)}</td>
-                <td className="mono">{short(a.proof_hash)}</td>
-                <td><a href={`${X}/tx/${a.tx_hash}`} target="_blank" rel="noreferrer" className="mono">{short(a.tx_hash, 6)}</a></td>
-                <td>{a.verified ? <span className="ok">PASS</span> : <span className="bad">FAIL</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <h2>SPV share assets</h2>
-      <div className="scroll">
-        <table>
-          <thead><tr><th>Asset</th><th>Shipment</th><th>SAC contract</th><th>Linked proof</th></tr></thead>
-          <tbody>
-            {store.shares.map((s) => (
-              <tr key={s.code}>
-                <td><a href={`${X}/asset/${s.code}-${s.issuer}`} target="_blank" rel="noreferrer">{s.code}</a></td>
-                <td><a href={`#/shipment/${s.shipment_ref}`}>{s.shipment_ref}</a></td>
-                <td><a href={`${X}/contract/${s.sac_id}`} target="_blank" rel="noreferrer" className="mono">{short(s.sac_id)}</a></td>
-                <td className="mono">{short(s.proof_hash)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {store.tusdc && (
-        <p className="muted">
-          Settlement asset: <a href={`${X}/asset/TUSDC-${store.tusdc.issuer}`} target="_blank" rel="noreferrer">TUSDC</a> (test USDC
-          issued by us on testnet, not Circle USDC).
-        </p>
-      )}
-    </>
-  );
 }
 
-function Detail({ store, ref_ }: { store: Store; ref_: string }) {
-  const atts = store.attestations.filter((a) => a.shipment_ref === ref_);
-  const share = store.shares.find((s) => s.shipment_ref === ref_);
-  if (!atts.length) return <p>Unknown or unattested shipment. <a href="#/">Back</a></p>;
+function ActivityPanel({ items, dismiss }: { items: Activity[]; dismiss: (id: number) => void }) {
+  if (!items.length) return null;
   return (
-    <>
-      <p><a href="#/">← All shipments</a></p>
-      <h2>{ref_}</h2>
-      {atts.map((a) => (
-        <section key={a.tx_hash} className="card">
-          <h3>{a.event} {a.verified ? <span className="ok">PASS</span> : <span className="bad">FAIL</span>}</h3>
-          <dl>
-            <dt>Proof hash</dt><dd className="mono">{a.proof_hash}</dd>
-            <dt>Transaction</dt><dd><a href={`${X}/tx/${a.tx_hash}`} target="_blank" rel="noreferrer" className="mono">{a.tx_hash}</a> (ledger {a.ledger})</dd>
-            {a.arc_stub && <><dt>Arc deal</dt><dd><span className="tag">stub</span> Arc deal data is stubbed in this demo</dd></>}
-          </dl>
-          <p className="muted">Public payload (the salt and raw customs file stay with TruMarket):</p>
-          <pre>{JSON.stringify(a.payload, null, 2)}</pre>
-        </section>
-      ))}
-      {share && (
-        <section className="card">
-          <h3>SPV share asset</h3>
-          <dl>
-            <dt>Asset</dt><dd><a href={`${X}/asset/${share.code}-${share.issuer}`} target="_blank" rel="noreferrer">{share.code}</a> (AUTH_REQUIRED, REVOCABLE, CLAWBACK)</dd>
-            <dt>SAC contract</dt><dd><a href={`${X}/contract/${share.sac_id}`} target="_blank" rel="noreferrer" className="mono">{share.sac_id}</a></dd>
-            <dt>Issuer</dt><dd className="mono">{share.issuer}</dd>
-          </dl>
-        </section>
-      )}
-    </>
+    <div className="activity">
+      {items.map((a) => {
+        const links = txLinks(a.log);
+        return (
+          <div key={a.id} className={`toast ${a.state === "err" ? "err" : a.state === "busy" ? "busy" : ""}`}>
+            <div className="row between">
+              <b>
+                {a.state === "busy" && <span className="spin" />} {a.label}
+                {a.state === "ok" && " ✓"}
+                {a.state === "err" && " failed"}
+              </b>
+              {a.state !== "busy" && <button className="link small" onClick={() => dismiss(a.id)}>Dismiss</button>}
+            </div>
+            {a.state === "busy" && <p className="muted small">Signing and submitting on Stellar testnet…</p>}
+            {!!links.length && (
+              <div className="small">
+                {links.map((h) => (
+                  <div key={h}>
+                    <a href={`${X}/tx/${h}`} target="_blank" rel="noreferrer" className="mono">tx {short(h, 8)}</a>
+                  </div>
+                ))}
+              </div>
+            )}
+            {a.state === "err" && <pre>{a.log.split("\n").filter((l) => l.includes("✗") || l.includes("Error")).join("\n") || a.log.slice(-600)}</pre>}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
 function App() {
   const [store, setStore] = useState<Store | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [interactive, setInteractive] = useState(false);
+  const [persona, setPersonaState] = useState<Persona>(savedPersona);
+  const [activity, setActivity] = useState<Activity[]>([]);
   const hash = useHash();
+
   useEffect(() => {
-    fetch("/public-store.json").then((r) => r.json()).then(setStore).catch((e) => setErr(String(e)));
+    loadStore().then(setStore).catch((e) => setErr(String(e)));
+    isInteractive().then(setInteractive);
   }, []);
-  const m = hash.match(/^#\/shipment\/(SHP-\d{4})$/);
+
+  const setPersona = (p: Persona) => {
+    setPersonaState(p);
+    try {
+      localStorage.setItem("pot-persona", p);
+    } catch {
+      /* private mode: persona just isn't remembered */
+    }
+    if (p === "ops" && !hash.startsWith("#/ops")) location.hash = "#/ops";
+    if (p !== "ops" && hash.startsWith("#/ops")) location.hash = "#/invest";
+  };
+
+  const busy = activity.some((a) => a.state === "busy");
+  const run = useCallback(async (label: string, body: ActionBody) => {
+    const id = Date.now();
+    const entry: Activity = { id, label, state: "busy", log: "" };
+    setActivity((a) => [entry, ...a].slice(0, 4));
+    let ok = false;
+    let log = "";
+    try {
+      ({ ok, log } = await postAction(body));
+    } catch (e) {
+      log = String(e);
+    }
+    setActivity((a) => a.map((x): Activity => (x.id === id ? { ...x, state: ok ? "ok" : "err", log } : x)));
+    setStore(await loadStore());
+    return ok;
+  }, []);
+
+  if (err) return <p className="wrap">Could not load data: {err}. Run <code>npm run export</code>.</p>;
+  if (!store) return <p className="wrap muted" style={{ padding: 40 }}>Loading…</p>;
+
+  const isInvestor = persona !== "ops";
+  const nav: [string, string][] = isInvestor
+    ? [["#/invest", "Invest"], ["#/portfolio", "My portfolio"], ["#/proofs", "Shipment records"]]
+    : [["#/ops", "SPV operations"], ["#/proofs", "Shipment records"]];
+  const deal = hash.match(/^#\/deal\/(SHP-\d{4})$/);
+  const proof = hash.match(/^#\/shipment\/(SHP-\d{4})$/);
+
+  let page: ReactNode;
+  if (deal) page = <DealPage ref_={deal[1]} />;
+  else if (proof) page = <ProofDetail ref_={proof[1]} />;
+  else if (hash.startsWith("#/portfolio")) page = <Portfolio />;
+  else if (hash.startsWith("#/proofs")) page = <Proofs />;
+  else if (hash.startsWith("#/ops")) page = <Ops />;
+  else if (hash.startsWith("#/ui")) page = <Showcase />;
+  else page = isInvestor ? <Marketplace /> : <Ops />;
+
   return (
-    <>
-      <header>
+    <AppCtx.Provider value={{ store, persona, interactive, busy, run }}>
+      <header className="top">
         <div className="wrap">
-          <h1>Proof of <span>Trading</span></h1>
-          <p className="banner">Testnet demo. Sample data is synthetic or authorized. Raw customs data never leaves TruMarket.</p>
+          <a className="brand" href={isInvestor ? "#/invest" : "#/ops"}>
+            <img src="/logo.svg" alt="TruMarket" />
+            <span>Proof of Trading</span>
+          </a>
+          <nav className="nav">
+            {nav.map(([href, label]) => (
+              <a key={href} href={href} className={hash.startsWith(href) || (href === "#/invest" && deal) ? "on" : ""}>{label}</a>
+            ))}
+          </nav>
+          <div className="persona">
+            <span className="small muted">Viewing as</span>
+            <select value={persona} onChange={(e) => setPersona(e.target.value as Persona)} aria-label="Persona">
+              {(Object.keys(PERSONAS) as Persona[]).map((p) => (
+                <option key={p} value={p}>{PERSONAS[p]}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </header>
-      <main className="wrap">
-        {err && <p className="bad">Could not load store: {err}. Run <code>npm run export</code>.</p>}
-        {store && (m ? <Detail store={store} ref_={m[1]} /> : <Shipments store={store} />)}
-      </main>
-    </>
+      <div className="banner">
+        <div className="wrap">
+          <span><b>Testnet demo.</b> SPV, KYB and insurance are simulated · TUSDC is test USDC</span>
+          <span className="chip" style={{ marginLeft: "auto", background: interactive ? "var(--tm-primary)" : "#3b5a4e", color: "#fff" }}>
+            {interactive ? "Live: buttons sign testnet transactions" : "Read-only snapshot"}
+          </span>
+        </div>
+      </div>
+      <main className="wrap">{page}</main>
+      <ActivityPanel items={activity} dismiss={(id) => setActivity((a) => a.filter((x) => x.id !== id))} />
+    </AppCtx.Provider>
   );
 }
 

@@ -1,0 +1,159 @@
+/*
+ * Styles for the components in src/ui. Each block is the plain-CSS version of
+ * the Tailwind classes the matching trumarket/web component uses (file noted
+ * per block), so the two apps render the same controls.
+ */
+
+/* --- Button: web components/common/button --- */
+.tm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-lg); /* BUTTON_RADIUS = rounded-tm-lg */
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out, color 0.2s ease-out, opacity 0.2s ease-out;
+}
+.tm-button:disabled,
+.tm-button[aria-busy="true"] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.tm-button:focus-visible {
+  outline: 2px solid rgb(var(--tm-primary-ch) / 0.35);
+  outline-offset: 2px;
+}
+.tm-button--sm { padding: 0.5rem 0.875rem; }
+.tm-button--md { padding: 0.625rem 1.25rem; }
+.tm-button--lg { padding: 0.875rem 1.75rem; }
+
+.tm-button--primary { background: var(--tm-primary); color: var(--tm-white); border: 2px solid var(--tm-primary); }
+.tm-button--primary:hover { background: var(--tm-primary-dark); border-color: var(--tm-primary-dark); }
+.tm-button--secondary {
+  background: var(--tm-white);
+  color: var(--tm-forest);
+  border: 1px solid rgb(var(--tm-forest-ch) / 0.22);
+  box-shadow: var(--tm-shadow-btn-secondary);
+}
+.tm-button--secondary:hover { opacity: 0.9; }
+.tm-button--accent { background: var(--tm-accent); color: var(--tm-white); border: 2px solid var(--tm-accent); }
+.tm-button--accent:hover { background: var(--tm-accent-dark); border-color: var(--tm-accent-dark); }
+.tm-button--danger { background: var(--tm-danger); color: var(--tm-white); border: 2px solid var(--tm-danger); }
+.tm-button--danger:hover { background: var(--tm-danger-dark); border-color: var(--tm-danger-dark); }
+.tm-button--ghost { background: transparent; color: var(--tm-primary); border: 2px solid transparent; }
+.tm-button--ghost:hover { background: rgb(var(--tm-primary-ch) / 0.12); }
+
+/* --- Card: web components/common/card --- */
+.tm-ui-card { border-radius: var(--radius-lg); }
+.tm-ui-card--default { background: var(--tm-white); border: 1px solid var(--tm-border); box-shadow: var(--tm-shadow-sm); }
+.tm-ui-card--highlight {
+  background: var(--tm-white);
+  border: 2px solid var(--tm-primary);
+  box-shadow: 0 4px 12px rgba(60, 166, 56, 0.15);
+}
+.tm-ui-card--accent {
+  background: linear-gradient(to bottom right, rgba(242, 160, 7, 0.1), rgba(242, 135, 5, 0.1));
+  border: 1px solid var(--tm-accent);
+}
+.tm-ui-card--gradient_primary { color: var(--tm-white); border: 0; box-shadow: 0 4px 14px 0 rgb(var(--tm-primary-ch) / 0.25); }
+.tm-ui-card--gradient_accent { color: var(--tm-white); border: 0; box-shadow: 0 4px 14px 0 rgba(242, 160, 7, 0.25); }
+.tm-ui-card--pad-none { padding: 0; }
+.tm-ui-card--pad-sm { padding: 0.75rem; }
+.tm-ui-card--pad-md { padding: 1.5rem; }
+.tm-ui-card--pad-lg { padding: 2rem; }
+.tm-ui-card--pad-xl { padding: 2.5rem; }
+.tm-ui-card--hover { transition: all 0.3s ease-out; cursor: pointer; }
+.tm-ui-card--hover:hover { box-shadow: var(--tm-shadow-lg); transform: translateY(-4px); }
+/* border-current at 10% opacity, as on the web */
+.tm-ui-card__header { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent); }
+.tm-ui-card__footer { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent); }
+
+/* --- Panel / SectionLabel: web components/common/panel --- */
+.tm-ui-panel {
+  border-radius: 14px;
+  border: 1px solid var(--tm-border);
+  background: var(--tm-surface);
+  padding: 1rem;
+  box-shadow: var(--tm-shadow-sm);
+}
+@media (min-width: 640px) { .tm-ui-panel { padding: 1.25rem; } }
+.tm-ui-panel--muted {
+  border-style: dashed;
+  background: var(--tm-surface-muted);
+  padding: 1.25rem;
+  box-shadow: none;
+}
+.tm-ui-section-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tm-ink-muted);
+}
+
+/* --- Form controls: web lib/form-control-styles.ts --- */
+.tm-field { display: flex; flex-direction: column; gap: 0.375rem; }
+.tm-field__label { font-size: 0.875rem; font-weight: 500; color: var(--tm-ink); }
+.tm-field__error { font-size: 0.75rem; color: var(--tm-danger); }
+.tm-control {
+  display: flex;
+  box-sizing: border-box;
+  min-height: 42px;
+  width: 100%;
+  border-radius: 0.75rem; /* rounded-xl */
+  background: var(--tm-white);
+  padding: 0.625rem 1rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--tm-text);
+  border: 1px solid var(--tm-border);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.tm-control::placeholder { font-weight: 400; color: var(--tm-ink-muted); }
+.tm-control:hover { border-color: var(--tm-border-hover); }
+.tm-control:focus { border-color: var(--tm-primary); box-shadow: 0 0 0 1px var(--tm-focus-ring); }
+.tm-control:disabled { cursor: not-allowed; opacity: 0.5; }
+.tm-control--invalid,
+.tm-control--invalid:hover,
+.tm-control--invalid:focus { border: 2px solid var(--tm-danger); }
+select.tm-control {
+  height: 42px;
+  padding-right: 2.5rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7785' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  cursor: pointer;
+}
+
+/* --- Loading: web components/common/loading --- */
+.tm-loading { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tm-loading--page { display: flex; min-height: 160px; width: 100%; }
+.tm-loading__spinner {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: tm-spin 0.8s linear infinite;
+}
+.tm-loading--page .tm-loading__spinner {
+  width: 50px;
+  height: 50px;
+  border-width: 4px;
+  border-color: rgb(var(--tm-primary-ch) / 0.15);
+  border-top-color: var(--tm-primary);
+}
+@keyframes tm-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .tm-loading__spinner { animation-duration: 2.4s; } }
