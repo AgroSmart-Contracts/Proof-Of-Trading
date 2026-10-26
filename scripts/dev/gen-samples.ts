@@ -25,6 +25,11 @@ const rows: [number, C, string, number, number, number, boolean, boolean, string
   [241, "grape", "EU", 240000, 120, 1300, true, false],
   [205, "mango", "US", 52000, 90, 1200, false, false],
   [208, "avocado", "EU", 88000, 110, 1200, false, false],
+  // Added Sun Oct 25 for the recorded demo: same terms as SHP-0247 (+ a spare).
+  [280, "avocado", "EU", 100000, 120, 1200, true, true, "B"],
+  [281, "avocado", "EU", 100000, 120, 1200, true, true, "B"],
+  // Added Sun Oct 25 to test the dashboard's investor flow end to end.
+  [282, "blueberry", "US", 50000, 90, 1100, true, true, "A"],
 ];
 const ports = ["PECLL", "PEPAI"]; // Callao, Paita (UN/LOCODE)
 
