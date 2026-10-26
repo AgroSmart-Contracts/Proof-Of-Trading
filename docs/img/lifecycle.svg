@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="1060" viewBox="0 0 1760 1060" font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#111"/>
+    </marker>
+    <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a8f96"/>
+    </marker>
+    <g id="badge"><circle r="15" fill="#B88A3E"/></g>
+  </defs>
+  <style>
+    .lbl { font-size: 23px; fill: #111; }
+    .sm { font-size: 19px; fill: #4a5058; }
+    .col { font-size: 25px; font-weight: 600; fill: #8a8f96; }
+    .box { fill: #fff; stroke: #d4d6d9; stroke-width: 2; }
+    .bt { font-size: 28px; font-weight: 700; fill: #0A1623; text-anchor: middle; }
+    .bs { font-size: 19px; fill: #6b7280; text-anchor: middle; }
+    .num { font-size: 17px; font-weight: 700; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+    .line { stroke: #111; stroke-width: 2.2; fill: none; }
+    .dash { stroke: #8a8f96; stroke-width: 2; stroke-dasharray: 5 6; fill: none; }
+    .st { font-size: 24px; font-weight: 700; fill: #0A1623; }
+    .sd { font-size: 18px; fill: #4a5058; }
+  </style>
+
+  <rect width="1760" height="1060" fill="#f7f7f5"/>
+
+  <!-- Title -->
+  <text x="85" y="112" font-size="58" font-weight="800" fill="#0A1623" letter-spacing="-1">Proof of Trading: <tspan fill="#3A5A40">Shipment Financing via a Per-Shipment SPV</tspan></text>
+  <text x="85" y="160" font-size="27" font-style="italic" fill="#8a8f96">TruMarket on Stellar · testnet proof of concept · SPV legal structure under counsel review</text>
+
+  <!-- Column labels -->
+  <text x="85" y="245" class="col">Peru: origination</text>
+  <text x="740" y="245" class="col">Per-shipment SPV</text>
+  <text x="1396" y="245" class="col">Investors</text>
+
+  <!-- Left boxes -->
+  <rect x="85" y="275" width="280" height="130" rx="18" class="box"/>
+  <text x="225" y="335" class="bt">Agri-exporter</text>
+  <text x="225" y="368" class="bs">insured shipment</text>
+
+  <rect x="85" y="430" width="280" height="90" rx="18" class="box"/>
+  <text x="225" y="472" class="bt">Buyer</text>
+  <text x="225" y="501" class="bs">EU / US importer</text>
+
+  <rect x="85" y="545" width="280" height="90" rx="18" class="box" stroke-dasharray="7 6"/>
+  <text x="225" y="587" class="bt">Insurer</text>
+  <text x="225" y="616" class="bs">covers up to 90%</text>
+
+  <!-- SPV -->
+  <rect x="740" y="275" width="280" height="360" rx="22" fill="#0A1623"/>
+  <text x="880" y="420" font-size="40" font-weight="800" fill="#fff" text-anchor="middle">SPV</text>
+  <text x="880" y="458" font-size="21" fill="#B88A3E" text-anchor="middle">one per shipment</text>
+  <text x="880" y="488" font-size="18" fill="#c9ced6" text-anchor="middle">owns the receivable,</text>
+  <text x="880" y="512" font-size="18" fill="#c9ced6" text-anchor="middle">beneficiary of insurance</text>
+
+  <!-- Investors -->
+  <rect x="1396" y="275" width="280" height="360" rx="18" class="box"/>
+  <text x="1536" y="430" class="bt">Approved</text>
+  <text x="1536" y="465" class="bt">investors</text>
+  <text x="1536" y="500" class="bs">KYB, professional only</text>
+
+  <!-- Left arrows -->
+  <line x1="377" y1="310" x2="728" y2="310" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="398" y="283"/><text x="398" y="283" class="num">1</text>
+  <text x="422" y="291" class="lbl">Receivable + insurance rights</text>
+
+  <line x1="728" y1="372" x2="377" y2="372" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="398" y="398"/><text x="398" y="398" class="num">4</text>
+  <text x="422" y="406" class="lbl">Financing (TruMarket payout)</text>
+
+  <line x1="377" y1="475" x2="728" y2="475" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="398" y="448"/><text x="398" y="448" class="num">5</text>
+  <text x="422" y="456" class="lbl">Buyer pays at maturity</text>
+
+  <line x1="377" y1="590" x2="728" y2="590" class="dash" marker-end="url(#ahg)"/>
+  <use href="#badge" x="398" y="563"/><text x="398" y="563" class="num">5</text>
+  <text x="422" y="571" class="lbl" fill="#4a5058">or insurer pays if it fails</text>
+
+  <!-- Right arrows -->
+  <line x1="1384" y1="310" x2="1032" y2="310" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="1053" y="283"/><text x="1053" y="283" class="num">2</text>
+  <text x="1077" y="291" class="lbl">USDC subscription</text>
+
+  <line x1="1032" y1="400" x2="1384" y2="400" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="1053" y="373"/><text x="1053" y="373" class="num">3</text>
+  <text x="1077" y="381" class="lbl">Share tokens, 1 token = $1</text>
+
+  <line x1="1032" y1="510" x2="1384" y2="510" class="line" marker-end="url(#ah)"/>
+  <use href="#badge" x="1053" y="483"/><text x="1053" y="483" class="num">6</text>
+  <text x="1077" y="491" class="lbl">Redemption: fixed APY</text>
+  <text x="1077" y="540" class="sm">or pro rata if less was collected</text>
+
+  <line x1="1384" y1="600" x2="1032" y2="600" class="dash" marker-end="url(#ahg)"/>
+  <text x="1077" y="590" class="sm">Shares burned on redeem</text>
+
+  <!-- Stellar band -->
+  <rect x="85" y="700" width="1591" height="250" rx="22" fill="#eceae4"/>
+  <text x="420" y="742" font-size="22" font-weight="700" fill="#B88A3E" letter-spacing="2">ON STELLAR</text>
+
+  <rect x="115" y="762" width="470" height="160" rx="16" class="box"/>
+  <text x="140" y="804" class="st">Proof layer</text>
+  <text x="140" y="838" class="sd">MEMO_HASH attestation of the customs</text>
+  <text x="140" y="862" class="sd">record, insurance assignment and CRAM band.</text>
+  <text x="140" y="886" class="sd">Raw data stays private; IDs rotate per quarter.</text>
+  <text x="140" y="910" class="sd" font-weight="600" fill="#3A5A40">Outcome attested when the cycle closes.</text>
+
+  <rect x="645" y="762" width="470" height="160" rx="16" fill="#fff" stroke="#B88A3E" stroke-width="2.5"/>
+  <text x="670" y="804" class="st">Offering contract (Soroban)</text>
+  <text x="670" y="838" class="sd">Admin of each share asset's SAC: mints on</text>
+  <text x="670" y="862" class="sd">subscribe, burns on redeem, escrows USDC,</text>
+  <text x="670" y="886" class="sd">pays min(owed at APY, collected) pro rata.</text>
+
+  <rect x="1175" y="762" width="471" height="160" rx="16" class="box"/>
+  <text x="1200" y="804" class="st">Share asset per shipment</text>
+  <text x="1200" y="838" class="sd">Native asset (e.g. TM0247) with auth</text>
+  <text x="1200" y="862" class="sd">required + revocable: approved holders only.</text>
+  <text x="1200" y="886" class="sd">Clawback enabled for compliance.</text>
+
+  <!-- Dotted links up -->
+  <path d="M115,842 H52 V340 H80" class="dash" marker-end="url(#ahg)"/>
+  <text x="42" y="600" class="sm" transform="rotate(-90 42 600)" text-anchor="middle">Shipment customs-attested</text>
+  <line x1="880" y1="760" x2="880" y2="648" class="dash" marker-end="url(#ahg)"/>
+  <text x="895" y="690" class="sm">Tracks supply, holdings, burns</text>
+  <line x1="1536" y1="760" x2="1536" y2="648" class="dash" marker-end="url(#ahg)"/>
+  <text x="1551" y="690" class="sm">Holds tokens</text>
+
+  <!-- Footer -->
+  <text x="85" y="1005" font-size="19" fill="#8a8f96">Simulated on testnet: SPV legal structure, investor KYB, insurance assignment, customs data and USDC (test USDC). They become real in the SCF milestones. "Protected", never "guaranteed".</text>
+</svg>
