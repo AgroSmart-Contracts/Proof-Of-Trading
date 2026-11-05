@@ -93,8 +93,8 @@ function DealCard({ d, o }: { d: Deal; o?: Offering }) {
         <span className="deal-title">{shortTitle(d)}</span>
         <span className={`band ${d.cram_band}`} title={`Risk band ${d.cram_band}`}>{d.cram_band}</span>
       </div>
-      <div className="deal-apy">
-        <span className="big-apy">{money(fixedAmount(d), 0)}</span>
+      <div className="deal-amount">
+        <span className="big-amount">{money(fixedAmount(d), 0)}</span>
         <span className="muted small">investor amount fixed in the subscription agreement · {termsLine(d)} on {money(d.face_value_usd, 0)}</span>
       </div>
       {open ? (

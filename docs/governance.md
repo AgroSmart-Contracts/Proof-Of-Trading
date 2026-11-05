@@ -92,4 +92,4 @@ While an offering runs, the offering contract is each share asset's SAC admin, s
 transfer_share_admin(share_token, issuer)
 ```
 
-which returns the SAC admin role to the issuer multisig (`npm run offering -- hand-back <ref>` does this today). Without it the asset would stay tied to the contract forever. The handback is the last step of every offering, and is also how a share asset moves to a successor contract if the offering contract is ever upgraded or replaced.
+which hands the SAC admin role back to the issuer multisig (`npm run offering -- hand-back <ref>` does this today). Without it the asset would stay tied to the contract forever. The handback is the last step of every offering, and is also how a share asset moves to a successor contract if the offering contract is ever upgraded or replaced.

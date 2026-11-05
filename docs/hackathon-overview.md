@@ -159,7 +159,7 @@ npm run demo:refund -- SHP-xxxx    # under-subscribed refund
 
 ## 5. Demo video transcript (target 2:30, hard cap 3:00)
 
-Wording rules: records are **verifiable** (anyone can check them on Stellar) and shipments are **customs-attested**, but never say "verified" (that would claim the shipment itself was confirmed genuine); "protected", never "guaranteed"; not a retail product. Lead with **trade receivables**: the Stellar ecosystem knows the term.
+Wording rules: records are **verifiable** (anyone can check them on Stellar) and shipments are **customs-attested**, but never say "verified" (that would claim the shipment itself was confirmed genuine); never promise repayment; not a retail product. Lead with **trade receivables**: the Stellar ecosystem knows the term.
 
 **[0:00–0:20] The gap.** *Screen: deck, PMF slide.*
 > Stellar holds over three billion dollars in real-world assets, but very little private trade credit reaches investors. TruMarket has financed about 247 insured agri-export shipments, around 22 million dollars. Each one is a real, insured trade receivable, yet the capital behind it sits locked for 90 to 120 days, because outside investors can't easily fund these receivables and the customs proof behind them can't be made public.

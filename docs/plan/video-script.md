@@ -3,7 +3,7 @@
 > **Historical record (HackMeridian, Oct 2026).** Rates appear as the fixed rate of the time; current docs describe the investor amount fixed in the subscription agreement. Since v0.3 the pilot uses one pool share with per-receivable attestations (see [pool contract v1](../pool-contract-v1.md)). Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
 
 
-Wording rules: "customs-attested", never "verified"; "protected", never "guaranteed"; not a retail product.
+Wording rules: "customs-attested", never "verified"; never promise repayment; not a retail product.
 
 ## A. Backup video, Sunday evening (~90 s, rough is fine)
 Its only job is to prove the core works if Monday's wifi or testnet fails.
