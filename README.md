@@ -1,18 +1,32 @@
 # Proof of Trading
 
-Customs-attested agri-export shipments, financed through SPV shares on Stellar. Each shipment's offering is a **fixed-amount trade receivable, not a loan**. **Testnet proof of concept.**
+Agri-export trade receivables, financed through **one pool share** on Stellar, with a verifiable record (attestation) for every receivable. Trade receivables, **not loans**. **Testnet:** the v0.2 per-shipment prototype; the pool contract is the Tranche 1 build.
 
 ![System overview](docs/figures/system.svg)
 
 - **Repository:** https://github.com/AgroSmart-Contracts/Proof-Of-Trading
 - **Demo app:** https://proof-of-trading.vercel.app
+- **Pilot design:** [pool contract v1](docs/pool-contract-v1.md) · [integrations](docs/integrations.md)
 - **Hackathon record (HackMeridian, Oct 2026):** [`docs/hackathon-overview.md`](docs/hackathon-overview.md)
 
 ## The problem
-TruMarket finances insured agri-export shipments, mostly from Peru: **287 deals, $21M+ financed, 0% losses**. Exporters wait 90 to 120 days to be paid. The shipment contracts are real, insured receivables, but they are hard to fund from outside investors, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each shipment on Stellar, and turns each financed shipment into SPV shares that approved investors can fund.
+TruMarket finances agri-export shipments, mostly from Peru: **287 deals since June 2024, USD 18.8M of goods shipped, USD 10.3M financed; 2 defaults in 2024, none since** (tape of record, 3 Oct 2026). Exporters wait 90 to 120 days to be paid. Their receivables are hard to fund from outside investors, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each receivable on Stellar, and funds the receivables through one pool that approved investors can buy into.
 
-## Deployments
-Everything deployed on testnet, with what each artifact proves and an explorer link: **[`docs/DEPLOYMENTS.md`](docs/DEPLOYMENTS.md)**.
+## The pilot: one pool share, an attestation per receivable
+- **Pool share.** One vehicle issues one share asset (1 share = USD 1), AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, with the pool contract as SAC admin. Investors subscribe in Circle USDC and shares are minted in the same transaction.
+- **Investors.** Legal entities only, after KYB, minimum ticket USD 50,000. No natural persons, no US persons.
+- **Receivables.** Each one is attested under its export declaration no., invoice no. and buyer tax ID, and can't be attested twice. Its status (paid, overdue, claim, loss, revoked) is appended, never edited.
+- **Money.** 90% of face is advanced to the exporter; the buyer's payment is applied as principal, then the investor amount fixed in the subscription agreement, then the balance (exporter's retained 10% and the TruMarket fee). Monthly distributions; redemption at NAV at the 3-month term.
+- **Credit insurance** to be bound and endorsed, with the vehicle named on the policy, before the first pool receivable.
+- **Rails.** Circle USDC on Stellar is the USD rail. Bridge turns the buyer's USD into USDC; Koywe pays exporters in PEN or CLP. Nothing is bridged.
+- **Integrations:** Stellar Wallets Kit, Freighter Connect, Privy, Bridge and Koywe.
+
+Design: [`docs/pool-contract-v1.md`](docs/pool-contract-v1.md) · integrations: [`docs/integrations.md`](docs/integrations.md) · decision: [ADR 0001](docs/adr/0001-share-asset-structure.md)
+
+![Pilot structure](docs/figures/pilot-structure.svg)
+
+## Deployments (v0.2 per-shipment prototype)
+Everything deployed on testnet (HackMeridian, TUSDC), with what each artifact proves and an explorer link: **[`docs/DEPLOYMENTS.md`](docs/DEPLOYMENTS.md)**.
 
 | Check (2 Nov 2026) | Result |
 |---|---|
@@ -25,11 +39,11 @@ Everything deployed on testnet, with what each artifact proves and an explorer l
 - **Key transactions (SHP-0247):**
   - [Shipment proof hash recorded on-chain](https://stellar.expert/explorer/testnet/tx/88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad)
   - [Investor subscribes 60,000 TUSDC, contract mints 60,000 shares](https://stellar.expert/explorer/testnet/tx/e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99)
-  - [Investor paid the fixed amount set in the offering terms, shares burned](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc)
+  - [Investor paid the investor amount fixed in the subscription agreement, shares burned](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc)
 
-The deployed IDs are the v0.2 record, and they don't change. The v0.3 contract (outcome records in storage, settlement asset pinned at deploy, Circle USDC by default) is in [`contracts/offering`](contracts/offering) and is **not deployed yet**; `npm run offering -- deploy` records it separately as `offering_v3`.
+The deployed IDs are the v0.2 record, and they don't change. The pool contract is not deployed yet. The v0.3 contract (outcome records in storage, settlement asset pinned at deploy, Circle USDC by default) is in [`contracts/offering`](contracts/offering) and is **not deployed yet**; `npm run offering -- deploy` records it separately as `offering_v3`.
 
-## How to verify an offering
+## How to verify a v0.2 offering
 No keys or local records needed. For SHP-0247 (offering 247):
 
 ```sh
@@ -51,17 +65,17 @@ npm run verify -- SHP-0247
 `--send=no` only simulates, so the source account needs no secret. On the v0.3 contract, `get_record --id <n>` gives the outcome record (hash and `Repaid`, `InsuredLoss` or `Refunded`).
 
 ## Scope
-**In scope**
-- One SPV per financed shipment; its shares are a classic Stellar asset that only approved investors can hold ([ADR 0001](docs/adr/0001-share-asset-structure.md)).
-- One offering per shipment: subscribe in USDC, shares minted in the same transaction, escrow released to the SPV when the cap is reached, refunds if it is not.
-- Payment from what the SPV collects (the buyer, or the insurer on default), pro rata, up to the fixed amount set in the offering terms.
-- A public, verifiable record of each shipment and its outcome, with the private data kept off-chain.
+**In scope (pilot)**
+- One pool share issued by the vehicle, held only by approved legal entities ([ADR 0001](docs/adr/0001-share-asset-structure.md)).
+- One attestation per receivable in the pool contract, with an append-only status history.
+- Subscription in Circle USDC, release of 90% of face per attested receivable, settlement through the waterfall, monthly distributions, redemption at NAV.
+- Buyer collections through Bridge and exporter payouts through Koywe.
 
 **Out of scope**
-- Lending, borrowing and collateral: offerings are fixed-amount trade receivables, not loans.
-- Retail investors: offerings are for approved professional investors only.
-- Secondary-market controls between approved investors (see the [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md)).
-- Mainnet, until the audit and the legal structure are done.
+- One instrument per receivable (the v0.2 prototype's model).
+- Secondary trading of pool shares (see the [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md)).
+- Natural persons and US persons.
+- Using the shares as collateral.
 
 ## Security model
 - **Who can do what** is enforced in the contract and tested (auth-matrix tests): the admin runs the offering lifecycle, the SPV treasury alone deposits collections, investors alone subscribe, redeem and refund their own position, and the recorder alone writes outcome records, once each. Details: [`docs/governance.md`](docs/governance.md).
@@ -70,13 +84,15 @@ npm run verify -- SHP-0247
 - **Freeze and clawback** (AUTH_REVOCABLE, AUTH_CLAWBACK_ENABLED) are limited by a written policy and need 2 of 3 issuer signers: [`docs/governance.md`](docs/governance.md).
 - **Keys:** testnet keys sit in a gitignored `.env`. Before pilots, the issuer/admin and treasury move to a 2-of-3 multisig with the master key locked (`npm run governance:setup`, dry run by default).
 - **Data:** only hashes, pseudonyms, balances and USDC movements are on-chain. Customs records, salts and identities stay with TruMarket.
-- **Not yet done:** an external audit of the offering contract.
+- **Pilot additions** ([pool contract v1](docs/pool-contract-v1.md)): two-person approval for attestations, concentration limits checked on every release, a reason stored for every pause, freeze and clawback, and upgrades only with 2 of 3 signers and 30 days' notice.
+- **Not yet done:** an external audit.
 
 ## Status
 ### v0.3 (SCF #46 review feedback)
 - **Outcome records in contract storage.** The recorder writes each offering's outcome (`Repaid`, `InsuredLoss`, `Refunded`) and its proof hash once, with an `OutcomeRecorded` event. `verify` now checks contract storage first, then Horizon, then RPC: 19/19 PASS (5 from contract storage, 14 from Horizon).
 - **Circle testnet USDC.** The settlement asset is fixed at deploy (constructor) and set by `SETTLEMENT_ASSET`; the default is Circle's testnet USDC. TUSDC stays for the v0.2 record.
-- **22 contract tests** (`cargo test`), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
+- **22 contract tests** (`cargo test`, plus 1 ignored pool test), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
+- **Pool model:** [pool contract v1](docs/pool-contract-v1.md), [integrations](docs/integrations.md), pool figures, and the first Tranche 1 test, `duplicate_attestation_rejected`, written first and ignored until `attest` exists.
 - **Docs:** [ADR 0001](docs/adr/0001-share-asset-structure.md), [figures](docs/figures), [rent and TTL](docs/rent-and-ttl.md) with a TTL keeper, [governance](docs/governance.md), a [SEP-1 `stellar.toml`](apps/dashboard/public/.well-known/stellar.toml) generator, and a [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md).
 
 ### v0.2 (built at HackMeridian, Oct 25 to 26)
@@ -91,36 +107,43 @@ npm run verify -- SHP-0247
 - **Spike: GO.** A Soroban contract can be the SAC admin: it authorizes, mints, is refused for an unapproved wallet, burns, and hands admin back. See [`docs/spike-report.md`](docs/spike-report.md).
 
 ## Architecture
-![Offering lifecycle](docs/figures/offering-lifecycle.svg)
+![Money flow for one receivable](docs/figures/money-flow.svg)
 
-![Money flow for one offering](docs/figures/money-flow.svg)
+![Payment waterfall on a USD 100,000 invoice](docs/figures/waterfall.svg)
 
-The on/off-ramps (CCTP, Bridge, Koywe) are planned, not integrated. How this fits into TruMarket today (planned; nothing in production uses Stellar yet):
+![Receivable lifecycle](docs/figures/receivable-lifecycle.svg)
 
-![TruMarket before and after the Stellar integration](docs/figures/integration-before-after.svg)
+How this fits into TruMarket today (planned; nothing in production uses Stellar yet):
 
-Details: [`docs/architecture.md`](docs/architecture.md) · payload format: [`docs/proof-schema-v1.md`](docs/proof-schema-v1.md) · figure sources: [`docs/figures`](docs/figures)
+![TruMarket before and after](docs/figures/integration-before-after.svg)
 
-**Stellar components:** classic assets with authorization flags and clawback, Stellar Asset Contract, Soroban contracts (constructor, auth, persistent storage with TTL, events), memo-hash attestations, Stellar RPC and Horizon (for verification beyond RPC retention), SEP-1.
+Details: [`docs/architecture.md`](docs/architecture.md) · v0.2 payload format: [`docs/proof-schema-v1.md`](docs/proof-schema-v1.md) · figure sources: [`docs/figures`](docs/figures)
+
+**Stellar components:** classic assets with authorization flags and clawback, Stellar Asset Contract, Soroban contracts (constructor, auth, persistent storage with TTL, events), sponsored reserves and fee-bump (Privy wallets), memo-hash attestations, Stellar RPC and Horizon, SEP-1.
 
 ## Simulated vs real
 | Real-world dependency | In this demo | Becomes real in |
 |---|---|---|
-| SPV legal structure, securities basis | Testnet treasury account + share asset; legal structure under counsel review | Tranche 1 |
-| Investor KYB / eligibility | Admin approval stands in for KYB | Tranche 1 |
-| Insurance assignment to the SPV | sha256 of a placeholder file | Tranche 1 |
+| Vehicle legal structure | Testnet treasury account + share asset; legal structure under counsel review | Tranche 1 |
+| Investor KYB / eligibility (legal entities, min. USD 50,000) | Admin approval stands in for KYB | Tranche 1 |
+| Credit insurance, vehicle named on the policy | sha256 of a placeholder file | Bound and endorsed before the first pool receivable |
 | Peruvian customs records, exporter consent | Synthetic files only | Tranches 1 and 2 |
 | Arc deal data | Labelled stubs (`stub-<n>`); reads Arc testnet when `ARC_RPC_URL` is set | Tranche 2 |
 | CRAM risk scores | Precomputed bands | Tranche 2 |
 | USDC | Circle testnet USDC by default (v0.3); the v0.2 record used TUSDC, our test asset | Tranche 1 (mainnet USDC) |
-| Audit, multisig, issuer lock, mainnet | Documented, setup script ready | Tranche 1 |
-| Lending, borrowing, collateral listing | Out of scope: offerings are fixed-amount trade receivables, not loans | Not planned |
+| Pool contract | Designed; per-shipment v0.2 contract on testnet | Tranche 1 |
+| Bridge, Koywe | Designed ([integrations](docs/integrations.md)) | Tranche 2 |
+| Multisig, issuer lock, mainnet | Documented, setup script ready | Tranche 3 |
+| Share collateral, secondary trading | Out of scope | Not planned |
 
 ## SCF #46 roadmap
-One line per tranche; the full plan, budget and deliverables are in the SCF #46 submission.
-- **Tranche 1:** legal structure, audit of the offering contract, multisig admin and treasury with the issuer locked, KYB behind `approve_investor`, real insurance assignment, mainnet contract with Circle USDC.
-- **Tranche 2:** pilot offerings with independent professional investors under a cap, investor-app wallet flow, real Arc deal IDs and customs consent, investor reporting.
-- **Tranche 3:** full lifecycle on mainnet, including an insured failure if one occurs.
+One line per tranche. The plan, budget and deliverables are in the SCF #46 submission.
+- **Tranche 1 (31/01/2027):** investor interface, wallets (Stellar Wallets Kit, Freighter, Privy), pool contract v1.
+- **Tranche 2 (15/03/2027):** Bridge, Koywe, exception handling, threat model and monitoring.
+- **Tranche 3 (15/06/2027):** mainnet pilot, with launch by 15/04/2027.
+- **Metric:** at least USD 250,000 in USDC from at least 3 independent institutional investor wallets within 60 days of mainnet launch.
+
+![Build plan](docs/figures/build-plan.svg)
 
 ## Setup
 Requires Node 20+, Rust stable with `wasm32v1-none`, and the Stellar CLI.
@@ -155,8 +178,8 @@ Investors need Circle testnet USDC from https://faucet.circle.com (Stellar testn
 **Testnet notes:** uploading the offering contract needs ~620 XLM of resource fee, above what a classic `u32` fee allows, so it is sent as a fee bump. Rent moves with how full testnet is: see [`docs/rent-and-ttl.md`](docs/rent-and-ttl.md).
 
 ## Prior work disclosure
-The TruMarket platform (deal flow, Arc/Base contracts, Lagoon vault, apps) is **prior work and is not submitted**. v0.1 code was built on **Sat Oct 24, 2026, before kickoff**, and is tagged `v0.1`. The v0.2 event work was committed on Mon Oct 26. See [`docs/prior-work.md`](docs/prior-work.md).
+The TruMarket platform (deal flow, Arc contracts, apps) is **prior work and is not submitted**. v0.1 code was built on **Sat Oct 24, 2026, before kickoff**, and is tagged `v0.1`. The v0.2 event work was committed on Mon Oct 26. See [`docs/prior-work.md`](docs/prior-work.md).
 
 **AI assistance:** parts of the code, tests and documentation were written with an AI coding assistant (Claude Code) and reviewed by the team.
 
-Not a retail product. Shares are protected by the SPV's ownership of the receivable and its insurance (up to 90% cover, with exclusions); they are not a promise of repayment.
+Not a retail product: legal entities only, minimum ticket USD 50,000, no natural persons or US persons. Shares are paid from what the pool collects, up to the investor amount fixed in the subscription agreement; they are not a promise of repayment.
