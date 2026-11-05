@@ -33,6 +33,31 @@ pub enum Error {
     AlreadyRedeemed = 9,
     NothingToSweep = 10,
     Overflow = 11,
+    AlreadyRecorded = 12,
+    BadOutcome = 13,
+}
+
+/// Final result of an offering, written once by the recorder.
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Outcome {
+    /// The buyer paid (outcome codes 1 on time, 2 late).
+    Repaid,
+    /// The insurer paid (outcome code 4).
+    InsuredLoss,
+    /// The offering missed its cap and subscribers were refunded.
+    Refunded,
+}
+
+/// The outcome record kept in contract storage. `record_hash` is the sha256 of the outcome
+/// proof payload, the same value the attestation transaction carries as MEMO_HASH. Storing it
+/// here keeps it readable after RPC's transaction retention (~7 days) has passed.
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Record {
+    pub record_hash: BytesN<32>,
+    pub outcome: Outcome,
+    pub recorded_at: u64,
 }
 
 #[contracttype]
@@ -79,6 +104,8 @@ enum DataKey {
     Admin,
     Offering(u32),
     Redeemed(u32, Address),
+    Recorder,
+    Record(u32),
 }
 
 #[contractevent]
@@ -101,6 +128,10 @@ pub struct Distribution { #[topic] pub id: u32, pub amount: i128, pub outcome_co
 pub struct Redeemed { #[topic] pub id: u32, pub investor: Address, pub shares: i128, pub payout: i128 }
 #[contractevent]
 pub struct Swept { #[topic] pub id: u32, pub to: Address, pub amount: i128 }
+#[contractevent]
+pub struct OutcomeRecorded { #[topic] pub id: u32, pub record_hash: BytesN<32>, pub outcome: Outcome }
+#[contractevent]
+pub struct RecorderSet { pub recorder: Address }
 
 fn admin(env: &Env) -> Address {
     let a: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
@@ -150,8 +181,51 @@ pub struct OfferingContract;
 
 #[contractimpl]
 impl OfferingContract {
-    pub fn __constructor(env: Env, admin: Address) {
+    pub fn __constructor(env: Env, admin: Address, recorder: Address) {
         env.storage().instance().set(&DataKey::Admin, &admin);
+        env.storage().instance().set(&DataKey::Recorder, &recorder);
+    }
+
+    /// Admin-only: replace the recorder (the account that writes outcome records).
+    pub fn set_recorder(env: Env, recorder: Address) {
+        admin(&env);
+        env.storage().instance().set(&DataKey::Recorder, &recorder);
+        RecorderSet { recorder }.publish(&env);
+    }
+
+    /// Recorder-only, once per offering: store the outcome and the hash of its proof payload.
+    /// The outcome must match the offering's state: Repaid needs a distribution with code 1 or 2,
+    /// InsuredLoss one with code 4, Refunded an offering in refunds.
+    pub fn record_outcome(env: Env, id: u32, record_hash: BytesN<32>, outcome: Outcome) -> Result<(), Error> {
+        let recorder: Address = env.storage().instance().get(&DataKey::Recorder).unwrap();
+        recorder.require_auth();
+        let o = load(&env, id)?;
+        let key = DataKey::Record(id);
+        if env.storage().persistent().has(&key) {
+            return Err(Error::AlreadyRecorded);
+        }
+        let consistent = match outcome {
+            Outcome::Repaid => o.status == Status::Distributing && (o.outcome_code == 1 || o.outcome_code == 2),
+            Outcome::InsuredLoss => o.status == Status::Distributing && o.outcome_code == 4,
+            Outcome::Refunded => o.status == Status::Refunding,
+        };
+        if !consistent {
+            return Err(Error::BadOutcome);
+        }
+        let rec = Record { record_hash: record_hash.clone(), outcome, recorded_at: env.ledger().timestamp() };
+        env.storage().persistent().set(&key, &rec);
+        env.storage().persistent().extend_ttl(&key, TTL_THRESHOLD, TTL_EXTEND);
+        env.storage().instance().extend_ttl(TTL_THRESHOLD, TTL_EXTEND);
+        OutcomeRecorded { id, record_hash, outcome }.publish(&env);
+        Ok(())
+    }
+
+    pub fn get_record(env: Env, id: u32) -> Option<Record> {
+        env.storage().persistent().get(&DataKey::Record(id))
+    }
+
+    pub fn recorder(env: Env) -> Address {
+        env.storage().instance().get(&DataKey::Recorder).unwrap()
     }
 
     pub fn create_offering(env: Env, id: u32, p: OfferingParams) -> Result<(), Error> {

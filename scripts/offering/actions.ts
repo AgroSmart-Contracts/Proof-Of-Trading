@@ -31,7 +31,7 @@ const struct = (fields: Record<string, xdr.ScVal>) =>
 
 export const OFFERING_ERRORS = [
   "", "AlreadyExists", "NotFound", "BadStatus", "DeadlinePassed", "DeadlineNotPassed", "CapExceeded", "BadAmount",
-  "NotSacAdmin", "AlreadyRedeemed", "NothingToSweep", "Overflow",
+  "NotSacAdmin", "AlreadyRedeemed", "NothingToSweep", "Overflow", "AlreadyRecorded", "BadOutcome",
 ];
 const SAC_ERRORS: Record<number, string> = { 10: "BalanceError", 11: "BalanceDeauthorizedError (holder not approved)", 13: "TrustlineMissingError" };
 
@@ -102,7 +102,8 @@ export async function deploy(force = false) {
   }
   const wasm = readFileSync(path.join(REPO_ROOT, "contracts/target/wasm32v1-none/release/offering.wasm"));
   const issuer = kp("issuer");
-  const r = await deployContract(issuer, wasm, [addr(issuer.publicKey())]);
+  // Constructor: (admin, recorder). The recorder is the attestor account that already signs attestations.
+  const r = await deployContract(issuer, wasm, [addr(issuer.publicKey()), addr(kp("attestor").publicKey())]);
   writeStore("contracts.json", {
     ...contracts(),
     offering: { contract_id: r.contractId, wasm_hash: r.wasmHash, admin: issuer.publicKey(), deploy_tx: r.tx.hash, deployed_at: new Date().toISOString() },

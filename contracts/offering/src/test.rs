@@ -16,6 +16,7 @@ fn usd(n: i128) -> i128 {
 struct T<'a> {
     env: Env,
     admin: Address,
+    recorder: Address,
     treasury: Address,
     a: Address,
     b: Address,
@@ -65,6 +66,7 @@ fn setup<'a>() -> T<'a> {
     env.mock_all_auths();
     env.ledger().set_timestamp(NOW);
     let admin = Address::generate(&env);
+    let recorder = Address::generate(&env);
     let treasury = Address::generate(&env);
     let a = Address::generate(&env);
     let b = Address::generate(&env);
@@ -82,7 +84,7 @@ fn setup<'a>() -> T<'a> {
     share.issuer().set_flag(IssuerFlags::ClawbackEnabledFlag);
     let share_sac = StellarAssetClient::new(&env, &share.address());
 
-    let id = env.register(OfferingContract, (admin.clone(),));
+    let id = env.register(OfferingContract, (admin.clone(), recorder.clone()));
     share_sac.set_admin(&id);
     T {
         usdc: TokenClient::new(&env, &usdc.address()),
@@ -91,6 +93,7 @@ fn setup<'a>() -> T<'a> {
         c: OfferingContractClient::new(&env, &id),
         env,
         admin,
+        recorder,
         treasury,
         a,
         b,
@@ -357,4 +360,82 @@ fn share_admin_can_be_handed_back() {
     assert_eq!(t.share_sac.admin(), issuer);
     // The contract is no longer SAC admin, so it can't open offerings on this asset.
     assert_eq!(t.c.try_create_offering(&1, &t.params(100_000, 1200, 120)), Err(Ok(Error::NotSacAdmin)));
+}
+
+#[test]
+fn records_repaid_outcome_once() {
+    let t = setup();
+    t.distributing(100_000, 1200, 120, 60_000, 40_000, usd(105_000), 1);
+    let h = BytesN::from_array(&t.env, &[3; 32]);
+    assert_eq!(t.c.get_record(&1), None);
+    t.c.record_outcome(&1, &h, &Outcome::Repaid);
+    assert_eq!(t.env.auths()[0].0, t.recorder);
+    let ev = OutcomeRecorded { id: 1, record_hash: h.clone(), outcome: Outcome::Repaid };
+    assert!(t.env.events().all().filter_by_contract(&t.c.address).events().contains(&ev.to_xdr(&t.env, &t.c.address)));
+    let rec = t.c.get_record(&1).unwrap();
+    assert_eq!(rec.record_hash, h);
+    assert_eq!(rec.outcome, Outcome::Repaid);
+    assert_eq!(rec.recorded_at, NOW);
+    // Written once: a second record is refused.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::AlreadyRecorded)));
+}
+
+#[test]
+fn records_insured_loss_and_refunded() {
+    let t = setup();
+    t.distributing(60_000, 1100, 90, 36_000, 24_000, usd(54_000), 4);
+    let h = BytesN::from_array(&t.env, &[4; 32]);
+    t.c.record_outcome(&1, &h, &Outcome::InsuredLoss);
+    assert_eq!(t.c.get_record(&1).unwrap().outcome, Outcome::InsuredLoss);
+
+    let r = setup();
+    r.open(150_000, 1300, 120);
+    r.c.subscribe(&1, &r.a, &usd(10_000), &r.hash());
+    r.env.ledger().set_timestamp(DEADLINE + 1);
+    r.c.start_refunds(&1);
+    r.c.record_outcome(&1, &BytesN::from_array(&r.env, &[4; 32]), &Outcome::Refunded);
+    assert_eq!(r.c.get_record(&1).unwrap().outcome, Outcome::Refunded);
+}
+
+#[test]
+fn outcome_must_match_offering_state() {
+    let t = setup();
+    let h = BytesN::from_array(&t.env, &[5; 32]);
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::NotFound)));
+    t.open(100_000, 1200, 120);
+    // Still open: no outcome yet.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::BadOutcome)));
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Refunded), Err(Ok(Error::BadOutcome)));
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    t.c.subscribe(&1, &t.b, &usd(40_000), &t.hash());
+    t.c.fund(&1);
+    t.c.deposit_distribution(&1, &usd(90_000), &4);
+    // Insurer paid (code 4): not a repayment.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::BadOutcome)));
+    t.c.record_outcome(&1, &h, &Outcome::InsuredLoss);
+}
+
+#[test]
+fn only_recorder_records_and_admin_replaces_it() {
+    let t = setup();
+    t.distributing(100_000, 1200, 120, 60_000, 40_000, usd(105_000), 1);
+    let h = BytesN::from_array(&t.env, &[6; 32]);
+    for who in [&t.admin, &t.stranger] {
+        t.env.mock_auths(&[MockAuth {
+            address: who,
+            invoke: &MockAuthInvoke {
+                contract: &t.c.address,
+                fn_name: "record_outcome",
+                args: (1u32, h.clone(), Outcome::Repaid).into_val(&t.env),
+                sub_invokes: &[],
+            },
+        }]);
+        assert!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid).is_err());
+    }
+    t.env.mock_all_auths();
+    t.c.set_recorder(&t.stranger);
+    assert_eq!(t.env.auths()[0].0, t.admin);
+    assert_eq!(t.c.recorder(), t.stranger);
+    t.c.record_outcome(&1, &h, &Outcome::Repaid);
+    assert_eq!(t.env.auths()[0].0, t.stranger);
 }
