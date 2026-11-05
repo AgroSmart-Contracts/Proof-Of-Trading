@@ -1,0 +1,24 @@
+%% TruMarket today vs. with the Stellar integration (planned; nothing in production uses Stellar yet)
+flowchart TB
+  subgraph BEFORE["Before: TruMarket today"]
+    direction LR
+    B1["Exporter deal<br/>customs records private"] --> B2["Arc DealsManager<br/>deal record"]
+    B2 --- B3["Lagoon vault on Base"]
+    B2 --- B4["OSN / AgroPay<br/>supplier payout"]
+    B5["Investors see the deal,<br/>not proof of the shipment"]
+  end
+
+  subgraph AFTER["After: with Proof of Trading on Stellar"]
+    direction LR
+    A1["Exporter deal<br/>customs records stay private"] --> A2["Arc DealsManager<br/>deal record (unchanged)"]
+    A1 -- "hash only" --> A3["Stellar proof layer<br/>MEMO_HASH + contract storage"]
+    A2 -- "deal ID in proof" --> A4["Stellar finance layer<br/>share asset per shipment<br/>+ offering contract"]
+    A3 --> A4
+    A4 -- "USDC (Circle)" --> A5["SPV treasury"]
+    A5 --> A6["OSN / AgroPay<br/>supplier payout (unchanged)"]
+    A2 --- A8["Lagoon vault on Base<br/>(unchanged)"]
+    A7["Investors verify each shipment<br/>and hold registered shares"]
+    A4 --> A7
+  end
+
+  BEFORE ~~~ AFTER

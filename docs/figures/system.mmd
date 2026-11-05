@@ -1,0 +1,36 @@
+%% System overview: proof layer and finance layer on Stellar
+flowchart LR
+  subgraph TM["TruMarket (off-chain, private)"]
+    CU["Customs record"] --> PL["Canonical proof payload<br/>+ salt + pseudonyms"]
+    IN["Insurance assignment"] --> PL
+    AR["Arc DealsManager<br/>deal ID"] --> PL
+    CR["CRAM risk band"] --> PL
+    KYB["KYB approval"]
+  end
+
+  subgraph ST["Stellar"]
+    REC["Recorder account"]
+    MH["MEMO_HASH attestation tx"]
+    OC["Offering contract<br/>(Soroban)"]
+    RS[("Contract storage:<br/>offerings, outcome records")]
+    SH["Share asset TMxxxx<br/>AUTH_REQUIRED · REVOCABLE · CLAWBACK<br/>+ its SAC"]
+    USDC["USDC (Circle) SAC"]
+    TR["SPV treasury"]
+  end
+
+  INV["Approved investor wallet"]
+  VER["verify / explorer"]
+
+  PL -- "sha256" --> REC
+  REC --> MH
+  REC -- "record_outcome" --> RS
+  OC --- RS
+  KYB -- "approve_investor" --> OC
+  OC -- "SAC admin: authorize, mint, burn" --> SH
+  INV -- "subscribe (USDC)" --> OC
+  OC -- "fund" --> TR
+  TR -- "deposit_distribution" --> OC
+  OC -- "redeem (USDC)" --> INV
+  USDC -.- OC
+  MH --> VER
+  RS --> VER

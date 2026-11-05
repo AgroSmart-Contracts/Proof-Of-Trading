@@ -1,5 +1,13 @@
 # Architecture
 
+## Figures
+- [System overview](figures/system.svg)
+- [Offering lifecycle](figures/offering-lifecycle.svg)
+- [Money flow for one offering](figures/money-flow.svg) (on/off-ramps planned)
+- [TruMarket before and after the Stellar integration](figures/integration-before-after.svg) (planned)
+
+![System overview](figures/system.svg)
+
 ## Two layers on Stellar
 **Proof layer (v0.1).** Every consented shipment, financed or not, gets one attestation: a `MEMO_HASH` classic payment from TruMarket's attestor account to a sink account. The memo is the sha256 of a canonical payload (see `proof-schema-v1.md`). Classic transactions are used because contract invocations cannot carry memos. An attestation registry contract is planned for SCF M1.
 
@@ -23,6 +31,10 @@ flowchart LR
   U[TUSDC] --> O
   O --> T[SPV treasury]
 ```
+
+![Offering lifecycle](figures/offering-lifecycle.svg)
+
+![Money flow for one offering](figures/money-flow.svg)
 
 ## On-chain vs off-chain
 | On-chain (public) | Off-chain (TruMarket only) |

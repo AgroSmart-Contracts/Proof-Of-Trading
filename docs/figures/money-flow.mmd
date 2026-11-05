@@ -1,0 +1,24 @@
+%% Money flow for one offering. Ramps are planned (SCF roadmap), not integrated on testnet.
+sequenceDiagram
+  autonumber
+  actor Inv as Investor
+  participant Ramp as On/off-ramps (planned)<br/>CCTP · Bridge · Koywe
+  participant OC as Offering contract
+  participant SPV as SPV treasury
+  actor Exp as Exporter
+  actor Buy as Buyer / insurer
+
+  Inv->>Ramp: Fiat (Bridge, Koywe) or USDC on another chain (CCTP)
+  Ramp-->>Inv: USDC on Stellar
+  Inv->>OC: subscribe: USDC into escrow
+  OC-->>Inv: shares minted in the same transaction
+  OC->>SPV: fund: escrow released once the cap is reached
+  SPV->>Ramp: USDC out
+  Ramp->>Exp: Exporter paid in local currency (existing payout flow)
+  Note over Exp,Buy: Shipment delivered, 90 to 120 days
+  Buy->>Ramp: Buyer pays (or insurer pays the claim)
+  Ramp-->>SPV: USDC on Stellar
+  SPV->>OC: deposit_distribution: collected amount + outcome code
+  Inv->>OC: redeem
+  OC-->>Inv: pro-rata share of what was collected, up to the fixed amount set in the offering terms, shares burned
+  OC->>SPV: sweep_surplus: any amount above what investors are owed
