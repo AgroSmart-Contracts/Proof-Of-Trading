@@ -1,5 +1,7 @@
 # Deployments and evidence (Stellar testnet)
 
+> **v0.2 per-shipment prototype (HackMeridian, TUSDC).** Every ID and transaction below is from the prototype: one offering and one share asset per shipment, settled in TUSDC. The pilot uses one pool share with per-receivable attestations ([pool contract v1](pool-contract-v1.md)), which is not deployed yet. These records don't change.
+
 Every Proof of Trading artifact deployed on **Stellar testnet**, what each one proves, and an explorer link to check it yourself. Nothing here is on mainnet. Shipments are synthetic, TUSDC is test USDC, and the SPV, KYB and insurance assignment are simulated (see [Simulated vs real](../README.md#simulated-vs-real)).
 
 - **Repository:** https://github.com/AgroSmart-Contracts/Proof-Of-Trading
@@ -36,7 +38,7 @@ This document was written at `main` = [`2e5a0cd`](https://github.com/AgroSmart-C
 
 To reproduce a hash, build the commit the deployment came from (the contract source changed in v0.3, so building `main` gives a different WASM): `git checkout 99e8da4 && cd contracts && stellar contract build --package offering --out-dir /tmp/wasm && shasum -a 256 /tmp/wasm/offering.wasm`.
 
-## Contracts
+## Contracts (v0.2 per-shipment prototype, TUSDC)
 
 | Artifact | Contract ID | What it proves | Status |
 |---|---|---|---|
@@ -45,7 +47,7 @@ To reproduce a hash, build the commit the deployment came from (the contract sou
 | SPIKE01 SAC | [`CCTLVNQJZY65YDN5N5NCA3D7JKF6CYZSUPITNY4MVPBPYQE27WUTT2FI`](https://stellar.expert/explorer/testnet/contract/CCTLVNQJZY65YDN5N5NCA3D7JKF6CYZSUPITNY4MVPBPYQE27WUTT2FI) | The test asset the spike contract administered. | ✅ exists |
 | TUSDC SAC | [`CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6`](https://stellar.expert/explorer/testnet/contract/CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6) | Test USDC as a Soroban token, the currency investors subscribe in and are repaid in. Asset [TUSDC](https://stellar.expert/explorer/testnet/asset/TUSDC-GBV6QFVVWJHJHZUWCZPGEZFEEE74YKLWESZ5QP353V2PDZM3OPB2SVZM). | ✅ exists |
 
-## Share assets (one per financed shipment)
+## Share assets (v0.2 per-shipment prototype: one per financed shipment)
 
 Each is a classic asset with AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, plus a Stellar Asset Contract, linked to the shipment's proof hash. Issuer for all: the issuer account below.
 
