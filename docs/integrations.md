@@ -15,16 +15,16 @@ Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). T
 ## Stellar Wallets Kit
 
 - **Role.** The investor interface talks to every wallet through one kit, so adding a wallet doesn't change the app.
-- **Flow.** Connect → read the address → check the pool-share trustline and its authorization (KYB) → build `subscribe` or `redeem` → the kit asks the chosen wallet to sign → submit through Stellar RPC.
+- **Flow.** Connect → read the address → check the TRU3 trustline and its authorization (KYB) → build `subscribe` or `redeem` → the kit asks the chosen wallet to sign → submit through Stellar RPC.
 - **SDK.** `@creit.tech/stellar-wallets-kit`, with `@stellar/stellar-sdk` for building and simulating transactions.
 - **Signing.** The investor signs their own `subscribe` and `redeem` calls (the contract calls `require_auth` on the investor). The app never holds investor keys.
 - **Webhook.** None; the app reads results from RPC.
-- **Reconciliation.** The app shows the transaction hash and the contract event (`subscribed`, `redeemed`); the indexer stores both against the investor's account.
+- **Reconciliation.** The app shows the transaction hash and the contract event (`subscribed`, `redeemed`); the app's records, rebuilt from an indexer or history archive (for example Mercury), store both against the investor's account.
 
 ## Freighter Connect
 
 - **Role.** The default self-custody wallet, offered through the Wallets Kit.
-- **Flow.** Same as above. On first use, the investor opens a trustline to the pool share; TruMarket then authorizes it after KYB.
+- **Flow.** Same as above. On first use, the investor opens a TRU3 trustline; TruMarket then authorizes it after KYB.
 - **SDK.** `@stellar/freighter-api`, used through the Wallets Kit module.
 - **Signing.** In Freighter, by the investor. Network passphrase checked before signing, so a testnet transaction can't be signed for mainnet or the reverse.
 - **Webhook.** None.
@@ -33,7 +33,7 @@ Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). T
 ## Privy
 
 - **Role.** Embedded wallets for investor staff who don't run a Stellar wallet: login by email, key managed by Privy.
-- **Flow.** Login → Privy creates the Stellar wallet → TruMarket **sponsors the reserves** for the account and its pool-share trustline (sponsored reserves, so the investor needs no XLM) → KYB → subscribe.
+- **Flow.** Login → Privy creates the Stellar wallet → TruMarket **sponsors the reserves** for the account and its TRU3 trustline (sponsored reserves, so the investor needs no XLM) → KYB → subscribe.
 - **SDK.** Privy's React SDK for login and the embedded wallet; transactions built with `@stellar/stellar-sdk`.
 - **Signing.** The investor's embedded wallet signs the inner transaction; TruMarket wraps it in a **fee-bump** and pays the fee. The fee-bump can't change what the investor signed.
 - **Webhook.** Privy user events (wallet created) start the KYB case.

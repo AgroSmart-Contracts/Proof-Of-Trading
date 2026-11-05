@@ -10,7 +10,7 @@ sequenceDiagram
   participant Col as Collection account
 
   Inv->>PC: subscribe: Circle USDC on Stellar
-  PC-->>Inv: pool shares minted in the same transaction
+  PC-->>Inv: TRU3 minted in the same transaction
   Note over PC: TruMarket attests the receivable (attest)
   PC->>Koy: release: 90% of face in USDC to the payout account
   Koy->>Exp: USDC to PEN or CLP, paid locally

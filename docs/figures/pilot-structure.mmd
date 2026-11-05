@@ -1,16 +1,16 @@
 %% Pilot structure: one vehicle, one pool share, many attested receivables (design, Tranche 1)
 flowchart TB
   INV["Investors<br/>legal entities, KYB<br/>min. USD 50,000"]
-  subgraph VEH["Vehicle (pool)"]
-    PC["Pool contract on Stellar<br/>pool share, 1 share = USD 1"]
+  subgraph VEH["Receivables-portfolio SPV"]
+    PC["Pool contract on Stellar<br/>TRU3 pool share, 1 TRU3 = USD 1"]
     COL["Collection account<br/>2-of-3 multisig"]
   end
   EXP["Exporter<br/>Peru, Chile"]
   BUY["Buyer<br/>importer"]
   TM["TruMarket<br/>screens, attests, services"]
-  INS["Credit insurer<br/>vehicle named on the policy"]
+  INS["Credit insurer<br/>SPV named on the policy"]
 
-  INV -- "USDC in, pool shares out" --> PC
+  INV -- "USDC in, TRU3 out" --> PC
   PC -- "monthly distributions,<br/>redemption at NAV" --> INV
   PC -- "advance: 90% of face" --> EXP
   EXP -- "assigns the receivable" --> VEH

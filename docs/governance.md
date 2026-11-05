@@ -26,7 +26,7 @@ The offering contract enforces the admin, recorder, treasury and investor limits
 
 **Signers: 2-of-3: CTO, COO, security lead; final keys confirmed before mainnet.** One key each, held separately. No signer addresses are set yet, and none are listed here until they are confirmed. Keys live in hardware wallets or a KMS, never in `.env`.
 
-In the pilot, the same 2-of-3 controls the pool contract's admin and the collection account, which receives buyers' payments ([pool contract v1](pool-contract-v1.md)).
+In the pilot, the same 2-of-3 controls the pool contract's admin (and so TRU3 issuance) and the collection account, which receives buyers' payments ([pool contract v1](pool-contract-v1.md)).
 
 Soroban checks a classic account's **medium** threshold when a contract calls `require_auth` on it, so 2 of 3 signers must authorize every admin call to the offering contract, as well as every classic operation from the issuer or treasury.
 

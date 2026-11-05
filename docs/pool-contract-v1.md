@@ -4,7 +4,7 @@
 - **Decision record:** [ADR 0001](adr/0001-share-asset-structure.md)
 - **Sources:** TruMarket's pilot reply (3 Nov 2026), the SCF #46 submission, [architecture.md](architecture.md)
 
-The pilot finances many export receivables through **one pool**. Investors hold one pool share; each receivable the pool funds is recorded on Stellar as its own **attestation**. This replaces the v0.2 model, where every shipment had its own offering and its own share asset.
+The pilot finances many export receivables through **one pool**. Investors hold one pool share, **TRU3**; each receivable the pool funds is recorded on Stellar as its own **attestation**. This replaces the v0.2 model, where every shipment had its own offering and its own share asset.
 
 ![Pilot structure](figures/pilot-structure.svg)
 
@@ -12,8 +12,9 @@ The pilot finances many export receivables through **one pool**. Investors hold 
 
 | Property | Value |
 |---|---|
-| Issuer | The vehicle (the pool's legal entity) |
-| Unit | 1 pool share = USD 1 |
+| Asset code | TRU3 |
+| Issuer | The receivables-portfolio SPV (the vehicle) |
+| Unit | 1 TRU3 = USD 1 |
 | Flags | AUTH_REQUIRED, AUTH_REVOCABLE, AUTH_CLAWBACK_ENABLED, set before any trustline exists |
 | SAC admin | The pool contract, so shares are only minted against USDC paid in and only burned on redemption |
 | Settlement | Circle USDC on Stellar |
@@ -25,7 +26,7 @@ The pilot finances many export receivables through **one pool**. Investors hold 
 |---|---|---|
 | `attest(key, hash)` | Recorder, with two-person approval | Records a receivable: its key and the hash of its document set. Rejects a key that is already attested. Stores the hash and the status `attested`. |
 | `set_status(key, state)` | Recorder | Appends `paid`, `overdue`, `claim`, `loss` or `revoked` to the receivable's history. It never edits or removes an earlier entry. |
-| `subscribe(investor, amount)` | Approved investor | Takes `amount` USDC and mints the same number of pool shares in the same transaction. |
+| `subscribe(investor, amount)` | Approved investor | Takes `amount` USDC and mints the same number of TRU3 in the same transaction. |
 | `release(key)` | Admin multisig | Sends 90% of face value for an attested receivable to the payout account. Fails for a key that isn't attested, was already released, or would break a concentration limit. |
 | `settle(key, amount)` | Admin multisig | Applies the collected amount through the waterfall below and marks the receivable `paid`. |
 | `distribute()` | Admin multisig | Monthly: pays the USDC due to holders, pro rata to their shares. |
@@ -86,7 +87,7 @@ Screened (off-chain) → **Attested** (`attest`) → **Funded** (`release`) → 
 ## Storage and events
 
 - Pool state, attestations and status histories are **persistent** entries. The [TTL keeper](rent-and-ttl.md) extends each one for the full term plus 60 days.
-- Every call emits an event with its arguments, so an indexer can rebuild the pool's history from events alone.
+- Every call emits an event with its arguments, so an indexer or history archive (for example Mercury) can rebuild the pool's history from events alone.
 
 ## Governance
 

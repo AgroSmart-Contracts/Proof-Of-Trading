@@ -8,7 +8,7 @@ flowchart LR
   subgraph ST["Stellar"]
     PC["Pool contract (Soroban)"]
     RS[("Persistent storage:<br/>attestations, status history, pool state")]
-    SH["Pool share<br/>AUTH_REQUIRED · REVOCABLE · CLAWBACK<br/>+ its SAC"]
+    SH["TRU3 pool share<br/>AUTH_REQUIRED · REVOCABLE · CLAWBACK<br/>+ its SAC"]
     USDC["Circle USDC SAC"]
     COL["Collection account<br/>2-of-3"]
   end
@@ -16,7 +16,7 @@ flowchart LR
   INV["Investor wallet<br/>Wallets Kit · Freighter · Privy"]
   BR["Bridge<br/>buyer USD to USDC"]
   KOY["Koywe<br/>USDC to PEN / CLP"]
-  VER["Indexer / explorer"]
+  VER["Indexer or history archive<br/>(for example Mercury), explorer"]
 
   KEY -- "attest" --> PC
   PC --- RS

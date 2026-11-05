@@ -1,6 +1,6 @@
 # ADR 0001: Share asset structure
 
-- **Status:** Accepted (v0.1 assets, v0.2 contract). **Revised 2026-11-05:** the pilot uses one pool share with per-receivable attestations (decision 3). Decisions 1 and 2 stand.
+- **Status:** Accepted (v0.1 assets, v0.2 contract). **Revised 2026-11-05:** the pilot uses one pool share, TRU3, with per-receivable attestations (decision 3). Decisions 1 and 2 stand.
 - **Date:** 2026-10-24, revised 2026-11-05
 - **Evidence:** [spike report](../spike-report.md), [DEPLOYMENTS.md](../DEPLOYMENTS.md), [pool contract v1](../pool-contract-v1.md)
 
@@ -41,7 +41,7 @@ The handover is reversible. `transfer_share_admin` hands the role back to the is
 
 ### 3. One pool share, with an attestation per receivable (revised 2026-11-05)
 
-The pilot has **one share asset**, issued by the vehicle (1 share = USD 1), with the pool contract as SAC admin. Each receivable the pool funds is **attested** in the pool contract under a key built from the export declaration number, the invoice number and the buyer's tax ID, and its status (paid, overdue, claim, loss, revoked) is appended over time. Design: [pool-contract-v1.md](../pool-contract-v1.md).
+The pilot has **one share asset, TRU3**, issued by the receivables-portfolio SPV (1 TRU3 = USD 1), with the pool contract as SAC admin. Each receivable the pool funds is **attested** in the pool contract under a key built from the export declaration number, the invoice number and the buyer's tax ID, and its status (paid, overdue, claim, loss, revoked) is appended over time. Design: [pool-contract-v1.md](../pool-contract-v1.md).
 
 - **One trustline, one asset.** Investors open one trustline and hold one asset, however many receivables the pool funds. `stellar.toml` lists one currency.
 - **Diversification by rule.** Concentration limits (20% per receivable, 25% per buyer, 30% per exporter, 50% per product) and a fixed loss waterfall replace per-shipment isolation.
