@@ -20,17 +20,13 @@ The offering contract enforces the admin, recorder, treasury and investor limits
 
 | Account | Signers | Threshold | Master key |
 |---|---|---|---|
-| Issuer / admin | 3 keys, weight 1 each | 2 for low, medium and high | weight 0 (locked) |
-| SPV treasury | 3 keys, weight 1 each | 2 for low, medium and high | weight 0 (locked) |
+| Issuer / admin (pool contract admin in the pilot) | 3 keys, weight 1 each | 2 for low, medium and high | weight 0 (locked) |
+| SPV treasury (collection account in the pilot) | 3 keys, weight 1 each | 2 for low, medium and high | weight 0 (locked) |
 | Recorder | 1 dedicated key | 1 | in use |
 
-Proposed signers, one key each, held separately:
+**Signers: 2-of-3: CTO, COO, security lead; final keys confirmed before mainnet.** One key each, held separately. No signer addresses are set yet, and none are listed here until they are confirmed. Keys live in hardware wallets or a KMS, never in `.env`.
 
-1. TruMarket operations lead;
-2. TruMarket finance lead;
-3. an independent signer (for example the SPV's administrator or counsel), so TruMarket alone cannot act.
-
-The names and keys are for TruMarket and counsel to confirm; none are set yet. Keys live in hardware wallets or a KMS, never in `.env`.
+In the pilot, the same 2-of-3 controls the pool contract's admin and the collection account, which receives buyers' payments ([pool contract v1](pool-contract-v1.md)).
 
 Soroban checks a classic account's **medium** threshold when a contract calls `require_auth` on it, so 2 of 3 signers must authorize every admin call to the offering contract, as well as every classic operation from the issuer or treasury.
 
@@ -41,8 +37,8 @@ The recorder stays a single key on purpose: it can only append records that must
 [`scripts/governance-setup.ts`](../scripts/governance-setup.ts) applies the table above in **one transaction** per account: add the signers, set the thresholds, set the master weight to 0. It is a dry run unless `--submit` is passed, and it refuses any setup that could lock the account out (threshold above the number of signers, duplicates, the account's own key as a signer, a threshold of 1 with several signers).
 
 ```sh
-GOV_SIGNERS=G...ops,G...finance,G...independent GOV_THRESHOLD=2 npm run governance:setup -- issuer          # dry run
-GOV_SIGNERS=G...ops,G...finance,G...independent GOV_THRESHOLD=2 npm run governance:setup -- issuer --submit
+GOV_SIGNERS=G...cto,G...coo,G...security GOV_THRESHOLD=2 npm run governance:setup -- issuer          # dry run
+GOV_SIGNERS=G...cto,G...coo,G...security GOV_THRESHOLD=2 npm run governance:setup -- issuer --submit
 GOV_SIGNERS=... npm run governance:setup -- spv_treasury --submit
 ```
 
@@ -57,6 +53,11 @@ It has **not** been run on the testnet demo accounts: the demo scripts sign with
 ### Issuer lock
 
 "Locking the issuer" means its master key weight is 0, so the original secret can never sign again. The account is **not** made unusable: the multisig signers still control it, because the asset has to stay administrable. Freeze, clawback and taking back the SAC admin at offering close all need the issuer. A lock with no remaining signers would make every share asset permanently unmanageable; the setup script cannot produce that state.
+
+### Upgrades (pool contract)
+
+- An upgrade needs 2 of 3 signers and is announced to holders **30 days** before it takes effect.
+- Economic terms can't change by upgrade: the waterfall, the 90% advance, the concentration limits and the term stay as set in the subscription agreement.
 
 ## Freeze and clawback policy
 
@@ -74,7 +75,7 @@ Share assets have AUTH_REVOCABLE (freeze) and AUTH_CLAWBACK_ENABLED (recover sha
 - a provable operational error (shares minted or sent to the wrong account);
 - reissuing shares to a holder who has lost their key, at their request, after KYB re-verification. The clawed-back amount is reissued to the holder's new, approved account.
 
-**Never** to settle a commercial dispute, to change the terms of an offering, or to move value between investors.
+**Never** to settle a commercial dispute, to change the terms of an offering or of the pool, or to move value between investors. In the pool contract, `freeze` and `clawback` each store and emit their reason.
 
 **Process:**
 
