@@ -95,7 +95,7 @@ function DealCard({ d, o }: { d: Deal; o?: Offering }) {
       </div>
       <div className="deal-apy">
         <span className="big-apy">{money(fixedAmount(d), 0)}</span>
-        <span className="muted small">fixed amount set in the offering terms · {termsLine(d)} on {money(d.face_value_usd, 0)}</span>
+        <span className="muted small">investor amount fixed in the subscription agreement · {termsLine(d)} on {money(d.face_value_usd, 0)}</span>
       </div>
       {open ? (
         <div className="stack" style={{ gap: 6 }}>
@@ -130,12 +130,12 @@ export function Marketplace() {
   return (
     <div className="stack-lg">
       <div className="stack" style={{ gap: 10 }}>
-        <h1>Invest in insured trade receivables</h1>
+        <h1>Invest in export trade receivables</h1>
         <p className="muted">Each deal is one agri-export shipment: you fund it, and you're repaid when the buyer pays.</p>
         <div className="row" style={{ gap: 8 }}>
-          <span className="chip green">🛡️ Insured up to 90%</span>
+          <span className="chip">🛡️ Credit insurance simulated in this prototype</span>
           <span className="chip green">✓ Verifiable on Stellar</span>
-          <span className="chip green">Fixed amount set in the offering terms, paid at maturity</span>
+          <span className="chip green">Investor amount fixed in the subscription agreement, paid at maturity</span>
           <span className="chip">Shares registered in your name</span>
         </div>
       </div>
@@ -251,7 +251,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
               <p className="small">This wallet hasn't passed KYB, so the share asset won't accept it. You can still try: the asset itself will refuse to mint, and your {sc} never leaves your wallet.</p>
             ) : (
               <>
-                <p className="small muted">Professional investors only. TruMarket approves your wallet after KYB (simulated here).</p>
+                <p className="small muted">Legal entities only, minimum ticket USD 50,000; no natural persons or US persons. TruMarket approves your wallet after KYB (simulated here).</p>
                 <div><button className="secondary" disabled={!interactive || busy || !canKyb} onClick={() => run(`KYB approval for ${PERSONAS[persona]}`, { action: "approve", ref: d.shipment_ref, who: who(persona) })}>Complete KYB (simulated)</button></div>
               </>
             )}
@@ -268,8 +268,8 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo, not a legal document)
 SPV: Proof of Trading SPV ${d.shipment_ref}
 Subscription: ${amountOk ? amt.toLocaleString("en-US") : "…"} USD for ${amountOk ? amt.toLocaleString("en-US") : "…"} ordinary shares at 1.00 USD
-Payment: the fixed amount set in the offering terms (${termsLine(d)}), paid from collections;
-        pro rata if less is collected (insurance covers up to 90%)
+Payment: the investor amount fixed in the subscription agreement (${termsLine(d)}), paid from collections;
+        pro rata if less is collected (credit insurance simulated in this prototype)
 Your share is registered off-chain in your name; you receive a share
 certificate whose hash is anchored on Stellar. ${d.share?.code} tokens are your
 on-chain receipt. The signed agreement's sha256 is recorded in your
@@ -325,7 +325,7 @@ function DueDiligence({ d, o }: { d: Deal; o?: Offering }) {
       <div className="card stack">
         <h3>Risk and protection</h3>
         <div className="row"><span className={`band ${d.cram_band}`}>{d.cram_band}</span><span className="small"><b>CRAM band {d.cram_band}</b>: {CRAM[d.cram_band]}</span></div>
-        <p className="small">🛡️ <b>Insured up to 90%</b>; the insurance is assigned to the SPV (simulated: assignment digest only). Exclusions apply: the insurance protects the shares, it is not a promise of repayment.</p>
+        <p className="small">🛡️ <b>Credit insurance is simulated here</b> (assignment digest only). In the pilot it is bound and endorsed, with the vehicle named on the policy, before the first pool receivable. It is not a promise of repayment.</p>
       </div>
       {proof && (
         <div className="card stack">
@@ -367,7 +367,7 @@ export function DealPage({ ref_ }: { ref_: string }) {
         <span className={`chip ${tone}`}>{label}</span>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{money(fixedAmount(d), 0)}</div><div className="l">Fixed amount (offering terms)</div></div>
+        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{money(fixedAmount(d), 0)}</div><div className="l">Investor amount (subscription agreement)</div></div>
         <div className="kpi"><div className="v">{d.term_days} days</div><div className="l">Term</div></div>
         <div className="kpi"><div className="v">{money(d.face_value_usd, 0)}</div><div className="l">Raise</div></div>
         <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "–"}</div><div className="l">Subscribed</div></div>

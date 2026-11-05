@@ -144,7 +144,7 @@ export function ProofDetail({ ref_ }: { ref_: string }) {
           <Fact
             label="Risk"
             value={<span className="row" style={{ gap: 8 }}><span className={`band ${main.payload.cram_band}`}>{main.payload.cram_band}</span> {CRAM[main.payload.cram_band]?.split(":")[0]}</span>}
-            sub="Insured up to 90%"
+            sub="Credit insurance simulated"
           />
         )}
         {outcome && (

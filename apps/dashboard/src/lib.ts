@@ -124,7 +124,7 @@ export function shipmentTitle(s: Store, ref: string): string {
 }
 export const offeringFor = (s: Store, ref: string) => s.offerings.find((o) => o.shipment_ref === ref);
 /**
- * The fixed amount set in the offering terms for the full raise, as the contract computes it
+ * The investor amount fixed in the subscription agreement for the full raise, as the contract computes it
  * (`owed_total`): face × (1 + rate × term / 365). Investors receive this, pro rata, when it is collected.
  */
 export const fixedAmount = (d: { face_value_usd: number; apy_bps: number; term_days: number }) =>
@@ -135,7 +135,7 @@ export const dealFor = (s: Store, ref: string) => s.deals.find((d) => d.shipment
 export const isApproved = (o: Offering | undefined, p: Persona) => !!o?.steps.some((s) => s.step === `approve ${stepName(p)}`);
 export const outcomeAttested = (s: Store, ref: string) => s.attestations.some((a) => a.shipment_ref === ref && a.event === "outcome");
 
-/** Value of a position under the offering terms, accrued from funding up to the term (estimate, before collection). */
+/** Value of a position under the subscription agreement, accrued from funding up to the term (estimate, before collection). */
 export function accruedValue(o: Offering, shares: number): number {
   const c = o.on_chain;
   if (!c || !Number(c.funded_at)) return shares;

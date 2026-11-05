@@ -51,7 +51,7 @@ function DealOps({ d }: { d: Deal }) {
           <input type="number" value={insured} onChange={(e) => setInsured(e.target.value)} className="money-in" aria-label="Insurance payout" />
           <button className="gold" disabled={off} onClick={() => run(`Insurer pays ${ref}`, { action: "distribute", ref, usd: insured, outcome: "4" })}>Shipment failed: insurer paid</button>
         </div>
-        <span className="tiny muted">Owed to investors under the offering terms: {usd(c.owed)}</span>
+        <span className="tiny muted">Owed to investors under the subscription agreement: {usd(c.owed)}</span>
       </div>
     );
   else if (c.status === "Distributing" && !(allRedeemed && surplus === 0n && outcomeAttested(store, ref)))

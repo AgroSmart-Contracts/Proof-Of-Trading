@@ -151,7 +151,7 @@ function App() {
       </header>
       <div className="banner">
         <div className="wrap">
-          <span><b>Testnet demo.</b> SPV, KYB and insurance are simulated · settles in {settlementLabel(store)}</span>
+          <span><b>v0.2 prototype on testnet.</b> One offering per shipment; the pilot uses one pool share with an attestation per receivable. SPV, KYB and insurance are simulated · settles in {settlementLabel(store)}</span>
           <span className="chip" style={{ marginLeft: "auto", background: interactive ? "var(--tm-primary)" : "#3b5a4e", color: "#fff" }}>
             {interactive ? "Live: buttons sign testnet transactions" : "Read-only snapshot"}
           </span>
