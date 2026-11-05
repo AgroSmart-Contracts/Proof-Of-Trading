@@ -49,7 +49,7 @@ export type Deal = {
   has_offering: boolean;
   stuck: boolean;
 };
-export type Account = { role: string; public_key: string; tusdc: string };
+export type Account = { role: string; public_key: string; balance?: string; tusdc: string };
 export type ShipmentSummary = { shipment_ref: string; commodity: string; destination_region: string; epoch: string; financed: boolean };
 export type Store = {
   generated_at: string;
@@ -61,7 +61,17 @@ export type Store = {
   shares: Share[];
   offerings: Offering[];
   tusdc: { code: string; issuer: string; sac_id: string } | null;
+  /** What offerings settle in (Circle USDC on the v0.3 contract, TUSDC on v0.2). Absent in older exports. */
+  settlement?: { code: string; sac_id: string } | null;
 };
+
+/** Code of the asset offerings settle in. */
+export const settlementCode = (s: Store) => s.settlement?.code ?? s.tusdc?.code ?? "USDC";
+/** An account's settlement-asset balance in base units. */
+export const balanceOf = (a?: Account) => a?.balance ?? a?.tusdc ?? "0";
+/** Banner text for the settlement asset. */
+export const settlementLabel = (s: Store) =>
+  settlementCode(s) === "USDC" ? "Circle testnet USDC" : `${settlementCode(s)} (our test USDC)`;
 
 export type Persona = "A" | "B" | "U" | "ops";
 export const PERSONAS: Record<Persona, string> = { A: "Investor A", B: "Investor B", U: "Unapproved wallet", ops: "TruMarket ops (SPV)" };
@@ -147,9 +157,9 @@ export function stepLabel(s: Step, code: string): string {
     case "create_offering": return `Offering opened: up to ${Number(s.detail?.cap_usd ?? 0).toLocaleString("en-US")} ${code} at $1 each`;
     case "trustline": return `${investor} opens a ${code} trustline`;
     case "approve": return `${investor} approved to hold ${code} (KYB, simulated)`;
-    case "subscribe": return `${investor} pays $${Number(qty).toLocaleString("en-US")} TUSDC → ${s.detail?.shares ?? qty} ${code} minted`;
+    case "subscribe": return `${investor} pays $${Number(qty).toLocaleString("en-US")} → ${s.detail?.shares ?? qty} ${code} minted`;
     case "certificate": return `SPV share certificate ${s.detail?.register_entry ?? ""} issued off-chain to ${investor}; hash anchored on Stellar`;
-    case "fund": return "Fully subscribed → escrowed TUSDC sent to the SPV treasury";
+    case "fund": return "Fully subscribed → escrowed funds sent to the SPV treasury";
     case "deposit_distribution": return `SPV deposits $${Number(actor).toLocaleString("en-US")} collected (${OUTCOMES[s.step.split(" ").pop()!] ?? "outcome"})`;
     case "redeem": return `${investor} redeems → ${amount(s.detail?.payout)} paid, ${s.detail?.shares_burned ?? "?"} ${code} cancelled`;
     case "sweep_surplus": return `Surplus ${amount(s.detail?.amount)} returned to the SPV`;

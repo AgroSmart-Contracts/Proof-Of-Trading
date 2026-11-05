@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApp } from "./ctx";
-import { COMMODITY, OUTCOMES, isApproved, money, num, offeringFor, outcomeAttested, offeringStatus, units, usd, type Deal } from "./lib";
+import { COMMODITY, OUTCOMES, balanceOf, isApproved, settlementCode, money, num, offeringFor, outcomeAttested, offeringStatus, units, usd, type Deal } from "./lib";
 
 function DealOps({ d }: { d: Deal }) {
   const { store, interactive, busy, run } = useApp();
@@ -82,6 +82,7 @@ function DealOps({ d }: { d: Deal }) {
 
 export function Ops() {
   const { store } = useApp();
+  const sc = settlementCode(store);
   const t = store.accounts.treasury;
   return (
     <div className="stack-lg">
@@ -90,7 +91,7 @@ export function Ops() {
         <p className="muted">Run each deal's SPV, step by step. Every button signs a real testnet transaction.</p>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v">{money(units(t.tusdc))}</div><div className="l">SPV treasury (TUSDC)</div></div>
+        <div className="kpi"><div className="v">{money(units(balanceOf(t)))}</div><div className="l">SPV treasury ({sc})</div></div>
         <div className="kpi"><div className="v">{store.deals.filter((d) => d.has_offering).length}</div><div className="l">Offerings opened</div></div>
         <div className="kpi"><div className="v">{store.attestations.filter((a) => a.event !== "outcome").length}</div><div className="l">Verifiable shipments</div></div>
       </div>

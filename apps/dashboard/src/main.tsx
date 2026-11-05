@@ -4,7 +4,7 @@ import "./theme/tokens.css";
 import "./theme/components.css";
 import "./style.css";
 import { AppCtx } from "./ctx";
-import { PERSONAS, X, isInteractive, postAction, short, txLinks, type ActionBody, type Persona, type Store } from "./lib";
+import { PERSONAS, X, isInteractive, postAction, settlementLabel, short, txLinks, type ActionBody, type Persona, type Store } from "./lib";
 import { DealPage, Marketplace, Portfolio } from "./investor";
 import { Ops } from "./ops";
 import { ProofDetail, Proofs } from "./proofs";
@@ -151,7 +151,7 @@ function App() {
       </header>
       <div className="banner">
         <div className="wrap">
-          <span><b>Testnet demo.</b> SPV, KYB and insurance are simulated · TUSDC is test USDC</span>
+          <span><b>Testnet demo.</b> SPV, KYB and insurance are simulated · settles in {settlementLabel(store)}</span>
           <span className="chip" style={{ marginLeft: "auto", background: interactive ? "var(--tm-primary)" : "#3b5a4e", color: "#fff" }}>
             {interactive ? "Live: buttons sign testnet transactions" : "Read-only snapshot"}
           </span>

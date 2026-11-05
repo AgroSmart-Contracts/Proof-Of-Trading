@@ -9,7 +9,7 @@ import {
   type AssetsFile, type AttestationRecord,
 } from "@pot/core";
 import { loadSamples, kp } from "./lib.js";
-import { contracts, offerings, onChain, shareBalance, type OfferingRecord } from "./offering/actions.js";
+import { contracts, offerings, onChain, settlement, shareBalance, type OfferingRecord } from "./offering/actions.js";
 
 const atts = readStore<AttestationRecord[]>("attestations.json", []);
 const assets = readStore<AssetsFile>("assets.json", { shares: [] });
@@ -26,15 +26,23 @@ const readDoc = (dir: string, file?: string) => {
   return p && existsSync(p) ? readFileSync(p, "utf8") : null;
 };
 
-// Personas: public keys and TUSDC balances (public information).
+// Personas: public keys and balances of the settlement asset (public information). The settlement
+// asset is what the current offering contract settles in: Circle USDC on v0.3, TUSDC on v0.2.
 const PERSONAS = { A: "investor_a", B: "investor_b", U: "unapproved", treasury: "spv_treasury", issuer: "issuer", registrar: "attestor" };
-const tusdcSac = assets.tusdc?.sac_id;
+const settle = (() => {
+  try {
+    return settlement();
+  } catch {
+    return null;
+  }
+})();
 const accounts = Object.fromEntries(
   await Promise.all(
     Object.entries(PERSONAS).map(async ([label, role]) => {
       const pub = kp(role).publicKey();
-      const bal = tusdcSac ? ((await view(tusdcSac, "balance", [new Address(pub).toScVal()]).catch(() => 0n)) as bigint) : 0n;
-      return [label, { role, public_key: pub, tusdc: bal.toString() }];
+      const bal = settle ? ((await view(settle.sac_id, "balance", [new Address(pub).toScVal()]).catch(() => 0n)) as bigint) : 0n;
+      // `tusdc` kept as an alias so older dashboard builds keep working.
+      return [label, { role, public_key: pub, balance: bal.toString(), tusdc: bal.toString() }];
     }),
   ),
 );
@@ -112,7 +120,7 @@ const shipments = loadSamples()
 const out = {
   generated_at: new Date().toISOString(),
   shipments,
-  offering_contract: contracts().offering?.contract_id ?? null,
+  offering_contract: contracts().offering_v3?.contract_id ?? contracts().offering?.contract_id ?? null,
   accounts,
   deals,
   attestations: atts.map((r) => {
@@ -124,6 +132,7 @@ const out = {
     };
   }),
   tusdc: assets.tusdc ?? null,
+  settlement: settle,
   shares: assets.shares,
   offerings: offeringsOut,
   spike_decision: spike?.decision ?? null,

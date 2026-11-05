@@ -4,7 +4,7 @@ import { Badge, ProgressBar } from "./ui";
 import {
   COMMODITY, CRAM, OUTCOMES, amount, PERSONAS, REGION, X, accruedValue, date, dateS, dealFor, isApproved, memoHashOf, money, num,
   offeringFor, previewPayout, sha256Hex, short, offeringStatus, stepLabel, units, usd, who,
-  type Deal, type Doc, type Offering, type Persona, type Store,
+  type Deal, type Doc, type Offering, type Persona, type Store, balanceOf, settlementCode
 } from "./lib";
 
 // ---------- shared pieces ----------
@@ -190,6 +190,7 @@ export function Marketplace() {
 
 function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
   const { persona, interactive, busy, run, store } = useApp();
+  const sc = settlementCode(store);
   const c = o?.on_chain;
   const cap = c ? units(c.p.cap_shares) : d.face_value_usd;
   const sold = c ? units(c.sold_shares) : 0;
@@ -200,7 +201,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
   const [declined, setDeclined] = useState(false);
   const approved = isApproved(o, persona);
   const position = persona === "A" || persona === "B" ? o?.investors[persona] : undefined;
-  const balance = units(store.accounts[persona]?.tusdc ?? 0);
+  const balance = units(balanceOf(store.accounts[persona]));
 
   if (persona === "ops") return <div className="card"><p>Switch to an investor persona to invest, or manage this deal in <a href="#/ops">SPV operations</a>.</p></div>;
   if (!o || !c) {
@@ -236,7 +237,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
     <div className="card stack">
       <div className="row between">
         <h3>Invest</h3>
-        <span className="small muted">Wallet: <b>{money(balance)}</b> TUSDC</span>
+        <span className="small muted">Wallet: <b>{money(balance)}</b> {sc}</span>
       </div>
       {position && <div className="chip green">You hold {num(position.shares_held)} shares · <a href="#/portfolio">view certificate</a></div>}
       <div className="steps">
@@ -247,7 +248,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             {approved ? (
               <p className="small ok">✓ Approved to hold {d.share?.code}. Your trustline is authorized by the issuer.</p>
             ) : persona === "U" ? (
-              <p className="small">This wallet hasn't passed KYB, so the share asset won't accept it. You can still try: the asset itself will refuse to mint, and your TUSDC never leaves your wallet.</p>
+              <p className="small">This wallet hasn't passed KYB, so the share asset won't accept it. You can still try: the asset itself will refuse to mint, and your {sc} never leaves your wallet.</p>
             ) : (
               <>
                 <p className="small muted">Professional investors only. TruMarket approves your wallet after KYB (simulated here).</p>
@@ -280,14 +281,14 @@ subscription transaction.`}</div>
           <div className="dot">3</div>
           <div className="stack" style={{ gap: 8 }}>
             <h4>Pay and receive your shares</h4>
-            <p className="small muted">One transaction: your TUSDC goes into escrow and {d.share?.code} shares are minted to you. The SPV then issues your share certificate.</p>
+            <p className="small muted">One transaction: your {sc} goes into escrow and {d.share?.code} shares are minted to you. The SPV then issues your share certificate.</p>
             <div>
               <button disabled={!interactive || busy || !agreed || !amountOk || (!approved && persona !== "U")} onClick={subscribe}>
-                Pay {amountOk ? money(amt, 0) : ""} TUSDC & subscribe
+                Pay {amountOk ? money(amt, 0) : ""} {sc} & subscribe
               </button>
             </div>
             {!interactive && <p className="tiny muted">Read-only snapshot. Run the dashboard locally (`npm run dev`) to sign testnet transactions.</p>}
-            {declined && <p className="small bad">✗ Rejected by the share asset (BalanceDeauthorizedError): this wallet isn't approved. No TUSDC moved.</p>}
+            {declined && <p className="small bad">✗ Rejected by the share asset (BalanceDeauthorizedError): this wallet isn't approved. No {sc} moved.</p>}
           </div>
         </div>
       </div>
@@ -413,6 +414,7 @@ function Certificate({ cert, agreement, burned }: { cert: Doc; agreement?: Doc; 
 
 function PositionCard({ o, label }: { o: Offering; label: Persona }) {
   const { store, interactive, busy, run } = useApp();
+  const sc = settlementCode(store);
   const p = o.investors[label];
   const d = dealFor(store, o.shipment_ref)!;
   const c = o.on_chain!;
@@ -442,7 +444,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
         <div className="card cream row between">
           <div className="stack" style={{ gap: 2 }}>
             <b>{OUTCOMES[String(c.outcome_code)]}: {usd(c.total_collected)} collected</b>
-            <span className="small">Redeem your {heldUnits.toLocaleString("en-US")} shares for <b>{usd(payout.toString())}</b> TUSDC. Your {o.share_code} tokens are burned and your certificate cancelled.</span>
+            <span className="small">Redeem your {heldUnits.toLocaleString("en-US")} shares for <b>{usd(payout.toString())}</b> {sc}. Your {o.share_code} tokens are burned and your certificate cancelled.</span>
           </div>
           <button disabled={!interactive || busy} onClick={() => run(`${PERSONAS[label]} redeems ${o.share_code}`, { action: "redeem", ref: o.shipment_ref, who: who(label) })}>Redeem {usd(payout.toString())}</button>
         </div>
@@ -461,6 +463,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
 
 export function Portfolio() {
   const { store, persona } = useApp();
+  const sc = settlementCode(store);
   if (persona === "ops") return <p>Switch to an investor persona to see a portfolio.</p>;
   const acct = store.accounts[persona];
   const lastActivity = (o: Offering) => o.steps[o.steps.length - 1]?.at ?? "";
@@ -479,7 +482,7 @@ export function Portfolio() {
         <a className="mono small" href={`${X}/account/${acct.public_key}`} target="_blank" rel="noreferrer">{short(acct.public_key, 8)}</a>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v">{money(units(acct.tusdc))}</div><div className="l">TUSDC in wallet</div></div>
+        <div className="kpi"><div className="v">{money(units(balanceOf(acct)))}</div><div className="l">{sc} in wallet</div></div>
         <div className="kpi"><div className="v">{money(invested, 0)}</div><div className="l">Active investments</div></div>
         <div className="kpi"><div className="v">{owed ? money(owed) : "–"}</div><div className="l">Owed at maturity</div></div>
         <div className="kpi"><div className="v">{positions.length}</div><div className="l">Deals (incl. closed)</div></div>
