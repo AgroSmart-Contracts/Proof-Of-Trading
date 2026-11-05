@@ -8,7 +8,7 @@ Context: [ADR 0001](../adr/0001-share-asset-structure.md). Today each share is a
 ## The two standards
 
 ### SEP-8: Regulated Assets
-A classic asset whose issuer must approve **every transaction** that moves it. Wallets send the transaction to the issuer's approval server (advertised in `stellar.toml` with `regulated = true` and `approval_server`). The server checks it against its rules and, if it passes, returns it with the issuer's signature and authorization operations around the payment (authorize, pay, deauthorize). Trustlines otherwise stay unauthorized, so nothing moves without approval.
+A classic asset whose issuer must approve **every transaction** that moves it. Wallets send the transaction to the issuer's approval server (advertised in each `[[CURRENCIES]]` entry of `stellar.toml` with `regulated = true`, `approval_server` and `approval_criteria`). Active, v1.7.4 ([SEP-0008](https://github.com/stellar/stellar-protocol/blob/master/ecosystem/sep-0008.md)); it requires AUTH_REQUIRED and AUTH_REVOCABLE on the issuer, which the share assets already have. The server checks it against its rules and, if it passes, returns it with the issuer's signature and authorization operations around the payment (authorize, pay, deauthorize). Trustlines otherwise stay unauthorized, so nothing moves without approval.
 
 - **Fits:** keeps the classic asset, its flags and its SAC; the rules (for example "recipient must be KYB-approved and within the investor cap", "no transfers before maturity") live in TruMarket's server and can change without a contract upgrade.
 - **Doesn't fit as-is:** the offering contract authorizes each investor's trustline once (`approve_investor`) and mints into it. Under SEP-8 trustlines are unauthorized at rest, so `subscribe` and `redeem` would have to authorize, act and deauthorize inside the contract call (the contract is SAC admin, so it can call `set_authorized` on both sides). That changes the contract.
@@ -32,7 +32,7 @@ Draft, v0.4.0, authored by OpenZeppelin ([SEP-0057](https://github.com/stellar/s
 | Where rules live | Contract + issuer | Off-chain approval server | On-chain modules |
 | Contract change for us | None | `subscribe`/`redeem`/`refund` authorize and deauthorize around each move | Token address and mint/burn calls; issuance flow rewritten |
 | New infrastructure | None | Approval server (signs as issuer) | Compliance and identity contracts, claim issuers |
-| Maturity | In use | Final SEP, few wallets support it | Draft |
+| Maturity | In use | Active, v1.7.4 (since 2018); wallets must support the approval flow | Draft, v0.4.0 |
 
 ## Recommendation
 
