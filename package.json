@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "setup:accounts": "tsx scripts/setup-accounts.ts",
     "setup:tusdc": "tsx scripts/setup-tusdc.ts",
+    "setup:circle-usdc": "tsx scripts/setup-circle-usdc.ts",
     "samples:check": "tsx scripts/check-samples.ts",
     "attest": "tsx scripts/attest.ts",
     "verify": "tsx scripts/verify.ts",

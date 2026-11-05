@@ -141,9 +141,12 @@ export async function handover(ref: string) {
   record(ref, "handover", await invoke(kp("issuer"), s.sac_id, "set_admin", [addr(c)]), { new_admin: c });
 }
 
-export async function create(ref: string, deadlineMins = 120) {
+/** capUsd overrides the sample's face value, e.g. a small cap for a run paid in faucet-sized Circle USDC. */
+export async function create(ref: string, deadlineMins = 120, capUsd?: number) {
   const sample = loadSamples().find((x) => x.shipment_ref === ref);
   if (!sample?.financed) throw new Error(`${ref} is not a financed sample`);
+  const cap = capUsd ?? sample.face_value_usd;
+  if (!(cap > 0)) throw new Error("cap must be a positive number of USD");
   const s = shareFor(ref);
   const deadline = BigInt(Math.floor(Date.now() / 1000) + deadlineMins * 60);
   const params = struct({
@@ -153,14 +156,14 @@ export async function create(ref: string, deadlineMins = 120) {
     usdc_token: addr(settlement().sac_id),
     treasury: addr(kp("spv_treasury").publicKey()),
     unit_price: i128(UNIT),
-    cap_shares: i128(usd(sample.face_value_usd)),
+    cap_shares: i128(usd(cap)),
     deadline: u64(deadline),
     term_secs: u64(sample.term_days * 86_400),
     apy_bps: u32(sample.apy_bps),
   });
   const tx = await invoke(kp("issuer"), offeringContract(), "create_offering", [u32(offeringId(ref)), params]);
   record(ref, "create_offering", tx, {
-    cap_usd: String(sample.face_value_usd), apy_bps: String(sample.apy_bps), term_days: String(sample.term_days),
+    cap_usd: String(cap), apy_bps: String(sample.apy_bps), term_days: String(sample.term_days),
     deadline: new Date(Number(deadline) * 1000).toISOString(),
   });
 }
@@ -190,7 +193,7 @@ export async function subscribe(ref: string, who: string, amountUsd: number) {
   const s = shareFor(ref);
   // Placeholder subscription agreement in the investor's name; only its hash goes on-chain.
   const agreement = [
-    "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo, not a legal document)",
+    "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo without legal effect)",
     `SPV: Proof of Trading SPV ${ref} (simulated; legal structure under counsel review)`,
     `Subscriber wallet: ${k.publicKey()}`,
     `Subscription: ${amountUsd} USD (paid in ${settlement().code}) for ${amountUsd} ordinary shares at 1.00 USD each`,
@@ -217,7 +220,7 @@ async function issueCertificate(ref: string, name: string, holder: string, share
   const s = shareFor(ref);
   const entry = `${ref}-${String((offerings()[ref]?.steps.filter((x) => x.step.startsWith("certificate")).length ?? 0) + 1).padStart(3, "0")}`;
   const cert = [
-    "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo, not a legal document)",
+    "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo without legal effect)",
     `Issuer: Proof of Trading SPV ${ref} (simulated)`,
     `Register entry: ${entry}`,
     `Registered holder: ${holder}`,
