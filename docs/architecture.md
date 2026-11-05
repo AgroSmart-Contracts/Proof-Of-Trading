@@ -50,7 +50,7 @@ The rest of this document describes what is deployed on testnet: one offering an
 
 **Finance layer (v0.1 assets, v0.2 contract).** Each financed shipment has an SPV. Its shares are a per-shipment classic Stellar asset (`TM` + 4 digits, 1 token = 1 share = $1) with AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, exposed through its Stellar Asset Contract (SAC). In v0.2 a Soroban offering contract becomes the SAC admin. Investors subscribe in USDC (TUSDC on testnet) and shares are minted automatically. When the buyer or the insurer pays the SPV, investors redeem and their shares are burned.
 
-Offerings are **trade receivables, not loans**: investors buy SPV shares in one shipment and are paid from what the buyer (or the insurer) pays, up to the investor amount fixed in the subscription agreement. There is no lending, borrowing or collateral in scope.
+Offerings are **trade receivables**: investors buy SPV shares in one shipment and are paid from what the buyer (or the insurer) pays, up to the investor amount fixed in the subscription agreement. There is no lending, borrowing or collateral in scope.
 
 ```mermaid
 flowchart LR

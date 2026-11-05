@@ -20,7 +20,7 @@ Every Proof of Trading artifact deployed on **Stellar testnet**, what each one p
 | Offering contract rebuilt from source matches the deployed WASM | **yes** (`2ee4cfceda8f…`) |
 | Spike contract rebuilt from source matches the deployed WASM | **yes** (`493b4477041c…`) |
 
-Nothing was missing. If a later check fails to find an artifact (for example after a testnet reset), it is marked ❌ here rather than removed.
+Nothing was missing. If a later check fails to find an artifact (for example after a testnet reset), it is marked ❌ here and stays in the list.
 
 **How transactions were checked.** RPC keeps transactions for about 7 days, and these date from 24 and 25 Oct 2026, so RPC `getTransaction` no longer serves them. Each one was confirmed in Horizon's testnet history (`/transactions/<hash>`, `successful: true`) instead. For the 17 attestations, whose signed envelopes are stored, the envelope was also checked to hash to the recorded transaction ID ("envelope ✓"), and `npm run verify` recomputes each proof hash from its payload and matches it to the envelope's `MEMO_HASH`.
 

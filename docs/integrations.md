@@ -46,7 +46,7 @@ Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). T
 - **API.** Bridge API: customers, virtual accounts, transfers and webhooks.
 - **Signing.** Bridge signs its Stellar payment. `settle` is an admin call: the webhook handler builds it, and it is submitted once 2 of 3 signers approve.
 - **Webhook.** Bridge's deposit webhook, checked with its **HMAC** signature before anything is done. The handler then builds the `settle()` call for the matched receivable. A replayed or unsigned webhook is rejected.
-- **Reconciliation.** Each deposit is matched three ways: the buyer's virtual account, the memo (receivable key), and the USDC amount received on Stellar. A deposit that doesn't match all three is held for review, not settled.
+- **Reconciliation.** Each deposit is matched three ways: the buyer's virtual account, the memo (receivable key), and the USDC amount received on Stellar. A deposit that doesn't match all three is held for review and isn't settled.
 
 ## Koywe
 

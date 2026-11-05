@@ -1,6 +1,6 @@
 # Figures
 
-Mermaid sources (`*.mmd`) and the SVGs exported from them. The pilot figures describe the pool design for SCF #46 ([pool contract v1](../pool-contract-v1.md)); the integrations are planned, not built.
+Mermaid sources (`*.mmd`) and the SVGs exported from them. The pilot figures describe the pool design for SCF #46 ([pool contract v1](../pool-contract-v1.md)); the integrations are planned and not yet built.
 
 | Figure | Source | SVG |
 |---|---|---|

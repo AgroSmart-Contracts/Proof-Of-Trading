@@ -6,7 +6,7 @@
 
 ## Context
 
-In the v0.2 prototype, each financed shipment is held by an SPV, and investors buy ordinary shares in that SPV. For the pilot, one vehicle holds a pool of export receivables, and investors buy shares in the pool. Either way, investors are paid from what is collected: the buyer's payment, or the credit insurer's payout if the buyer defaults, up to the investor amount fixed in the subscription agreement. These are trade receivables, not loans.
+In the v0.2 prototype, each financed shipment is held by an SPV, and investors buy ordinary shares in that SPV. For the pilot, one vehicle holds a pool of export receivables, and investors buy shares in the pool. Either way, investors are paid from what is collected: the buyer's payment, or the credit insurer's payout if the buyer defaults, up to the investor amount fixed in the subscription agreement. These are trade receivables, with no lending involved.
 
 The share token has to:
 

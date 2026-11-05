@@ -11,7 +11,7 @@ What we built, the proof that it works on Stellar testnet, how to demo it, the d
 
 ## 1. In one paragraph
 
-TruMarket finances insured agri-export shipments, mostly from Peru (287 deals since June 2024, USD 18.8M of goods shipped, USD 10.3M financed; 2 defaults in 2024, none since (tape of record, 3 Oct 2026)). Exporters wait 90 to 120 days to be paid, and the insured shipment contracts behind those deals are real receivables that are still hard to fund from outside investors. Proof of Trading adds two layers on Stellar:
+TruMarket finances insured agri-export shipments, mostly from Peru (287 deals since June 2024, USD 18.8M of goods shipped, USD 10.3M financing advanced; 2 defaults in 2024, none since (tape of record, 3 Oct 2026)). Exporters wait 90 to 120 days to be paid, and the insured shipment contracts behind those deals are real receivables that are still hard to fund from outside investors. Proof of Trading adds two layers on Stellar:
 
 - **Proof layer.** Every consented shipment is **customs-attested**: a salted hash of its customs record (and, for financed shipments, the insurance assignment and CRAM risk band) goes on-chain. The data stays private.
 - **Finance layer.** Each financed shipment gets an SPV whose shares are a Stellar asset that only approved investors can hold. Investors subscribe in USDC and shares are minted automatically. When the buyer (or, on failure, the insurer) pays, investors redeem the investor amount fixed in the subscription agreement, or pro rata if less was collected, and the shares burn.
@@ -46,7 +46,7 @@ The README, docs and v0.2 plan were first drafted Saturday night (no v0.2 code) 
 ### Stellar components used
 | Track | Components |
 |---|---|
-| **Stellar Unlocked (core features, all in use)** | Native classic assets · issuer flags (auth required, revocable, clawback enabled) · trustlines + trustline authorization as the KYB gate · Stellar Asset Contract (`mint`, `burn`, `transfer`, `set_authorized`, `set_admin`) · SAC admin handover to a contract · Soroban contract (constructor, auth, persistent storage with TTL, events, errors) · `MEMO_HASH` attestations · Stellar RPC (no Horizon) · fee-bump transactions |
+| **Stellar Unlocked (core features, all in use)** | Native classic assets · issuer flags (auth required, revocable, clawback enabled) · trustlines + trustline authorization as the KYB gate · Stellar Asset Contract (`mint`, `burn`, `transfer`, `set_authorized`, `set_admin`) · SAC admin handover to a contract · Soroban contract (constructor, auth, persistent storage with TTL, events, errors) · `MEMO_HASH` attestations · Stellar RPC, with Horizon for history beyond the RPC retention window · fee-bump transactions |
 | **Stellar Composed (other protocols)** | Not yet: Circle USDC is SCF roadmap. Lending and borrowing are out of scope. |
 
 **Recommended track: Stellar Unlocked.**
@@ -161,22 +161,22 @@ npm run demo:refund -- SHP-xxxx    # under-subscribed refund
 
 Wording rules: records are **verifiable** (anyone can check them on Stellar) and shipments are **customs-attested**, but never say "verified" (that would claim the shipment itself was confirmed genuine); never promise repayment; not a retail product. Lead with **trade receivables**: the Stellar ecosystem knows the term.
 
-**[0:00–0:20] The gap.** *Screen: deck, PMF slide.*
+**[0:00-0:20] The gap.** *Screen: deck, PMF slide.*
 > Stellar holds over three billion dollars in real-world assets, but very little private trade credit reaches investors. TruMarket has financed about 247 insured agri-export shipments, around 22 million dollars. Each one is a real, insured trade receivable, yet the capital behind it sits locked for 90 to 120 days, because outside investors can't easily fund these receivables and the customs proof behind them can't be made public.
 
-**[0:20–0:50] Proof layer.** *Screen: `npm run verify`, then the explorer showing the memo hash on the SHP-0247 attestation, then the dashboard shipment page.*
+**[0:20-0:50] Proof layer.** *Screen: `npm run verify`, then the explorer showing the memo hash on the SHP-0247 attestation, then the dashboard shipment page.*
 > First, the proof layer: verifiable shipment records. Every consented shipment is customs-attested on Stellar: we seal a fingerprint of its customs record, and for financed deals the insurance assignment and our risk band. The raw data never leaves TruMarket and exporter and buyer IDs rotate every quarter, but anyone can verify a record hasn't changed, straight from Stellar, in one click.
 
-**[0:50–1:40] Finance layer, as an investor.** *Screen: investor app, click-through steps 1 to 5 above.*
+**[0:50-1:40] Finance layer, as an investor.** *Screen: investor app, click-through steps 1 to 5 above.*
 > Now I'm an investor. This deal is one insured trade receivable, an avocado shipment: 12% fixed, 120 days, risk band B, and I can verify its customs record on Stellar myself. After KYB, I sign the subscription agreement and pay sixty thousand in USDC, test USDC here. In one transaction my money goes into escrow and the SPV's share tokens are minted to me. An unapproved wallet tries the same and the asset itself refuses it. What I actually own is a share of the SPV that holds this receivable, registered off-chain in my name. Here's my certificate, and it's verifiable on Stellar: one click proves it's the one on record. The token is my on-chain receipt.
 
-**[1:40–2:05] Buyer pays.** *Screen: click-through steps 6 to 8: ops records the buyer payment, Investor A redeems, Proof explorer timeline.*
+**[1:40-2:05] Buyer pays.** *Screen: click-through steps 6 to 8: ops records the buyer payment, Investor A redeems, Proof explorer timeline.*
 > The offering fills and funds the shipment. At maturity the buyer pays the SPV, and I redeem at the fixed 12% rate: sixty thousand becomes 62,367. My tokens are burned, my certificate is cancelled, and the outcome is attested back to the proof layer, adding to the exporter's and buyer's track record.
 
-**[2:05–2:20] Shipment fails.** *Screen: dashboard SHP-0251 timeline.*
+**[2:05-2:20] Shipment fails.** *Screen: dashboard SHP-0251 timeline.*
 > If a shipment fails, the insurer pays the SPV, here 90%, and investors share what was collected pro rata: 32,400 and 21,600. We also handle offerings that don't fill: investors are refunded in full.
 
-**[2:20–2:40] What's next.** *Screen: README "Simulated vs real" table, then the lifecycle diagram.*
+**[2:20-2:40] What's next.** *Screen: README "Simulated vs real" table, then the lifecycle diagram.*
 > On testnet, the SPV legal structure, KYB, insurance assignment, customs data and USDC are simulated. SCF funding makes them real: legal structure, audit and multisig first, then pilots with professional investors, a price feed and a lending listing so these shares can back loans. Proof of Trading: verifiable, insured trade receivables on Stellar.
 
 **Recording tips:** record the investor app in live mode (`cd apps/dashboard && npm run dev`) at 1280px or wider, browser zoom 110 to 125%. Record each section separately and stitch them; speed up the 5 to 15 second confirmations in editing. Use **SHP-0280** (same terms and numbers as SHP-0247). If a take goes wrong partway, don't re-run SHP-0280: switch to the spare, **SHP-0281**. The terminal alternative for the same flow is `npm run demo -- SHP-0280`.
