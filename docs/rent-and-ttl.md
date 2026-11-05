@@ -4,14 +4,14 @@ Soroban storage is rented. Every persistent entry has a time to live (TTL) in le
 
 ## What the offering contract stores
 
-| Entry | Size (measured) | One per |
+| Entry | Size | One per |
 |---|---|---|
-| Contract WASM | 18,828 bytes | contract (shared by every offering) |
-| Contract instance (admin, recorder, settlement token) | 220 bytes | contract |
-| `Offering(id)` | 956 bytes | offering |
-| `Redeemed(id, investor)` | ~200 bytes | investor who redeemed |
-| `Record(id)` (v0.3 outcome record) | ~150 bytes | offering |
-| Share asset SAC instance | ~500 bytes | offering |
+| Contract WASM | 18,828 bytes (measured) | contract (shared by every offering) |
+| Contract instance (admin, recorder, settlement token) | 220 bytes (measured, v0.2) | contract |
+| `Offering(id)` | 956 bytes (measured) | offering |
+| `Redeemed(id, investor)` | ~200 bytes (estimate) | investor who redeemed |
+| `Record(id)` (v0.3 outcome record) | ~150 bytes (estimate) | offering |
+| Share asset SAC instance | ~500 bytes (a SAC instance measured 512 bytes) | offering |
 
 The contract tops each entry up to ~7 days (`TTL_EXTEND = 120_960` ledgers) when it is touched and has under ~1 day left. That keeps an active offering alive, but an idle one archives after a week. Funding to maturity is 90 to 120 days, so production needs a keeper.
 
