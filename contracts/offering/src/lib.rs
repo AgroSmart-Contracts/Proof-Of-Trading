@@ -385,7 +385,8 @@ impl OfferingContract {
         Ok(())
     }
 
-    /// Pays min(owed at APY, collected) pro rata and burns the investor's shares. Returns (shares, payout).
+    /// Pays min(owed under the offering terms, collected) pro rata and burns the investor's shares.
+    /// Result: (shares, payout).
     pub fn redeem(env: Env, id: u32, investor: Address) -> Result<(i128, i128), Error> {
         investor.require_auth();
         let mut o = load(&env, id)?;

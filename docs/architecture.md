@@ -70,7 +70,7 @@ stateDiagram-v2
   Refunding --> Refunding: refund (shares burned, TUSDC back)
   Closed --> Funded: fund (escrow → SPV treasury)
   Funded --> Distributing: deposit_distribution (treasury: buyer or insurer payment + outcome)
-  Distributing --> Distributing: redeem (pay min(owed at APY, collected) pro rata, burn) / sweep_surplus
+  Distributing --> Distributing: redeem (pay min(owed under the offering terms, collected) pro rata, burn) / sweep_surplus
 ```
 
 ### Auth model

@@ -73,7 +73,7 @@ export function Showcase() {
       </div>
 
       <div className="grid g3">
-        <MetricCard value="12.0%" label="Fixed APY" />
+        <MetricCard value="$103,945" label="Fixed amount" />
         <MetricCard value="$100k" label="Raise" />
         <MetricCard value="120 d" label="Term" />
       </div>

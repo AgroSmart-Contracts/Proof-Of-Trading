@@ -45,6 +45,6 @@ The same chain runs in the sandbox (`cargo test` in `contracts/`). The unapprove
 
 ## OpenZeppelin Stellar contracts check (input for Sunday)
 Checked `OpenZeppelin/stellar-contracts` (crates pinned at `=0.8.0` in the README install section) and its docs.
-- **Vault (`stellar-tokens` vault, ERC-4626):** share price = assets/supply, which floats with the vault's assets. It has an optional `Capped` extension, but no deadline, refund, fixed term or fixed-APY payout, and the share is a custom contract token, not a SAC. **Does not fit.**
+- **Vault (`stellar-tokens` vault, ERC-4626):** share price = assets/supply, which floats with the vault's assets. It has an optional `Capped` extension, but no deadline, refund, fixed term or fixed payout amount, and the share is a custom contract token, not a SAC. **Does not fit.**
 - **RWA (`stellar-tokens` RWA, T-REX / ERC-3643):** custom token plus separate identity-verifier and compliance contracts. It has freezing, forced transfers and recovery, but no offering, subscription, distribution or redemption logic. It also replaces the classic-asset model (native auth flags, clawback, SAC composability with Blend). **Does not fit for the event**; worth discussing with SDF mentors as an SCF-phase alternative if counsel needs ERC-3643-style identity claims.
 - **Conclusion:** write the small custom offering contract (brief 2, section 2). `stellar-access` (Ownable/roles) is optional; a stored admin address is enough for the demo.

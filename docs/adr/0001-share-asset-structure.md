@@ -37,7 +37,7 @@ Each share asset has a Stellar Asset Contract (SAC). The issuer calls `set_admin
 
 No operator can mint without payment, and the share supply always equals what was paid in, less what was redeemed. The spike confirmed a contract can hold this role: approve, mint, be refused for an unapproved wallet, burn, and hand the role back.
 
-The handover is reversible. `transfer_share_admin` returns the role to the issuer (or a successor contract) at offering close; see [governance.md](../governance.md).
+The handover is reversible. `transfer_share_admin` hands the role back to the issuer (or a successor contract) at offering close; see [governance.md](../governance.md).
 
 ### 3. One asset per shipment
 

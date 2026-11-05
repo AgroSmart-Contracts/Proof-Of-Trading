@@ -1,6 +1,6 @@
 # Proof of Trading: HackMeridian 2026 overview
 
-> **Historical record (HackMeridian, Oct 2026).** Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../README.md) for the current scope.
+> **Historical record (HackMeridian, Oct 2026).** It uses the wording of the time ("APY"); current docs describe the fixed amount set in the offering terms. Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../README.md) for the current scope.
 
 
 What we built, the proof that it works on Stellar testnet, how to demo it, the demo video transcript, and how it plugs into the existing TruMarket platform.
@@ -14,7 +14,7 @@ What we built, the proof that it works on Stellar testnet, how to demo it, the d
 TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid, and the insured shipment contracts behind those deals are real receivables that are still hard to fund from outside investors. Proof of Trading adds two layers on Stellar:
 
 - **Proof layer.** Every consented shipment is **customs-attested**: a salted hash of its customs record (and, for financed shipments, the insurance assignment and CRAM risk band) goes on-chain. The data stays private.
-- **Finance layer.** Each financed shipment gets an SPV whose shares are a Stellar asset that only approved investors can hold. Investors subscribe in USDC and shares are minted automatically. When the buyer (or, on failure, the insurer) pays, investors redeem at the deal's fixed APY, or pro rata if less was collected, and the shares burn.
+- **Finance layer.** Each financed shipment gets an SPV whose shares are a Stellar asset that only approved investors can hold. Investors subscribe in USDC and shares are minted automatically. When the buyer (or, on failure, the insurer) pays, investors redeem the fixed amount set in the offering terms, or pro rata if less was collected, and the shares burn.
 
 ---
 
@@ -36,7 +36,7 @@ The README, docs and v0.2 plan were first drafted Saturday night (no v0.2 code) 
 ### At the event: v0.2 (from Sun Oct 25, 11:06)
 | Piece | What it does |
 |---|---|
-| **Offering contract** (`contracts/offering`) | One instance, one offering per financed shipment. SAC admin of each share asset: mints on `subscribe`, burns on `redeem`/`refund`, escrows USDC, pays `min(owed at APY, collected)` pro rata, sweeps the surplus to the SPV, hands the SAC admin back. **17 tests** with exact base-unit assertions; key tests were checked by temporarily breaking the contract |
+| **Offering contract** (`contracts/offering`) | One instance, one offering per financed shipment. SAC admin of each share asset: mints on `subscribe`, burns on `redeem`/`refund`, escrows USDC, pays `min(owed under the offering terms, collected)` pro rata, sweeps the surplus to the SPV, hands the SAC admin back. **17 tests** with exact base-unit assertions; key tests were checked by temporarily breaking the contract |
 | Fee-bump deploy | Contract uploads need ~620 XLM of resource fee on testnet, above the ~429 XLM `u32` fee cap, so `submitSoroban` sends them as a fee bump (`i64` fee) |
 | Offering CLI + demo scripts | `npm run offering -- <cmd>`, `demo`, `demo:failure`, `demo:refund`; every step prints an explorer link and is logged |
 | Outcome attestations | After redemptions, an `outcome` proof (outcome code, amounts, hash of the SPV redemption confirmation) closes the loop |
@@ -64,7 +64,7 @@ Explorer: `https://stellar.expert/explorer/testnet/tx/<hash>`
 | TM0247 share SAC | `CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE` |
 | Spike contract | `CCVDLSWF4A2OXWNLZZUE6PAN2IEWQASF7VQ7F5DKFIJAVL6R6OREV5QQ` |
 
-### Happy path: SHP-0247 ($100,000, 12% APY, 120 days; buyer pays $105,000)
+### Happy path: SHP-0247 ($100,000; terms 12% for 120 days; buyer pays $105,000)
 | Step | Result | Tx |
 |---|---|---|
 | Customs + financed attestation | Proof hash on-chain | [`88cfe725…`](https://stellar.expert/explorer/testnet/tx/88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad) |
@@ -81,7 +81,7 @@ Explorer: `https://stellar.expert/explorer/testnet/tx/<hash>`
 
 The payouts match the values computed before the event (`docs/plan/v0.2-design.md`) to the last base unit.
 
-### Insured failure: SHP-0251 ($60,000, 11% APY, 90 days; insurer pays 90%)
+### Insured failure: SHP-0251 ($60,000; terms 11% for 90 days; insurer pays 90%)
 | Step | Result | Tx |
 |---|---|---|
 | Unapproved wallet subscribes | **Rejected**: SAC `BalanceDeauthorizedError` | (failed in simulation; nothing submitted) |
@@ -153,7 +153,7 @@ npm run demo -- SHP-xxxx           # happy path
 npm run demo:failure -- SHP-xxxx   # insurer pays 90%
 npm run demo:refund -- SHP-xxxx    # under-subscribed refund
 ```
-**For the recorded video: `npm run demo -- SHP-0280`.** SHP-0280 and its spare SHP-0281 were added on Sun Oct 25 with the same terms as SHP-0247 ($100,000, 12% APY, 120 days), so a live run reproduces the transcript's numbers. Both are attested and have share assets (`TM0280`, `TM0281`), with no offering yet. Every other sample has been used. To add more: append a row to `scripts/dev/gen-samples.ts`, run it, then `npm run attest -- --only SHP-xxxx` and `npm run issue:shares`.
+**For the recorded video: `npm run demo -- SHP-0280`.** SHP-0280 and its spare SHP-0281 were added on Sun Oct 25 with the same terms as SHP-0247 ($100,000; 12% for 120 days), so a live run reproduces the transcript's numbers. Both are attested and have share assets (`TM0280`, `TM0281`), with no offering yet. Every other sample has been used. To add more: append a row to `scripts/dev/gen-samples.ts`, run it, then `npm run attest -- --only SHP-xxxx` and `npm run issue:shares`.
 
 ---
 

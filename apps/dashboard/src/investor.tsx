@@ -4,7 +4,7 @@ import { Badge, ProgressBar } from "./ui";
 import {
   COMMODITY, CRAM, OUTCOMES, amount, PERSONAS, REGION, X, accruedValue, date, dateS, dealFor, isApproved, memoHashOf, money, num,
   offeringFor, previewPayout, sha256Hex, short, offeringStatus, stepLabel, units, usd, who,
-  type Deal, type Doc, type Offering, type Persona, type Store, balanceOf, settlementCode
+  type Deal, type Doc, type Offering, type Persona, type Store, balanceOf, settlementCode, fixedAmount, termsLine
 } from "./lib";
 
 // ---------- shared pieces ----------
@@ -94,8 +94,8 @@ function DealCard({ d, o }: { d: Deal; o?: Offering }) {
         <span className={`band ${d.cram_band}`} title={`Risk band ${d.cram_band}`}>{d.cram_band}</span>
       </div>
       <div className="deal-apy">
-        <span className="big-apy">{(d.apy_bps / 100).toFixed(1)}%</span>
-        <span className="muted small">APY · {d.term_days} days</span>
+        <span className="big-apy">{money(fixedAmount(d), 0)}</span>
+        <span className="muted small">fixed amount set in the offering terms · {termsLine(d)} on {money(d.face_value_usd, 0)}</span>
       </div>
       {open ? (
         <div className="stack" style={{ gap: 6 }}>
@@ -135,7 +135,7 @@ export function Marketplace() {
         <div className="row" style={{ gap: 8 }}>
           <span className="chip green">🛡️ Insured up to 90%</span>
           <span className="chip green">✓ Verifiable on Stellar</span>
-          <span className="chip green">Fixed APY, paid at maturity</span>
+          <span className="chip green">Fixed amount set in the offering terms, paid at maturity</span>
           <span className="chip">Shares registered in your name</span>
         </div>
       </div>
@@ -162,14 +162,14 @@ export function Marketplace() {
           <div className="card" style={{ padding: 0 }}>
             <div className="scroll">
               <table>
-                <thead><tr><th>Deal</th><th>APY</th><th>Term</th><th>Raise</th><th>Result</th></tr></thead>
+                <thead><tr><th>Deal</th><th>Fixed amount</th><th>Term</th><th>Raise</th><th>Result</th></tr></thead>
                 <tbody>
                   {past.map((d) => {
                     const [label, tone] = result(d);
                     return (
                       <tr key={d.shipment_ref}>
                         <td><a href={`#/deal/${d.shipment_ref}`}><b>{shortTitle(d)}</b></a></td>
-                        <td>{(d.apy_bps / 100).toFixed(1)}%</td>
+                        <td>{money(fixedAmount(d), 0)}</td>
                         <td>{d.term_days} days</td>
                         <td>{money(d.face_value_usd, 0)}</td>
                         <td><Badge tone={tone}>{label}</Badge></td>
@@ -268,7 +268,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo, not a legal document)
 SPV: Proof of Trading SPV ${d.shipment_ref}
 Subscription: ${amountOk ? amt.toLocaleString("en-US") : "…"} USD for ${amountOk ? amt.toLocaleString("en-US") : "…"} ordinary shares at 1.00 USD
-Return: fixed ${(d.apy_bps / 100).toFixed(1)}% APY over ${d.term_days} days, paid from collections;
+Payment: the fixed amount set in the offering terms (${termsLine(d)}), paid from collections;
         pro rata if less is collected (insurance covers up to 90%)
 Your share is registered off-chain in your name; you receive a share
 certificate whose hash is anchored on Stellar. ${d.share?.code} tokens are your
@@ -325,7 +325,7 @@ function DueDiligence({ d, o }: { d: Deal; o?: Offering }) {
       <div className="card stack">
         <h3>Risk and protection</h3>
         <div className="row"><span className={`band ${d.cram_band}`}>{d.cram_band}</span><span className="small"><b>CRAM band {d.cram_band}</b>: {CRAM[d.cram_band]}</span></div>
-        <p className="small">🛡️ <b>Insured up to 90%</b>; the insurance is assigned to the SPV (simulated: assignment digest only). Exclusions apply; "protected", never "guaranteed".</p>
+        <p className="small">🛡️ <b>Insured up to 90%</b>; the insurance is assigned to the SPV (simulated: assignment digest only). Exclusions apply: the insurance protects the shares, it is not a promise of repayment.</p>
       </div>
       {proof && (
         <div className="card stack">
@@ -367,7 +367,7 @@ export function DealPage({ ref_ }: { ref_: string }) {
         <span className={`chip ${tone}`}>{label}</span>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{(d.apy_bps / 100).toFixed(1)}%</div><div className="l">Fixed APY</div></div>
+        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{money(fixedAmount(d), 0)}</div><div className="l">Fixed amount (offering terms)</div></div>
         <div className="kpi"><div className="v">{d.term_days} days</div><div className="l">Term</div></div>
         <div className="kpi"><div className="v">{money(d.face_value_usd, 0)}</div><div className="l">Raise</div></div>
         <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "–"}</div><div className="l">Subscribed</div></div>

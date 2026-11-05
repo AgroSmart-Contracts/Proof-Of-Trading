@@ -1,6 +1,6 @@
 # Sunday/Monday runbook
 
-> **Historical record (HackMeridian, Oct 2026).** Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
+> **Historical record (HackMeridian, Oct 2026).** It uses the wording of the time ("APY"); current docs describe the fixed amount set in the offering terms. Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
 
 
 ## Status, Sun Oct 25 ~12:00 (event work)

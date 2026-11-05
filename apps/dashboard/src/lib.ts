@@ -123,11 +123,19 @@ export function shipmentTitle(s: Store, ref: string): string {
   return x ? `${COMMODITY[x.commodity] ?? x.commodity} shipment · Peru → ${REGION[x.destination_region] ?? x.destination_region}` : ref;
 }
 export const offeringFor = (s: Store, ref: string) => s.offerings.find((o) => o.shipment_ref === ref);
+/**
+ * The fixed amount set in the offering terms for the full raise, as the contract computes it
+ * (`owed_total`): face × (1 + rate × term / 365). Investors receive this, pro rata, when it is collected.
+ */
+export const fixedAmount = (d: { face_value_usd: number; apy_bps: number; term_days: number }) =>
+  d.face_value_usd * (1 + (d.apy_bps / 10_000) * (d.term_days / 365));
+/** The rate and term behind the fixed amount, e.g. "12.0% for 120 days". */
+export const termsLine = (d: { apy_bps: number; term_days: number }) => `${(d.apy_bps / 100).toFixed(1)}% for ${d.term_days} days`;
 export const dealFor = (s: Store, ref: string) => s.deals.find((d) => d.shipment_ref === ref);
 export const isApproved = (o: Offering | undefined, p: Persona) => !!o?.steps.some((s) => s.step === `approve ${stepName(p)}`);
 export const outcomeAttested = (s: Store, ref: string) => s.attestations.some((a) => a.shipment_ref === ref && a.event === "outcome");
 
-/** Value of a position at the deal's fixed APY, accrued from funding up to the term (estimate, before collection). */
+/** Value of a position under the offering terms, accrued from funding up to the term (estimate, before collection). */
 export function accruedValue(o: Offering, shares: number): number {
   const c = o.on_chain;
   if (!c || !Number(c.funded_at)) return shares;
