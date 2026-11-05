@@ -44,7 +44,7 @@ For each receivable, `release` advances 90% of face value; the exporter's remain
 
 1. **Principal** back to the pool (the 90% advanced).
 2. **The investor amount**, the amount fixed in the subscription agreement for that receivable.
-3. **The balance:** the exporter's retained 10%, less the TruMarket fee.
+3. **The balance:** what is left of the exporter's retained 10% after the investor amount, split between the exporter and the TruMarket fee.
 
 On a USD 100,000 invoice:
 
