@@ -1,6 +1,6 @@
 # Proof of Trading
 
-Agri-export trade receivables, financed through **one pool share** on Stellar, with a verifiable record (attestation) for every receivable. Investors fund **trade receivables**; there is no lending or borrowing. **Testnet:** the v0.2 per-shipment prototype; the pool contract is the Tranche 1 build.
+Agri-export trade receivables, financed through **one pool share, TRU3**, on Stellar, with a verifiable record (attestation) for every receivable. Investors fund **trade receivables**; there is no lending or borrowing. **Testnet:** the v0.2 per-shipment prototype; the pool contract is the Tranche 1 build.
 
 ![System overview](docs/figures/system.svg)
 
@@ -12,8 +12,8 @@ Agri-export trade receivables, financed through **one pool share** on Stellar, w
 ## The problem
 TruMarket finances agri-export shipments, mostly from Peru: **287 deals since June 2024, USD 18.8M of goods shipped, USD 10.3M financing advanced; 2 defaults in 2024, none since** (tape of record, 3 Oct 2026). Exporters wait 90 to 120 days to be paid. Their receivables are hard to fund from outside investors, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each receivable on Stellar, and funds the receivables through one pool that approved investors can buy into.
 
-## The pilot: one pool share, an attestation per receivable
-- **Pool share.** One vehicle issues one share asset (1 share = USD 1), AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, with the pool contract as SAC admin. Investors subscribe in Circle USDC and shares are minted in the same transaction.
+## The pilot: one pool share (TRU3), an attestation per receivable
+- **Pool share.** The receivables-portfolio SPV issues one share asset, **TRU3** (1 TRU3 = USD 1), AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, with the pool contract as SAC admin. Investors subscribe in Circle USDC and shares are minted in the same transaction.
 - **Investors.** Legal entities only, after KYB, minimum ticket USD 50,000. No natural persons, no US persons.
 - **Receivables.** Each one is attested under its export declaration no., invoice no. and buyer tax ID, and can't be attested twice. Its status (paid, overdue, claim, loss, revoked) is appended, never edited.
 - **Money.** 90% of face is advanced to the exporter; the buyer's payment is applied as principal, then the investor amount fixed in the subscription agreement, then the balance (exporter's retained 10% and the TruMarket fee). Monthly distributions; redemption at NAV at the 3-month term.
@@ -66,16 +66,18 @@ npm run verify -- SHP-0247
 
 ## Scope
 **In scope (pilot)**
-- One pool share issued by the vehicle, held only by approved legal entities ([ADR 0001](docs/adr/0001-share-asset-structure.md)).
+- One pool share, TRU3, issued by the receivables-portfolio SPV and held only by approved legal entities ([ADR 0001](docs/adr/0001-share-asset-structure.md)).
 - One attestation per receivable in the pool contract, with an append-only status history.
 - Subscription in Circle USDC, release of 90% of face per attested receivable, settlement through the waterfall, monthly distributions, redemption at NAV.
 - Buyer collections through Bridge and exporter payouts through Koywe.
 
-**Out of scope**
+**Out of scope for this grant**
 - One instrument per receivable (the v0.2 prototype's model).
-- Secondary trading of pool shares (see the [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md)).
+- Secondary trading of TRU3 (see the [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md)).
 - Natural persons and US persons.
 - Using the shares as collateral.
+
+**Post-grant:** TRU3 transfers between approved holders, and use of TRU3 in isolated lending pools (for example Blend) open to approved holders only.
 
 ## Security model
 - **Who can do what** is enforced in the contract and tested (auth-matrix tests): the admin runs the offering lifecycle, the SPV treasury alone deposits collections, investors alone subscribe, redeem and refund their own position, and the recorder alone writes outcome records, once each. Details: [`docs/governance.md`](docs/governance.md).
@@ -140,7 +142,7 @@ Details: [`docs/architecture.md`](docs/architecture.md) · v0.2 payload format: 
 One line per tranche. The plan, budget and deliverables are in the SCF #46 submission.
 - **Tranche 1 (31/01/2027):** investor interface, wallets (Stellar Wallets Kit, Freighter, Privy), pool contract v1.
 - **Tranche 2 (15/03/2027):** Bridge, Koywe, exception handling, threat model and monitoring.
-- **Tranche 3 (15/06/2027):** mainnet pilot, with launch by 15/04/2027.
+- **Tranche 3 (12/06/2027):** mainnet pilot, with launch by 10/04/2027.
 - **Metric:** at least USD 250,000 in USDC from at least 3 independent institutional investor wallets within 60 days of mainnet launch.
 
 ![Build plan](docs/figures/build-plan.svg)

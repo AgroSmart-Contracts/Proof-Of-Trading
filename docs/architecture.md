@@ -1,6 +1,6 @@
 # Architecture
 
-The pilot uses **one pool share with an attestation per receivable**. The contract on testnet is the **v0.2 per-shipment prototype**, kept as the record of what was built and tested; its design is below the pilot sections. Decision: [ADR 0001](adr/0001-share-asset-structure.md).
+The pilot uses **one pool share, TRU3, with an attestation per receivable**. The contract on testnet is the **v0.2 per-shipment prototype**, kept as the record of what was built and tested; its design is below the pilot sections. Decision: [ADR 0001](adr/0001-share-asset-structure.md).
 
 ## Figures
 - [System overview](figures/system.svg) and [pilot structure](figures/pilot-structure.svg)
@@ -12,7 +12,7 @@ The pilot uses **one pool share with an attestation per receivable**. The contra
 ![System overview](figures/system.svg)
 
 ## Pilot model (design, Tranche 1)
-- **Vehicle and pool share.** One vehicle issues one pool share (1 share = USD 1) with AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED. The pool contract is its SAC admin, so shares are minted only against USDC paid in, in the same transaction.
+- **SPV and pool share.** The receivables-portfolio SPV issues one pool share, TRU3 (1 TRU3 = USD 1), with AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED. The pool contract is its SAC admin, so shares are minted only against USDC paid in, in the same transaction.
 - **Investors.** Legal entities only, after KYB, with a minimum ticket of USD 50,000. No natural persons and no US persons.
 - **Receivables.** TruMarket screens each export receivable off-chain, then attests it in the pool contract under `sha256(export declaration no. | invoice no. | buyer tax ID)`. A key can be attested once. Its status history (paid, overdue, claim, loss, revoked) is appended, never edited.
 - **Money.** `release` advances 90% of face to the payout account; `settle` applies the buyer's payment through the waterfall (principal, then the investor amount fixed in the subscription agreement, then the balance); `distribute` pays holders monthly; `redeem` pays NAV at the 3-month term.
@@ -137,6 +137,6 @@ Offerings and redemption flags are persistent entries. Testnet rent is currently
 
 1. **Tranche 1 (31/01/2027):** investor interface; wallets (Stellar Wallets Kit, Freighter Connect, Privy); pool contract v1.
 2. **Tranche 2 (15/03/2027):** Bridge and Koywe; exception handling; threat model and monitoring.
-3. **Tranche 3 (15/06/2027):** mainnet pilot, with launch by 15/04/2027.
+3. **Tranche 3 (12/06/2027):** mainnet pilot, with launch by 10/04/2027.
 
 Out of scope: one instrument per receivable, secondary trading, natural persons and US persons, and using the shares as collateral.
