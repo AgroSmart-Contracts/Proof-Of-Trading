@@ -385,7 +385,7 @@ impl OfferingContract {
         Ok(())
     }
 
-    /// Pays min(owed under the offering terms, collected) pro rata and burns the investor's shares.
+    /// Pays min(owed under the subscription agreement, collected) pro rata and burns the investor's shares.
     /// Result: (shares, payout).
     pub fn redeem(env: Env, id: u32, investor: Address) -> Result<(i128, i128), Error> {
         investor.require_auth();

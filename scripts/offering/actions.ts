@@ -194,7 +194,7 @@ export async function subscribe(ref: string, who: string, amountUsd: number) {
     `SPV: Proof of Trading SPV ${ref} (simulated; legal structure under counsel review)`,
     `Subscriber wallet: ${k.publicKey()}`,
     `Subscription: ${amountUsd} USD (paid in ${settlement().code}) for ${amountUsd} ordinary shares at 1.00 USD each`,
-    `Payment: the fixed amount set in the offering terms (${sample.apy_bps / 100}% for ${sample.term_days} days), paid from collections; pro rata if less is collected`,
+    `Payment: the investor amount fixed in the subscription agreement (${sample.apy_bps / 100}% for ${sample.term_days} days), paid from collections; pro rata if less is collected`,
     `Underlying: receivable and insurance of shipment ${ref}; customs attestation proof hash ${s.proof_hash}`,
     `On-chain receipt: ${s.code} tokens (issuer ${s.issuer})`,
     `Nonce: ${randomBytes(8).toString("hex")}`,

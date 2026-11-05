@@ -58,16 +58,16 @@ export function renderStellarToml(input: {
       `contract = ${q(s.sac_id)}`,
       `status = ${q(input.status ?? "test")}`,
       "display_decimals = 7",
-      `name = ${q(`SPV share, shipment ${s.shipment_ref}`)}`,
+      `name = ${q(`SPV share, shipment ${s.shipment_ref} (v0.2 prototype)`)}`,
       `desc = ${q(
-        `Ordinary share in the SPV that holds the receivable and insurance of shipment ${s.shipment_ref}` +
+        `v0.2 per-shipment prototype on testnet. Ordinary share in the SPV that holds the receivable of shipment ${s.shipment_ref}` +
           `${what ? ` (${what})` : ""}. One token is one share of 1.00 USD face value. ` +
           `Linked proof hash ${s.proof_hash}.`,
       )}`,
       `conditions = ${q(
         "Held only by investors approved by the issuer (AUTH_REQUIRED). The issuer may freeze (AUTH_REVOCABLE) or " +
           "claw back (AUTH_CLAWBACK_ENABLED) shares under its published policy. Holders are paid, pro rata, from what " +
-          "the SPV collects, up to the fixed amount set in the offering terms. Not a loan.",
+          "the SPV collects, up to the investor amount fixed in the subscription agreement. Not a loan.",
       )}`,
       "is_asset_anchored = false",
       ...(s.face_value_usd ? [`max_number = ${Math.round(s.face_value_usd)}`] : []),

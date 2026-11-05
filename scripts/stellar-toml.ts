@@ -30,8 +30,9 @@ const toml = renderStellarToml({
     name: "TruMarket",
     url: "https://trumarket.tech",
     description:
-      "Insured agri-export trade receivables from Peru, recorded on Stellar. Each financed shipment is held by an SPV " +
-      "whose shares are a Stellar asset that only approved investors can hold.",
+      "Agri-export trade receivables from Peru, recorded on Stellar. On testnet: the v0.2 per-shipment prototype, " +
+      "where each financed shipment is held by an SPV whose shares only approved investors can hold. " +
+      "The pilot issues one pool share with an attestation per receivable.",
     email: optionalEnv("ORG_OFFICIAL_EMAIL"),
     github: "AgroSmart-Contracts",
   },

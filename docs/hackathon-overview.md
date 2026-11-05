@@ -36,7 +36,7 @@ The README, docs and v0.2 plan were first drafted Saturday night (no v0.2 code) 
 ### At the event: v0.2 (from Sun Oct 25, 11:06)
 | Piece | What it does |
 |---|---|
-| **Offering contract** (`contracts/offering`) | One instance, one offering per financed shipment. SAC admin of each share asset: mints on `subscribe`, burns on `redeem`/`refund`, escrows USDC, pays `min(owed under the offering terms, collected)` pro rata, sweeps the surplus to the SPV, hands the SAC admin back. **17 tests** with exact base-unit assertions; key tests were checked by temporarily breaking the contract |
+| **Offering contract** (`contracts/offering`) | One instance, one offering per financed shipment. SAC admin of each share asset: mints on `subscribe`, burns on `redeem`/`refund`, escrows USDC, pays `min(owed under the subscription agreement, collected)` pro rata, sweeps the surplus to the SPV, hands the SAC admin back. **17 tests** with exact base-unit assertions; key tests were checked by temporarily breaking the contract |
 | Fee-bump deploy | Contract uploads need ~620 XLM of resource fee on testnet, above the ~429 XLM `u32` fee cap, so `submitSoroban` sends them as a fee bump (`i64` fee) |
 | Offering CLI + demo scripts | `npm run offering -- <cmd>`, `demo`, `demo:failure`, `demo:refund`; every step prints an explorer link and is logged |
 | Outcome attestations | After redemptions, an `outcome` proof (outcome code, amounts, hash of the SPV redemption confirmation) closes the loop |
