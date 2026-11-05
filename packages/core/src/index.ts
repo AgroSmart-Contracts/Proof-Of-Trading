@@ -6,3 +6,4 @@ export * from "./stellar.js";
 export * from "./arc.js";
 export * from "./store.js";
 export * from "./settlement.js";
+export * from "./stellar-toml.js";

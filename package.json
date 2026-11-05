@@ -23,7 +23,8 @@
     "export": "tsx scripts/export-public.ts",
     "topup": "tsx scripts/topup-xlm.ts",
     "ttl:keeper": "tsx scripts/ttl-keeper.ts",
-    "governance:setup": "tsx scripts/governance-setup.ts"
+    "governance:setup": "tsx scripts/governance-setup.ts",
+    "stellar-toml": "tsx scripts/stellar-toml.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
