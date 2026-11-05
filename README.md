@@ -6,6 +6,16 @@ Customs-attested agri-export shipments, financed through tokenized SPV shares on
 
 **Start here:** [`docs/hackathon-overview.md`](docs/hackathon-overview.md): what we built, testnet evidence, the investor app, the demo script and how this integrates into TruMarket.
 
+## Deployed on Stellar testnet
+- **Offering contract:** [`CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7`](https://stellar.expert/explorer/testnet/contract/CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7)
+- **Key transactions (SHP-0247):**
+  - [Shipment proof hash recorded on-chain](https://stellar.expert/explorer/testnet/tx/88cfe725eb57da4d3d37c663e959e3b84d18e3448434d738d16e7ca763d84aad)
+  - [Investor subscribes 60,000 TUSDC, contract mints 60,000 shares](https://stellar.expert/explorer/testnet/tx/e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99)
+  - [Investor repaid at the 12% APY, shares burned](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc)
+- **Every contract, asset, account and transaction, checked on testnet:** [`docs/DEPLOYMENTS.md`](docs/DEPLOYMENTS.md)
+- **Repository:** https://github.com/AgroSmart-Contracts/Proof-Of-Trading
+- **Demo app:** https://proof-of-trading.vercel.app
+
 ## The problem
 TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid. The shipment contracts are real, insured receivables, but lenders don't accept them as collateral, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each shipment on Stellar, and turns each financed shipment into SPV shares that approved investors can fund.
 
