@@ -84,7 +84,7 @@ fn setup<'a>() -> T<'a> {
     share.issuer().set_flag(IssuerFlags::ClawbackEnabledFlag);
     let share_sac = StellarAssetClient::new(&env, &share.address());
 
-    let id = env.register(OfferingContract, (admin.clone(), recorder.clone()));
+    let id = env.register(OfferingContract, (admin.clone(), recorder.clone(), usdc.address()));
     share_sac.set_admin(&id);
     T {
         usdc: TokenClient::new(&env, &usdc.address()),
@@ -438,4 +438,15 @@ fn only_recorder_records_and_admin_replaces_it() {
     assert_eq!(t.c.recorder(), t.stranger);
     t.c.record_outcome(&1, &h, &Outcome::Repaid);
     assert_eq!(t.env.auths()[0].0, t.stranger);
+}
+
+#[test]
+fn offerings_must_settle_in_the_configured_token() {
+    let t = setup();
+    assert_eq!(t.c.settlement_token(), t.usdc.address);
+    let other = t.env.register_stellar_asset_contract_v2(Address::generate(&t.env)).address();
+    let mut p = t.params(100_000, 1200, 120);
+    p.usdc_token = other;
+    assert_eq!(t.c.try_create_offering(&1, &p), Err(Ok(Error::WrongSettlementAsset)));
+    t.c.create_offering(&1, &t.params(100_000, 1200, 120));
 }

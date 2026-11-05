@@ -6,7 +6,7 @@ import path from "node:path";
 import { Address, Asset, Operation, nativeToScVal, scValToNative, xdr } from "@stellar/stellar-sdk";
 import {
   ProofPayloadV1, REPO_ROOT, STORE_DIR, deployContract, env, explorerTx, invoke, proofHash, pseudonym, readStore,
-  sha256, submitClassic, toMemoHash, trustline, view, writeStore,
+  settlementAsset, sha256, submitClassic, toMemoHash, trustline, view, writeStore,
   type AssetsFile, type AttestationRecord, type ShareAssetRecord, type Submitted,
 } from "@pot/core";
 import { kp, loadSamples, sampleFile } from "../lib.js";
@@ -48,7 +48,16 @@ export function explainError(e: unknown): string {
 }
 
 // ---------- store ----------
-type ContractsFile = { offering?: { contract_id: string; wasm_hash: string; admin: string; deploy_tx: string; deployed_at: string } };
+type DeployRecord = { contract_id: string; wasm_hash: string; admin: string; deploy_tx: string; deployed_at: string };
+/**
+ * `offering` is the v0.2 deployment (TUSDC, constructor(admin)), kept as published in
+ * docs/DEPLOYMENTS.md. `offering_v3` is the v0.3 contract, constructor(admin, recorder,
+ * settlement_token), with outcome records in storage. Scripts use v3 once it is deployed.
+ */
+type ContractsFile = {
+  offering?: DeployRecord;
+  offering_v3?: DeployRecord & { recorder: string; settlement_token: string; settlement_asset: string };
+};
 export type OfferingRecord = {
   shipment_ref: string;
   offering_id: number;
@@ -57,8 +66,10 @@ export type OfferingRecord = {
   steps: { step: string; tx: string; at: string; detail?: Record<string, string> }[];
 };
 export const contracts = () => readStore<ContractsFile>("contracts.json", {});
+/** True once the v0.3 contract (settlement pinned, outcome records) is deployed. */
+export const isV3 = () => Boolean(contracts().offering_v3);
 export const offeringContract = () => {
-  const c = contracts().offering?.contract_id;
+  const c = contracts().offering_v3?.contract_id ?? contracts().offering?.contract_id;
   if (!c) throw new Error("offering contract not deployed (run: npm run offering -- deploy)");
   return c;
 };
@@ -73,6 +84,11 @@ const tusdc = () => {
   const t = readStore<AssetsFile>("assets.json", { shares: [] }).tusdc;
   if (!t) throw new Error("TUSDC not set up (run: npm run setup:tusdc)");
   return t;
+};
+/** What offerings on the current contract settle in: the pinned asset on v3, TUSDC on v0.2. */
+export const settlement = () => {
+  const v3 = contracts().offering_v3;
+  return v3 ? { code: v3.settlement_asset.split(":")[0], sac_id: v3.settlement_token } : { code: "TUSDC", sac_id: tusdc().sac_id };
 };
 export const offeringId = (ref: string) => Number(ref.split("-")[1]);
 
@@ -94,21 +110,26 @@ export const role = (name: string) => {
 };
 
 // ---------- actions ----------
+/** Deploys the v0.3 contract. Never overwrites the v0.2 `offering` record. */
 export async function deploy(force = false) {
-  const existing = contracts().offering;
+  const existing = contracts().offering_v3;
   if (existing && !force) {
-    console.log(`offering contract already deployed: ${existing.contract_id} (use --force to redeploy)`);
+    console.log(`offering contract v0.3 already deployed: ${existing.contract_id} (use --force to redeploy)`);
     return existing.contract_id;
   }
   const wasm = readFileSync(path.join(REPO_ROOT, "contracts/target/wasm32v1-none/release/offering.wasm"));
   const issuer = kp("issuer");
-  // Constructor: (admin, recorder). The recorder is the attestor account that already signs attestations.
-  const r = await deployContract(issuer, wasm, [addr(issuer.publicKey()), addr(kp("attestor").publicKey())]);
+  const recorder = kp("attestor").publicKey(); // the account that already signs attestations
+  const asset = settlementAsset();
+  const r = await deployContract(issuer, wasm, [addr(issuer.publicKey()), addr(recorder), addr(asset.sac_id)]);
   writeStore("contracts.json", {
     ...contracts(),
-    offering: { contract_id: r.contractId, wasm_hash: r.wasmHash, admin: issuer.publicKey(), deploy_tx: r.tx.hash, deployed_at: new Date().toISOString() },
+    offering_v3: {
+      contract_id: r.contractId, wasm_hash: r.wasmHash, admin: issuer.publicKey(), deploy_tx: r.tx.hash,
+      deployed_at: new Date().toISOString(), recorder, settlement_token: asset.sac_id, settlement_asset: `${asset.code}:${asset.issuer}`,
+    },
   });
-  console.log(`offering contract ${r.contractId}\n  ✓ deploy  ${explorerTx(r.tx.hash)}`);
+  console.log(`offering contract v0.3 ${r.contractId} (settles in ${asset.code})\n  ✓ deploy  ${explorerTx(r.tx.hash)}`);
   return r.contractId;
 }
 
@@ -129,7 +150,7 @@ export async function create(ref: string, deadlineMins = 120) {
     shipment_ref: str(ref),
     proof_hash: bytes(s.proof_hash),
     share_token: addr(s.sac_id),
-    usdc_token: addr(tusdc().sac_id),
+    usdc_token: addr(settlement().sac_id),
     treasury: addr(kp("spv_treasury").publicKey()),
     unit_price: i128(UNIT),
     cap_shares: i128(usd(sample.face_value_usd)),
@@ -172,7 +193,7 @@ export async function subscribe(ref: string, who: string, amountUsd: number) {
     "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo, not a legal document)",
     `SPV: Proof of Trading SPV ${ref} (simulated; legal structure under counsel review)`,
     `Subscriber wallet: ${k.publicKey()}`,
-    `Subscription: ${amountUsd} USD (paid in TUSDC) for ${amountUsd} ordinary shares at 1.00 USD each`,
+    `Subscription: ${amountUsd} USD (paid in ${settlement().code}) for ${amountUsd} ordinary shares at 1.00 USD each`,
     `Return: fixed ${sample.apy_bps / 100}% APY over ${sample.term_days} days, paid from collections; pro rata if less is collected`,
     `Underlying: receivable and insurance of shipment ${ref}; customs attestation proof hash ${s.proof_hash}`,
     `On-chain receipt: ${s.code} tokens (issuer ${s.issuer})`,
@@ -239,7 +260,7 @@ export async function distribute(ref: string, amountUsd: number, outcome: number
 export async function redeem(ref: string, who: string) {
   const { name, kp: k } = role(who);
   const [shares, preview] = (await view(offeringContract(), "preview_redeem", [u32(offeringId(ref)), addr(k.publicKey())])) as bigint[];
-  console.log(`  preview: ${name} redeems ${fmt(shares)} shares for ${fmt(preview)} TUSDC`);
+  console.log(`  preview: ${name} redeems ${fmt(shares)} shares for ${fmt(preview)} ${settlement().code}`);
   const tx = await invoke(k, offeringContract(), "redeem", [u32(offeringId(ref)), addr(k.publicKey())]);
   const [burned, payout] = scv(tx) as bigint[];
   record(ref, `redeem ${name}`, tx, { shares_burned: fmt(burned), payout: fmt(payout) });
@@ -310,6 +331,19 @@ export async function attestOutcome(ref: string) {
   });
   writeStore("attestations.json", atts);
   record(ref, `outcome attested (code ${o.outcome_code})`, tx, { proof_hash: hash.toString("hex") });
+  if (isV3()) await recordOutcome(ref, hash.toString("hex"), o.outcome_code);
+}
+
+/** Outcome codes 1-2 (buyer paid) and 4 (insurer paid) map to the contract's Outcome. */
+const OUTCOME_VARIANT: Record<number, string> = { 1: "Repaid", 2: "Repaid", 4: "InsuredLoss" };
+
+/** v0.3: the recorder writes the outcome and its proof hash into contract storage. */
+export async function recordOutcome(ref: string, hashHex: string, outcomeCode: number | "refunded") {
+  const variant = outcomeCode === "refunded" ? "Refunded" : OUTCOME_VARIANT[outcomeCode];
+  if (!variant) return console.log(`  · outcome code ${outcomeCode} has no contract record (only Repaid, InsuredLoss, Refunded)`);
+  const outcome = xdr.ScVal.scvVec([xdr.ScVal.scvSymbol(variant)]);
+  const tx = await invoke(kp("attestor"), offeringContract(), "record_outcome", [u32(offeringId(ref)), bytes(hashHex), outcome]);
+  record(ref, `outcome recorded in contract (${variant})`, tx, { record_hash: hashHex });
 }
 
 /** Run a step that must fail; print the decoded error. */

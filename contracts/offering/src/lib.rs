@@ -35,6 +35,7 @@ pub enum Error {
     Overflow = 11,
     AlreadyRecorded = 12,
     BadOutcome = 13,
+    WrongSettlementAsset = 14,
 }
 
 /// Final result of an offering, written once by the recorder.
@@ -106,6 +107,7 @@ enum DataKey {
     Redeemed(u32, Address),
     Recorder,
     Record(u32),
+    Settlement,
 }
 
 #[contractevent]
@@ -181,9 +183,16 @@ pub struct OfferingContract;
 
 #[contractimpl]
 impl OfferingContract {
-    pub fn __constructor(env: Env, admin: Address, recorder: Address) {
+    /// `settlement_token` is the token every offering settles in (Circle USDC on testnet and
+    /// mainnet). It is fixed for the life of the instance.
+    pub fn __constructor(env: Env, admin: Address, recorder: Address, settlement_token: Address) {
         env.storage().instance().set(&DataKey::Admin, &admin);
         env.storage().instance().set(&DataKey::Recorder, &recorder);
+        env.storage().instance().set(&DataKey::Settlement, &settlement_token);
+    }
+
+    pub fn settlement_token(env: Env) -> Address {
+        env.storage().instance().get(&DataKey::Settlement).unwrap()
     }
 
     /// Admin-only: replace the recorder (the account that writes outcome records).
@@ -235,6 +244,10 @@ impl OfferingContract {
         }
         if p.unit_price <= 0 || p.cap_shares <= 0 || p.term_secs == 0 || p.deadline <= env.ledger().timestamp() {
             return Err(Error::BadAmount);
+        }
+        let settlement: Address = env.storage().instance().get(&DataKey::Settlement).unwrap();
+        if p.usdc_token != settlement {
+            return Err(Error::WrongSettlementAsset);
         }
         if StellarAssetClient::new(&env, &p.share_token).admin() != env.current_contract_address() {
             return Err(Error::NotSacAdmin);
