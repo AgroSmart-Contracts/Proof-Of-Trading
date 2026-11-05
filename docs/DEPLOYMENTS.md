@@ -34,7 +34,7 @@ The deployments were made from the working tree during the build and committed a
 
 This document was written at `main` = [`2e5a0cd`](https://github.com/AgroSmart-Contracts/Proof-Of-Trading/commit/2e5a0cd). The v0.2 work has no tag of its own.
 
-To reproduce a hash: `cd contracts && stellar contract build --package offering --out-dir /tmp/wasm && shasum -a 256 /tmp/wasm/offering.wasm`.
+To reproduce a hash, build the commit the deployment came from (the contract source changed in v0.3, so building `main` gives a different WASM): `git checkout 99e8da4 && cd contracts && stellar contract build --package offering --out-dir /tmp/wasm && shasum -a 256 /tmp/wasm/offering.wasm`.
 
 ## Contracts
 
