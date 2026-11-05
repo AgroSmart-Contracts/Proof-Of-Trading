@@ -5,6 +5,8 @@
 
 **Finance layer (v0.1 assets, v0.2 contract).** Each financed shipment has an SPV. Its shares are a per-shipment classic Stellar asset (`TM` + 4 digits, 1 token = 1 share = $1) with AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, exposed through its Stellar Asset Contract (SAC). In v0.2 a Soroban offering contract becomes the SAC admin. Investors subscribe in USDC (TUSDC on testnet) and shares are minted automatically. When the buyer or the insurer pays the SPV, investors redeem and their shares are burned.
 
+Offerings are **fixed-amount trade receivables, not loans**: investors buy SPV shares in one insured shipment and are paid from what the buyer (or the insurer) pays. There is no lending, borrowing or collateral in scope.
+
 ```mermaid
 flowchart LR
   subgraph TruMarket off-chain
@@ -85,5 +87,5 @@ Offerings and redemption flags are persistent entries. Testnet rent is currently
 
 ## SCF path (beyond the hackathon)
 1. **M1:** legal structure (SPV per shipment or compartments), securities basis, real insurance assignment, investor KYB behind `approve_investor`, audit of the offering contract and issuance controls, multisig admin/treasury, issuer lock on mainnet, attestation registry contract.
-2. **M2:** pilot offerings with independent professional investors under a cap; real USDC; investor reporting; price feed (e.g. a SEP-40 oracle) and a Blend isolated-pool listing so share tokens can back loans.
+2. **M2:** pilot offerings with independent professional investors under a cap; real USDC; investor reporting of each offering's terms and status. Lending, borrowing and collateral use of the shares are out of scope.
 3. **M3:** full lifecycle on record including an insured failure if one occurs; optional pool or vault token holding many shipment tokens.

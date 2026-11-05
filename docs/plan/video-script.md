@@ -1,5 +1,8 @@
 # Demo video scripts (written before the event)
 
+> **Historical record (HackMeridian, Oct 2026).** Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
+
+
 Wording rules: "customs-attested", never "verified"; "protected", never "guaranteed"; not a retail product.
 
 ## A. Backup video, Sunday evening (~90 s, rough is fine)

@@ -17,7 +17,7 @@ Customs-attested agri-export shipments, financed through tokenized SPV shares on
 - **Demo app:** https://proof-of-trading.vercel.app
 
 ## The problem
-TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid. The shipment contracts are real, insured receivables, but lenders don't accept them as collateral, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each shipment on Stellar, and turns each financed shipment into SPV shares that approved investors can fund.
+TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid. The shipment contracts are real, insured receivables, but they are hard to fund from outside investors, and the customs records that prove them can't be made public. Proof of Trading puts a private, verifiable record of each shipment on Stellar, and turns each financed shipment into SPV shares that approved investors can fund.
 
 ## Status: v0.2 (built at HackMeridian, Oct 25 to 26)
 - **Offering contract** [`contracts/offering`](contracts/offering): one instance manages one offering per financed shipment. It is the **SAC admin** of each share asset, so it mints shares on `subscribe` and burns them on `redeem`/`refund`. Testnet: `CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7`.
@@ -76,7 +76,7 @@ Details: [`docs/architecture.md`](docs/architecture.md) · payload format: [`doc
 | CRAM risk scores | Precomputed bands | SCF M2 |
 | USDC | TUSDC, our test asset | SCF M1 |
 | Audit, multisig, issuer lock, mainnet | Documented only | SCF M1 |
-| Price feed, Blend, vault, collateral listing | Roadmap only | SCF M2/M3 |
+| Lending, borrowing, collateral listing | Out of scope: offerings are fixed-amount trade receivables, not loans | Not planned |
 
 ## Setup
 Requires Node 20+, Rust stable with `wasm32v1-none`, and the Stellar CLI.

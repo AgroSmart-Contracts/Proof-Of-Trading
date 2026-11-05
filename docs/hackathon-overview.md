@@ -1,5 +1,8 @@
 # Proof of Trading: HackMeridian 2026 overview
 
+> **Historical record (HackMeridian, Oct 2026).** Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../README.md) for the current scope.
+
+
 What we built, the proof that it works on Stellar testnet, how to demo it, the demo video transcript, and how it plugs into the existing TruMarket platform.
 
 ![Proof of Trading lifecycle](img/lifecycle.png)
@@ -8,7 +11,7 @@ What we built, the proof that it works on Stellar testnet, how to demo it, the d
 
 ## 1. In one paragraph
 
-TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid, and the insured shipment contracts behind those deals are real receivables that lenders still won't accept as collateral. Proof of Trading adds two layers on Stellar:
+TruMarket finances insured agri-export shipments, mostly from Peru (~247 deals, ~$22M over 24 months). Exporters wait 90 to 120 days to be paid, and the insured shipment contracts behind those deals are real receivables that are still hard to fund from outside investors. Proof of Trading adds two layers on Stellar:
 
 - **Proof layer.** Every consented shipment is **customs-attested**: a salted hash of its customs record (and, for financed shipments, the insurance assignment and CRAM risk band) goes on-chain. The data stays private.
 - **Finance layer.** Each financed shipment gets an SPV whose shares are a Stellar asset that only approved investors can hold. Investors subscribe in USDC and shares are minted automatically. When the buyer (or, on failure, the insurer) pays, investors redeem at the deal's fixed APY, or pro rata if less was collected, and the shares burn.
@@ -44,9 +47,9 @@ The README, docs and v0.2 plan were first drafted Saturday night (no v0.2 code) 
 | Track | Components |
 |---|---|
 | **Stellar Unlocked (core features, all in use)** | Native classic assets · issuer flags (auth required, revocable, clawback enabled) · trustlines + trustline authorization as the KYB gate · Stellar Asset Contract (`mint`, `burn`, `transfer`, `set_authorized`, `set_admin`) · SAC admin handover to a contract · Soroban contract (constructor, auth, persistent storage with TTL, events, errors) · `MEMO_HASH` attestations · Stellar RPC (no Horizon) · fee-bump transactions |
-| **Stellar Composed (other protocols)** | Not yet: Blend borrowing is the stretch goal; USDC (Circle), price feed (SEP-40), DeFindex and CCTP are SCF roadmap |
+| **Stellar Composed (other protocols)** | Not yet: USDC (Circle) and CCTP are SCF roadmap. Lending and borrowing are out of scope. |
 
-**Recommended track: Stellar Unlocked** (switch to Composed only if the Blend stretch ships).
+**Recommended track: Stellar Unlocked.**
 
 ---
 
@@ -159,7 +162,7 @@ npm run demo:refund -- SHP-xxxx    # under-subscribed refund
 Wording rules: records are **verifiable** (anyone can check them on Stellar) and shipments are **customs-attested**, but never say "verified" (that would claim the shipment itself was confirmed genuine); "protected", never "guaranteed"; not a retail product. Lead with **trade receivables**: the Stellar ecosystem knows the term.
 
 **[0:00–0:20] The gap.** *Screen: deck, PMF slide.*
-> Stellar holds over three billion dollars in real-world assets, but very little private trade credit reaches investors. TruMarket has financed about 247 insured agri-export shipments, around 22 million dollars. Each one is a real, insured trade receivable, yet the capital behind it sits locked for 90 to 120 days, because lenders won't take these receivables as collateral and the customs proof behind them can't be made public.
+> Stellar holds over three billion dollars in real-world assets, but very little private trade credit reaches investors. TruMarket has financed about 247 insured agri-export shipments, around 22 million dollars. Each one is a real, insured trade receivable, yet the capital behind it sits locked for 90 to 120 days, because outside investors can't easily fund these receivables and the customs proof behind them can't be made public.
 
 **[0:20–0:50] Proof layer.** *Screen: `npm run verify`, then the explorer showing the memo hash on the SHP-0247 attestation, then the dashboard shipment page.*
 > First, the proof layer: verifiable shipment records. Every consented shipment is customs-attested on Stellar: we seal a fingerprint of its customs record, and for financed deals the insurance assignment and our risk band. The raw data never leaves TruMarket and exporter and buyer IDs rotate every quarter, but anyone can verify a record hasn't changed, straight from Stellar, in one click.
@@ -216,7 +219,7 @@ On-chain: hashes, pseudonyms, share balances, USDC movements. Private in TruMark
 
 ### Milestones
 - **M1:** `stellar` module in the API, MongoDB store, admin hooks, multisig keys, audit, mainnet contract, legal structure.
-- **M2:** investor-app wallet flow, pilot offerings with real USDC and independent professional investors, real Arc IDs and customs consent, price feed and Blend listing.
+- **M2:** investor-app wallet flow, pilot offerings with real USDC and independent professional investors, real Arc IDs and customs consent.
 - **M3:** full lifecycle on mainnet, including an insured failure if one occurs; optional pool or vault token across shipments.
 
 ---
@@ -233,4 +236,4 @@ On-chain: hashes, pseudonyms, share balances, USDC movements. Private in TruMark
 | CRAM risk scores | Precomputed bands | SCF M2 |
 | USDC | TUSDC (our test asset) | SCF M1 |
 | Audit, multisig, issuer lock | Documented only | SCF M1 |
-| Price feed, Blend, vault | Roadmap | SCF M2/M3 |
+| Lending, borrowing, collateral | Out of scope | Not planned |
