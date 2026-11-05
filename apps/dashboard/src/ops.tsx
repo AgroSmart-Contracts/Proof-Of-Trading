@@ -72,10 +72,10 @@ function DealOps({ d }: { d: Deal }) {
       </td>
       <td><span className={`chip ${tone}`}>{label}</span></td>
       <td className="small num">
-        {o?.tokens ? `${num(o.tokens.minted)} / ${num(o.tokens.outstanding)} / ${num(o.tokens.burned)}` : "–"}
+        {o?.tokens ? `${num(o.tokens.minted)} / ${num(o.tokens.outstanding)} / ${num(o.tokens.burned)}` : "-"}
       </td>
-      <td className="small num">{c && c.total_collected !== "0" ? <>{usd(c.total_collected)}<div className="tiny muted">{OUTCOMES[String(c.outcome_code)]}</div></> : "–"}</td>
-      <td style={{ whiteSpace: "normal", minWidth: 300 }}>{next ?? <span className="muted">–</span>}</td>
+      <td className="small num">{c && c.total_collected !== "0" ? <>{usd(c.total_collected)}<div className="tiny muted">{OUTCOMES[String(c.outcome_code)]}</div></> : "-"}</td>
+      <td style={{ whiteSpace: "normal", minWidth: 300 }}>{next ?? <span className="muted">-</span>}</td>
     </tr>
   );
 }

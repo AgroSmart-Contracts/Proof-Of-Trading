@@ -30,7 +30,7 @@ export function VerifyOnChain({ tx, expected, text, label = "Verify on Stellar" 
     }
     try {
       const r = await memoHashOf(tx);
-      if (r.memo) out.push({ ok: r.memo === expected, msg: r.memo === expected ? `The Stellar network holds the same fingerprint (block ${r.ledger}), read directly, not via TruMarket` : "The fingerprint on Stellar doesn't match" });
+      if (r.memo) out.push({ ok: r.memo === expected, msg: r.memo === expected ? `The Stellar network holds the same fingerprint (block ${r.ledger}), read directly from Stellar without going through TruMarket` : "The fingerprint on Stellar doesn't match" });
       else out.push({ ok: false, msg: `Couldn't read it from Stellar right now: ${r.note}` });
     } catch (e) {
       out.push({ ok: false, msg: `Couldn't reach the Stellar network: ${String(e)}` });
@@ -263,9 +263,9 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             <h4>Subscription agreement</h4>
             <div className="row" style={{ alignItems: "stretch" }}>
               <input type="number" min={1} max={remaining} step={1} value={amount} onChange={(e) => setAmount(e.target.value)} style={{ maxWidth: 180 }} aria-label="Amount in USD" />
-              <span className="small muted" style={{ alignSelf: "center" }}>USD → {amountOk ? amt.toLocaleString("en-US") : "–"} shares · {money(remaining, 0)} left</span>
+              <span className="small muted" style={{ alignSelf: "center" }}>USD → {amountOk ? amt.toLocaleString("en-US") : "-"} shares · {money(remaining, 0)} left</span>
             </div>
-            <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo, not a legal document)
+            <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo without legal effect)
 SPV: Proof of Trading SPV ${d.shipment_ref}
 Subscription: ${amountOk ? amt.toLocaleString("en-US") : "…"} USD for ${amountOk ? amt.toLocaleString("en-US") : "…"} ordinary shares at 1.00 USD
 Payment: the investor amount fixed in the subscription agreement (${termsLine(d)}), paid from collections;
@@ -370,7 +370,7 @@ export function DealPage({ ref_ }: { ref_: string }) {
         <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{money(fixedAmount(d), 0)}</div><div className="l">Investor amount (subscription agreement)</div></div>
         <div className="kpi"><div className="v">{d.term_days} days</div><div className="l">Term</div></div>
         <div className="kpi"><div className="v">{money(d.face_value_usd, 0)}</div><div className="l">Raise</div></div>
-        <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "–"}</div><div className="l">Subscribed</div></div>
+        <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "-"}</div><div className="l">Subscribed</div></div>
         <div className="kpi"><div className="v">{c ? num(o!.tokens?.outstanding ?? 0) : "0"}</div><div className="l">{d.share?.code} outstanding</div></div>
         {c && c.status === "Open" && <div className="kpi"><div className="v" style={{ fontSize: 15 }}>{dateS(c.p.deadline)}</div><div className="l">Closes</div></div>}
       </div>
@@ -435,7 +435,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
         <div className="kpi"><div className="v">{money(p.subscribed_usd, 0)}</div><div className="l">Invested</div></div>
         <div className="kpi"><div className="v">{heldUnits.toLocaleString("en-US")}</div><div className="l">{o.share_code} held</div></div>
         <div className="kpi"><div className="v">{p.pct_of_spv?.toFixed(0)}%</div><div className="l">of the SPV</div></div>
-        <div className="kpi"><div className="v">{p.owed_at_apy ? usd(p.owed_at_apy) : "–"}</div><div className="l">Owed at maturity</div></div>
+        <div className="kpi"><div className="v">{p.owed_at_apy ? usd(p.owed_at_apy) : "-"}</div><div className="l">Owed at maturity</div></div>
         {!done && c.status !== "Open" && <div className="kpi"><div className="v">{money(accruedValue(o, p.subscribed_usd))}</div><div className="l">Accrued value (est.)</div></div>}
         {p.payout && <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{amount(p.payout)}</div><div className="l">Paid out</div></div>}
         {p.refund && <div className="kpi"><div className="v">{amount(p.refund)}</div><div className="l">Refunded</div></div>}
@@ -484,7 +484,7 @@ export function Portfolio() {
       <div className="kpis">
         <div className="kpi"><div className="v">{money(units(balanceOf(acct)))}</div><div className="l">{sc} in wallet</div></div>
         <div className="kpi"><div className="v">{money(invested, 0)}</div><div className="l">Active investments</div></div>
-        <div className="kpi"><div className="v">{owed ? money(owed) : "–"}</div><div className="l">Owed at maturity</div></div>
+        <div className="kpi"><div className="v">{owed ? money(owed) : "-"}</div><div className="l">Owed at maturity</div></div>
         <div className="kpi"><div className="v">{positions.length}</div><div className="l">Deals (incl. closed)</div></div>
       </div>
       {!positions.length && (

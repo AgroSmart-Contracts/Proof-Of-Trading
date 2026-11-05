@@ -98,7 +98,7 @@ export const short = (s: string, n = 6) => (s && s.length > n * 2 + 1 ? `${s.sli
 export const units = (base: string | number) => Number(base) / 1e7;
 export const money = (n: number, dp = 2) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: dp > 0 && n % 1 !== 0 ? 2 : 0, maximumFractionDigits: dp })}`;
-export const usd = (base: string | number | null | undefined, dp = 2) => (base == null ? "–" : money(units(base), dp));
+export const usd = (base: string | number | null | undefined, dp = 2) => (base == null ? "-" : money(units(base), dp));
 export const num = (base: string | number) => units(base).toLocaleString("en-US", { maximumFractionDigits: 2 });
 export const date = (iso: string) => new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
 export const dateS = (secs: string | number) => new Date(Number(secs) * 1000).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
