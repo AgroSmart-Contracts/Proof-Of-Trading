@@ -78,7 +78,7 @@ Public keys only. The secret keys are in a local `.env` that is never committed.
 
 ## SHP-0247: happy path, buyer pays
 
-Two approved investors subscribe 60/40, the buyer pays in full, both are paid the fixed amount set in the offering terms (12% for 120 days) and the surplus goes back to the SPV. Offering ID 247, share asset TM0247.
+Two approved investors subscribe 60/40, the buyer pays in full, both are paid the investor amount fixed in the subscription agreement (12% for 120 days) and the surplus goes back to the SPV. Offering ID 247, share asset TM0247.
 
 | Step | Transaction | What it proves | Status |
 |---|---|---|---|
@@ -90,7 +90,7 @@ Two approved investors subscribe 60/40, the buyer pays in full, both are paid th
 | Subscription, investor B | [`532e6b07…0ecb`](https://stellar.expert/explorer/testnet/tx/532e6b070f6fca891f46100550329f79df3e636789b187650d0e4b2039fc0ecb) | 40,000 TUSDC in, 40,000 TM0247 minted; the offering is fully subscribed. | ✅ ledger 5382579 |
 | Funding | [`5fd00fa6…eaae`](https://stellar.expert/explorer/testnet/tx/5fd00fa661bc9782ec8bc7bf4952a658892c1cf751ce9ea1cb90ab15e8b0eaae) | 100,000 TUSDC moves to the SPV treasury. | ✅ ledger 5382580 |
 | Buyer payment | [`127fafb6…c36d`](https://stellar.expert/explorer/testnet/tx/127fafb6262c1f6def0661eb077aa6a66e7a5de9472cd574adf9c11301b9c36d) | 105,000 TUSDC deposited, outcome 1 (buyer paid). | ✅ ledger 5382581 |
-| Redemption, investor A | [`fbfcc984…00bc`](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc) | 60,000 shares burned, 62,367.12 TUSDC paid (the fixed amount set in the offering terms). | ✅ ledger 5382582 |
+| Redemption, investor A | [`fbfcc984…00bc`](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc) | 60,000 shares burned, 62,367.12 TUSDC paid (the investor amount fixed in the subscription agreement). | ✅ ledger 5382582 |
 | Redemption, investor B | [`ccf1ad04…7a77`](https://stellar.expert/explorer/testnet/tx/ccf1ad042f9ed269cd2f1789ddb02c4f5f600f05b3232570968cb0d18b5a7a77) | 40,000 shares burned, 41,578.08 TUSDC paid. | ✅ ledger 5382583 |
 | Surplus sweep | [`9b458a45…1362`](https://stellar.expert/explorer/testnet/tx/9b458a45bccc16d418713d962da9a1864a1edf961a9eb6d4b7c910db78ba1362) | 1,054.79 TUSDC above what investors are owed goes back to the SPV. | ✅ ledger 5382584 |
 | Outcome record | [`784d4189…2030`](https://stellar.expert/explorer/testnet/tx/784d41899a776068e1023361e4dc792ea6fadc3151f9ca21860b36ab45432030) | The outcome (code 1) is attested on-chain. | ✅ ledger 5382585 |

@@ -1,6 +1,6 @@
 # Sunday/Monday runbook
 
-> **Historical record (HackMeridian, Oct 2026).** It uses the wording of the time ("APY"); current docs describe the fixed amount set in the offering terms. Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
+> **Historical record (HackMeridian, Oct 2026).** Rates appear as the fixed rate of the time; current docs describe the investor amount fixed in the subscription agreement. Since v0.3 the pilot uses one pool share with per-receivable attestations (see [pool contract v1](../pool-contract-v1.md)). Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
 
 
 ## Status, Sun Oct 25 ~12:00 (event work)
