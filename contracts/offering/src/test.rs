@@ -450,3 +450,12 @@ fn offerings_must_settle_in_the_configured_token() {
     assert_eq!(t.c.try_create_offering(&1, &p), Err(Ok(Error::WrongSettlementAsset)));
     t.c.create_offering(&1, &t.params(100_000, 1200, 120));
 }
+
+// Pool contract v1 (docs/pool-contract-v1.md), Tranche 1. Written first, so it fails until `attest` exists.
+// When it does: attest(key, h1) succeeds; attest(key, h2) is rejected as a duplicate; the stored hash
+// and status are still h1 and `attested`. key = sha256(export declaration no. | invoice no. | buyer tax ID).
+#[test]
+#[ignore = "pool contract v1 is not built yet (Tranche 1)"]
+fn duplicate_attestation_rejected() {
+    todo!("pool contract v1: attest(key, hash) must reject a key that is already attested");
+}
