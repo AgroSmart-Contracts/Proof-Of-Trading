@@ -21,7 +21,8 @@
     "demo:refund": "tsx scripts/refund-demo.ts",
     "spike": "tsx scripts/spike.ts",
     "export": "tsx scripts/export-public.ts",
-    "topup": "tsx scripts/topup-xlm.ts"
+    "topup": "tsx scripts/topup-xlm.ts",
+    "ttl:keeper": "tsx scripts/ttl-keeper.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
