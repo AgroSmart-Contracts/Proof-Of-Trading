@@ -1,4 +1,4 @@
-%% Offering state machine in contracts/offering (Status enum) and the outcome record
+%% v0.2 prototype: per-shipment offering state machine in contracts/offering (Status enum) and the outcome record
 stateDiagram-v2
   [*] --> Open: create_offering (admin)
   Open --> Open: subscribe (approved investor),<br/>shares minted

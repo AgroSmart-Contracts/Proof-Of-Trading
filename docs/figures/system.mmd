@@ -1,36 +1,31 @@
-%% System overview: proof layer and finance layer on Stellar
+%% System overview: the pilot pool on Stellar (design for Tranche 1; the testnet record is the v0.2 prototype)
 flowchart LR
   subgraph TM["TruMarket (off-chain, private)"]
-    CU["Customs record"] --> PL["Canonical proof payload<br/>+ salt + pseudonyms"]
-    IN["Insurance assignment"] --> PL
-    AR["Arc DealsManager<br/>deal ID"] --> PL
-    CR["CRAM risk band"] --> PL
-    KYB["KYB approval"]
+    DOC["Export declaration, invoice,<br/>buyer tax ID, documents"] --> KEY["Attestation key + document hash"]
+    KYB["KYB: legal entities,<br/>min. USD 50,000"]
   end
 
   subgraph ST["Stellar"]
-    REC["Recorder account"]
-    MH["MEMO_HASH attestation tx"]
-    OC["Offering contract<br/>(Soroban)"]
-    RS[("Contract storage:<br/>offerings, outcome records")]
-    SH["Share asset TMxxxx<br/>AUTH_REQUIRED · REVOCABLE · CLAWBACK<br/>+ its SAC"]
-    USDC["USDC (Circle) SAC"]
-    TR["SPV treasury"]
+    PC["Pool contract (Soroban)"]
+    RS[("Persistent storage:<br/>attestations, status history, pool state")]
+    SH["Pool share<br/>AUTH_REQUIRED · REVOCABLE · CLAWBACK<br/>+ its SAC"]
+    USDC["Circle USDC SAC"]
+    COL["Collection account<br/>2-of-3"]
   end
 
-  INV["Approved investor wallet"]
-  VER["verify / explorer"]
+  INV["Investor wallet<br/>Wallets Kit · Freighter · Privy"]
+  BR["Bridge<br/>buyer USD to USDC"]
+  KOY["Koywe<br/>USDC to PEN / CLP"]
+  VER["Indexer / explorer"]
 
-  PL -- "sha256" --> REC
-  REC --> MH
-  REC -- "record_outcome" --> RS
-  OC --- RS
-  KYB -- "approve_investor" --> OC
-  OC -- "SAC admin: authorize, mint, burn" --> SH
-  INV -- "subscribe (USDC)" --> OC
-  OC -- "fund" --> TR
-  TR -- "deposit_distribution" --> OC
-  OC -- "redeem (USDC)" --> INV
-  USDC -.- OC
-  MH --> VER
-  RS --> VER
+  KEY -- "attest" --> PC
+  PC --- RS
+  KYB -- "authorize holder" --> SH
+  PC -- "SAC admin: mint, burn" --> SH
+  INV -- "subscribe (USDC)" --> PC
+  PC -- "release" --> KOY
+  BR --> COL
+  COL -- "settle" --> PC
+  PC -- "distribute, redeem" --> INV
+  USDC -.- PC
+  RS -- "events" --> VER

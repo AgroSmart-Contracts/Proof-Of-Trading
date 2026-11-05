@@ -1,24 +1,24 @@
-%% Money flow for one offering. Ramps are planned (SCF roadmap), not integrated on testnet.
+%% Money flow for one pool receivable (design, Tranche 2). Circle USDC is the USD rail; nothing is bridged.
 sequenceDiagram
   autonumber
-  actor Inv as Investor
-  participant Ramp as On/off-ramps (planned)<br/>CCTP · Bridge · Koywe
-  participant OC as Offering contract
-  participant SPV as SPV treasury
+  actor Inv as Investor (legal entity)
+  participant PC as Pool contract (Stellar)
+  participant Koy as Koywe
   actor Exp as Exporter
-  actor Buy as Buyer / insurer
+  actor Buy as Buyer
+  participant Br as Bridge
+  participant Col as Collection account
 
-  Inv->>Ramp: Fiat (Bridge, Koywe) or USDC on another chain (CCTP)
-  Ramp-->>Inv: USDC on Stellar
-  Inv->>OC: subscribe: USDC into escrow
-  OC-->>Inv: shares minted in the same transaction
-  OC->>SPV: fund: escrow released once the cap is reached
-  SPV->>Ramp: USDC out
-  Ramp->>Exp: Exporter paid in local currency (existing payout flow)
-  Note over Exp,Buy: Shipment delivered, 90 to 120 days
-  Buy->>Ramp: Buyer pays (or insurer pays the claim)
-  Ramp-->>SPV: USDC on Stellar
-  SPV->>OC: deposit_distribution: collected amount + outcome code
-  Inv->>OC: redeem
-  OC-->>Inv: pro-rata share of what was collected, up to the fixed amount set in the offering terms, shares burned
-  OC->>SPV: sweep_surplus: any amount above what investors are owed
+  Inv->>PC: subscribe: Circle USDC on Stellar
+  PC-->>Inv: pool shares minted in the same transaction
+  Note over PC: TruMarket attests the receivable (attest)
+  PC->>Koy: release: 90% of face in USDC to the payout account
+  Koy->>Exp: USDC to PEN or CLP, paid locally
+  Note over Exp,Buy: Goods shipped, buyer pays at term
+  Buy->>Br: USD to the buyer's virtual account
+  Br->>Col: USD to USDC on Stellar (memo matched)
+  Br-->>PC: HMAC-signed webhook, then settle
+  Col->>PC: settle: principal, investor amount, balance
+  PC->>Inv: distribute monthly, pro rata
+  Inv->>PC: redeem at the 3-month term
+  PC-->>Inv: USDC at NAV, shares burned
