@@ -5,7 +5,6 @@ const ABI = parseAbi([
   "function completed(uint256) view returns (bool)",
   "function vault(uint256) view returns (address)",
   "function maxDeposit(uint256) view returns (uint256)",
-  "function borrower(uint256) view returns (address)",
 ]);
 
 export type ArcDeal = {
@@ -16,7 +15,6 @@ export type ArcDeal = {
   completed?: boolean;
   vault?: string;
   maxDeposit?: string;
-  borrower?: string;
 };
 
 export const arcChainId = () => Number(optionalEnv("ARC_CHAIN_ID") ?? 5042002);
@@ -34,11 +32,10 @@ export async function readDeal(nftId: string): Promise<ArcDeal> {
   const client = createPublicClient({ transport: http(url) });
   const address = base.deals_manager as `0x${string}`;
   const id = BigInt(nftId);
-  const [completed, vault, maxDeposit, borrower] = await Promise.all([
+  const [completed, vault, maxDeposit] = await Promise.all([
     client.readContract({ address, abi: ABI, functionName: "completed", args: [id] }),
     client.readContract({ address, abi: ABI, functionName: "vault", args: [id] }),
     client.readContract({ address, abi: ABI, functionName: "maxDeposit", args: [id] }),
-    client.readContract({ address, abi: ABI, functionName: "borrower", args: [id] }),
   ]);
-  return { ...base, stub: false, completed, vault, maxDeposit: maxDeposit.toString(), borrower };
+  return { ...base, stub: false, completed, vault, maxDeposit: maxDeposit.toString() };
 }

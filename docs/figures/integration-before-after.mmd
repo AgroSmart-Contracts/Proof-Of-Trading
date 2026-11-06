@@ -1,0 +1,20 @@
+%% TruMarket today vs. the pilot on Stellar (planned; nothing in production uses Stellar yet)
+flowchart TB
+  subgraph BEFORE["Before: TruMarket today"]
+    direction LR
+    B1["Exporter deal<br/>customs records private"] --> B2["Arc DealsManager<br/>deal record"]
+    B2 --- B4["Supplier payout"]
+    B5["Investors see the deal,<br/>not proof of the receivable"]
+  end
+
+  subgraph AFTER["After: the pilot pool on Stellar"]
+    direction LR
+    A1["Exporter receivable<br/>documents stay private"] -- "key + hash" --> A3["Pool contract<br/>one attestation per receivable"]
+    A2["Arc DealsManager<br/>deal record (unchanged)"] -- "deal ID in proof" --> A3
+    A9["Investors: Stellar Wallets Kit,<br/>Varial (formerly Freighter), Privy"] -- "Circle USDC" --> A4["TRU3 pool share<br/>one asset"]
+    A4 --- A3
+    A3 -- "release, via Koywe" --> A6["Exporter paid in PEN or CLP"]
+    A7["Buyer pays USD"] -- "Bridge: USD to USDC" --> A3
+  end
+
+  BEFORE ~~~ AFTER

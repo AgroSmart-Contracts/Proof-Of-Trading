@@ -4,7 +4,7 @@ import { Badge, ProgressBar } from "./ui";
 import {
   COMMODITY, CRAM, OUTCOMES, amount, PERSONAS, REGION, X, accruedValue, date, dateS, dealFor, isApproved, memoHashOf, money, num,
   offeringFor, previewPayout, sha256Hex, short, offeringStatus, stepLabel, units, usd, who,
-  type Deal, type Doc, type Offering, type Persona, type Store,
+  type Deal, type Doc, type Offering, type Persona, type Store, balanceOf, settlementCode, fixedAmount, termsLine
 } from "./lib";
 
 // ---------- shared pieces ----------
@@ -30,7 +30,7 @@ export function VerifyOnChain({ tx, expected, text, label = "Verify on Stellar" 
     }
     try {
       const r = await memoHashOf(tx);
-      if (r.memo) out.push({ ok: r.memo === expected, msg: r.memo === expected ? `The Stellar network holds the same fingerprint (block ${r.ledger}), read directly, not via TruMarket` : "The fingerprint on Stellar doesn't match" });
+      if (r.memo) out.push({ ok: r.memo === expected, msg: r.memo === expected ? `The Stellar network holds the same fingerprint (block ${r.ledger}), read directly from Stellar without going through TruMarket` : "The fingerprint on Stellar doesn't match" });
       else out.push({ ok: false, msg: `Couldn't read it from Stellar right now: ${r.note}` });
     } catch (e) {
       out.push({ ok: false, msg: `Couldn't reach the Stellar network: ${String(e)}` });
@@ -93,9 +93,9 @@ function DealCard({ d, o }: { d: Deal; o?: Offering }) {
         <span className="deal-title">{shortTitle(d)}</span>
         <span className={`band ${d.cram_band}`} title={`Risk band ${d.cram_band}`}>{d.cram_band}</span>
       </div>
-      <div className="deal-apy">
-        <span className="big-apy">{(d.apy_bps / 100).toFixed(1)}%</span>
-        <span className="muted small">APY · {d.term_days} days</span>
+      <div className="deal-amount">
+        <span className="big-amount">{money(fixedAmount(d), 0)}</span>
+        <span className="muted small">investor amount fixed in the subscription agreement · {termsLine(d)} on {money(d.face_value_usd, 0)}</span>
       </div>
       {open ? (
         <div className="stack" style={{ gap: 6 }}>
@@ -130,12 +130,12 @@ export function Marketplace() {
   return (
     <div className="stack-lg">
       <div className="stack" style={{ gap: 10 }}>
-        <h1>Invest in insured trade receivables</h1>
+        <h1>Invest in export trade receivables</h1>
         <p className="muted">Each deal is one agri-export shipment: you fund it, and you're repaid when the buyer pays.</p>
         <div className="row" style={{ gap: 8 }}>
-          <span className="chip green">🛡️ Insured up to 90%</span>
+          <span className="chip">🛡️ Credit insurance simulated in this prototype</span>
           <span className="chip green">✓ Verifiable on Stellar</span>
-          <span className="chip green">Fixed APY, paid at maturity</span>
+          <span className="chip green">Investor amount fixed in the subscription agreement, paid at maturity</span>
           <span className="chip">Shares registered in your name</span>
         </div>
       </div>
@@ -162,14 +162,14 @@ export function Marketplace() {
           <div className="card" style={{ padding: 0 }}>
             <div className="scroll">
               <table>
-                <thead><tr><th>Deal</th><th>APY</th><th>Term</th><th>Raise</th><th>Result</th></tr></thead>
+                <thead><tr><th>Deal</th><th>Fixed amount</th><th>Term</th><th>Raise</th><th>Result</th></tr></thead>
                 <tbody>
                   {past.map((d) => {
                     const [label, tone] = result(d);
                     return (
                       <tr key={d.shipment_ref}>
                         <td><a href={`#/deal/${d.shipment_ref}`}><b>{shortTitle(d)}</b></a></td>
-                        <td>{(d.apy_bps / 100).toFixed(1)}%</td>
+                        <td>{money(fixedAmount(d), 0)}</td>
                         <td>{d.term_days} days</td>
                         <td>{money(d.face_value_usd, 0)}</td>
                         <td><Badge tone={tone}>{label}</Badge></td>
@@ -190,6 +190,7 @@ export function Marketplace() {
 
 function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
   const { persona, interactive, busy, run, store } = useApp();
+  const sc = settlementCode(store, o);
   const c = o?.on_chain;
   const cap = c ? units(c.p.cap_shares) : d.face_value_usd;
   const sold = c ? units(c.sold_shares) : 0;
@@ -200,7 +201,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
   const [declined, setDeclined] = useState(false);
   const approved = isApproved(o, persona);
   const position = persona === "A" || persona === "B" ? o?.investors[persona] : undefined;
-  const balance = units(store.accounts[persona]?.tusdc ?? 0);
+  const balance = units(balanceOf(store.accounts[persona]));
 
   if (persona === "ops") return <div className="card"><p>Switch to an investor persona to invest, or manage this deal in <a href="#/ops">SPV operations</a>.</p></div>;
   if (!o || !c) {
@@ -236,7 +237,7 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
     <div className="card stack">
       <div className="row between">
         <h3>Invest</h3>
-        <span className="small muted">Wallet: <b>{money(balance)}</b> TUSDC</span>
+        <span className="small muted">Wallet: <b>{money(balance)}</b> {sc}</span>
       </div>
       {position && <div className="chip green">You hold {num(position.shares_held)} shares · <a href="#/portfolio">view certificate</a></div>}
       <div className="steps">
@@ -247,10 +248,10 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             {approved ? (
               <p className="small ok">✓ Approved to hold {d.share?.code}. Your trustline is authorized by the issuer.</p>
             ) : persona === "U" ? (
-              <p className="small">This wallet hasn't passed KYB, so the share asset won't accept it. You can still try: the asset itself will refuse to mint, and your TUSDC never leaves your wallet.</p>
+              <p className="small">This wallet hasn't passed KYB, so the share asset won't accept it. You can still try: the asset itself will refuse to mint, and your {sc} never leaves your wallet.</p>
             ) : (
               <>
-                <p className="small muted">Professional investors only. TruMarket approves your wallet after KYB (simulated here).</p>
+                <p className="small muted">Legal entities only, minimum ticket USD 50,000; no natural persons or US persons. TruMarket approves your wallet after KYB (simulated here).</p>
                 <div><button className="secondary" disabled={!interactive || busy || !canKyb} onClick={() => run(`KYB approval for ${PERSONAS[persona]}`, { action: "approve", ref: d.shipment_ref, who: who(persona) })}>Complete KYB (simulated)</button></div>
               </>
             )}
@@ -262,13 +263,13 @@ function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
             <h4>Subscription agreement</h4>
             <div className="row" style={{ alignItems: "stretch" }}>
               <input type="number" min={1} max={remaining} step={1} value={amount} onChange={(e) => setAmount(e.target.value)} style={{ maxWidth: 180 }} aria-label="Amount in USD" />
-              <span className="small muted" style={{ alignSelf: "center" }}>USD → {amountOk ? amt.toLocaleString("en-US") : "–"} shares · {money(remaining, 0)} left</span>
+              <span className="small muted" style={{ alignSelf: "center" }}>USD → {amountOk ? amt.toLocaleString("en-US") : "-"} shares · {money(remaining, 0)} left</span>
             </div>
-            <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo, not a legal document)
+            <div className="doc">{`SUBSCRIPTION AGREEMENT (preview: testnet demo without legal effect)
 SPV: Proof of Trading SPV ${d.shipment_ref}
 Subscription: ${amountOk ? amt.toLocaleString("en-US") : "…"} USD for ${amountOk ? amt.toLocaleString("en-US") : "…"} ordinary shares at 1.00 USD
-Return: fixed ${(d.apy_bps / 100).toFixed(1)}% APY over ${d.term_days} days, paid from collections;
-        pro rata if less is collected (insurance covers up to 90%)
+Payment: the investor amount fixed in the subscription agreement (${termsLine(d)}), paid from collections;
+        pro rata if less is collected (credit insurance simulated in this prototype)
 Your share is registered off-chain in your name; you receive a share
 certificate whose hash is anchored on Stellar. ${d.share?.code} tokens are your
 on-chain receipt. The signed agreement's sha256 is recorded in your
@@ -280,14 +281,14 @@ subscription transaction.`}</div>
           <div className="dot">3</div>
           <div className="stack" style={{ gap: 8 }}>
             <h4>Pay and receive your shares</h4>
-            <p className="small muted">One transaction: your TUSDC goes into escrow and {d.share?.code} shares are minted to you. The SPV then issues your share certificate.</p>
+            <p className="small muted">One transaction: your {sc} goes into escrow and {d.share?.code} shares are minted to you. The SPV then issues your share certificate.</p>
             <div>
               <button disabled={!interactive || busy || !agreed || !amountOk || (!approved && persona !== "U")} onClick={subscribe}>
-                Pay {amountOk ? money(amt, 0) : ""} TUSDC & subscribe
+                Pay {amountOk ? money(amt, 0) : ""} {sc} & subscribe
               </button>
             </div>
             {!interactive && <p className="tiny muted">Read-only snapshot. Run the dashboard locally (`npm run dev`) to sign testnet transactions.</p>}
-            {declined && <p className="small bad">✗ Rejected by the share asset (BalanceDeauthorizedError): this wallet isn't approved. No TUSDC moved.</p>}
+            {declined && <p className="small bad">✗ Rejected by the share asset (BalanceDeauthorizedError): this wallet isn't approved. No {sc} moved.</p>}
           </div>
         </div>
       </div>
@@ -324,7 +325,7 @@ function DueDiligence({ d, o }: { d: Deal; o?: Offering }) {
       <div className="card stack">
         <h3>Risk and protection</h3>
         <div className="row"><span className={`band ${d.cram_band}`}>{d.cram_band}</span><span className="small"><b>CRAM band {d.cram_band}</b>: {CRAM[d.cram_band]}</span></div>
-        <p className="small">🛡️ <b>Insured up to 90%</b>; the insurance is assigned to the SPV (simulated: assignment digest only). Exclusions apply; "protected", never "guaranteed".</p>
+        <p className="small">🛡️ <b>Credit insurance is simulated here</b> (assignment digest only). In the pilot it is bound and endorsed, with the vehicle named on the policy, before the first pool receivable. It is not a promise of repayment.</p>
       </div>
       {proof && (
         <div className="card stack">
@@ -366,10 +367,10 @@ export function DealPage({ ref_ }: { ref_: string }) {
         <span className={`chip ${tone}`}>{label}</span>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{(d.apy_bps / 100).toFixed(1)}%</div><div className="l">Fixed APY</div></div>
+        <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{money(fixedAmount(d), 0)}</div><div className="l">Investor amount (subscription agreement)</div></div>
         <div className="kpi"><div className="v">{d.term_days} days</div><div className="l">Term</div></div>
         <div className="kpi"><div className="v">{money(d.face_value_usd, 0)}</div><div className="l">Raise</div></div>
-        <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "–"}</div><div className="l">Subscribed</div></div>
+        <div className="kpi"><div className="v">{c ? usd(c.sold_shares, 0) : "-"}</div><div className="l">Subscribed</div></div>
         <div className="kpi"><div className="v">{c ? num(o!.tokens?.outstanding ?? 0) : "0"}</div><div className="l">{d.share?.code} outstanding</div></div>
         {c && c.status === "Open" && <div className="kpi"><div className="v" style={{ fontSize: 15 }}>{dateS(c.p.deadline)}</div><div className="l">Closes</div></div>}
       </div>
@@ -413,6 +414,7 @@ function Certificate({ cert, agreement, burned }: { cert: Doc; agreement?: Doc; 
 
 function PositionCard({ o, label }: { o: Offering; label: Persona }) {
   const { store, interactive, busy, run } = useApp();
+  const sc = settlementCode(store, o);
   const p = o.investors[label];
   const d = dealFor(store, o.shipment_ref)!;
   const c = o.on_chain!;
@@ -433,7 +435,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
         <div className="kpi"><div className="v">{money(p.subscribed_usd, 0)}</div><div className="l">Invested</div></div>
         <div className="kpi"><div className="v">{heldUnits.toLocaleString("en-US")}</div><div className="l">{o.share_code} held</div></div>
         <div className="kpi"><div className="v">{p.pct_of_spv?.toFixed(0)}%</div><div className="l">of the SPV</div></div>
-        <div className="kpi"><div className="v">{p.owed_at_apy ? usd(p.owed_at_apy) : "–"}</div><div className="l">Owed at maturity</div></div>
+        <div className="kpi"><div className="v">{p.owed_at_apy ? usd(p.owed_at_apy) : "-"}</div><div className="l">Owed at maturity</div></div>
         {!done && c.status !== "Open" && <div className="kpi"><div className="v">{money(accruedValue(o, p.subscribed_usd))}</div><div className="l">Accrued value (est.)</div></div>}
         {p.payout && <div className="kpi"><div className="v" style={{ color: "var(--primary)" }}>{amount(p.payout)}</div><div className="l">Paid out</div></div>}
         {p.refund && <div className="kpi"><div className="v">{amount(p.refund)}</div><div className="l">Refunded</div></div>}
@@ -442,7 +444,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
         <div className="card cream row between">
           <div className="stack" style={{ gap: 2 }}>
             <b>{OUTCOMES[String(c.outcome_code)]}: {usd(c.total_collected)} collected</b>
-            <span className="small">Redeem your {heldUnits.toLocaleString("en-US")} shares for <b>{usd(payout.toString())}</b> TUSDC. Your {o.share_code} tokens are burned and your certificate cancelled.</span>
+            <span className="small">Redeem your {heldUnits.toLocaleString("en-US")} shares for <b>{usd(payout.toString())}</b> {sc}. Your {o.share_code} tokens are burned and your certificate cancelled.</span>
           </div>
           <button disabled={!interactive || busy} onClick={() => run(`${PERSONAS[label]} redeems ${o.share_code}`, { action: "redeem", ref: o.shipment_ref, who: who(label) })}>Redeem {usd(payout.toString())}</button>
         </div>
@@ -461,6 +463,7 @@ function PositionCard({ o, label }: { o: Offering; label: Persona }) {
 
 export function Portfolio() {
   const { store, persona } = useApp();
+  const sc = settlementCode(store);
   if (persona === "ops") return <p>Switch to an investor persona to see a portfolio.</p>;
   const acct = store.accounts[persona];
   const lastActivity = (o: Offering) => o.steps[o.steps.length - 1]?.at ?? "";
@@ -479,9 +482,9 @@ export function Portfolio() {
         <a className="mono small" href={`${X}/account/${acct.public_key}`} target="_blank" rel="noreferrer">{short(acct.public_key, 8)}</a>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v">{money(units(acct.tusdc))}</div><div className="l">TUSDC in wallet</div></div>
+        <div className="kpi"><div className="v">{money(units(balanceOf(acct)))}</div><div className="l">{sc} in wallet</div></div>
         <div className="kpi"><div className="v">{money(invested, 0)}</div><div className="l">Active investments</div></div>
-        <div className="kpi"><div className="v">{owed ? money(owed) : "–"}</div><div className="l">Owed at maturity</div></div>
+        <div className="kpi"><div className="v">{owed ? money(owed) : "-"}</div><div className="l">Owed at maturity</div></div>
         <div className="kpi"><div className="v">{positions.length}</div><div className="l">Deals (incl. closed)</div></div>
       </div>
       {!positions.length && (

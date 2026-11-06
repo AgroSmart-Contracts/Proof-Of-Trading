@@ -5,7 +5,7 @@
  * when the web changes a token, change it here too.
  */
 :root {
-  /* TruMarket Brand Colors — login rebrand (deep green + mint CTA) */
+  /* TruMarket Brand Colors - login rebrand (deep green + mint CTA) */
   --tm-primary: #0f9d6b;
   --tm-primary-dark: #0b4732;
   --tm-primary-light: #7fd3a6;
@@ -42,23 +42,23 @@
   --tm-white-ch: 255 255 255;
   --tm-text-ch: 58 69 80;
   --tm-cream-ch: 244 241 230;
-  /* Chart palette — slot 1 is the TruMarket brand teal for identity;
+  /* Chart palette - slot 1 is the TruMarket brand teal for identity;
      remaining slots from deals-analytics-dashboard with max perceptual
      distance: teal → amber → sky-blue → dark-olive → deep-navy.
      Every adjacent pair in the donut ring is clearly distinguishable. */
   --tm-chart-blue: #4ea4d9;   /* sky blue (legacy token, kept for SeasonalityLite) */
   --tm-chart-gold: #f2a007;   /* amber  (legacy token) */
-  --tm-chart-1: #0f9d6b;      /* brand teal    — primary identity */
-  --tm-chart-2: #f2a007;      /* amber         — mandarina / medium-high */
-  --tm-chart-3: #4ea4d9;      /* sky blue      — asparagus */
-  --tm-chart-4: #3a6b2a;      /* dark olive    — avocado portfolio */
-  --tm-chart-5: #1f2d42;      /* deep navy     — ginger / dark accent */
-  --tm-chart-6: #5fa84a;      /* mid green     — avocado product / overflow */
+  --tm-chart-1: #0f9d6b;      /* brand teal    - primary identity */
+  --tm-chart-2: #f2a007;      /* amber         - mandarina / medium-high */
+  --tm-chart-3: #4ea4d9;      /* sky blue      - asparagus */
+  --tm-chart-4: #3a6b2a;      /* dark olive    - avocado portfolio */
+  --tm-chart-5: #1f2d42;      /* deep navy     - ginger / dark accent */
+  --tm-chart-6: #5fa84a;      /* mid green     - avocado product / overflow */
   --tm-bar-track: #edeff2;
   --tm-tint-bg: #e6f6ef;
   --tm-tint-text: #0b6b4a;
 
-  /* Secondary button / forest green — text, border tint, and banner CTA */
+  /* Secondary button / forest green - text, border tint, and banner CTA */
   --tm-forest: #1e4a3a;
   --tm-forest-ch: 30 74 58;
   --tm-chart-blue-ch: 78 164 217;
@@ -66,7 +66,7 @@
   /* Input / select focus ring (primary at 15% opacity) */
   --tm-focus-ring: rgb(var(--tm-primary-ch) / 0.15);
 
-  /* Surfaces / ink — dashboard + auth shared (handoff light theme) */
+  /* Surfaces / ink - dashboard + auth shared (handoff light theme) */
   --tm-ink: #102a40;
   --tm-ink-muted: #6b7785;
   --tm-ink-subtle: #94a3b8;
@@ -89,7 +89,7 @@
   --tm-surface-input-ch: 247 249 251;
   --tm-surface-hover-ch: 241 245 249;
 
-  /* Status — same hexes as before, now tokenized for opacity + one source */
+  /* Status - same hexes as before, now tokenized for opacity + one source */
   --tm-status-neutral: #64748b;
   --tm-status-neutral-light: #94a3b8;
   --tm-status-progress: #2563eb;

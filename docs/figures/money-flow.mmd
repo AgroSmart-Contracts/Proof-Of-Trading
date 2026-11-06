@@ -1,0 +1,24 @@
+%% Money flow for one pool receivable (design, Tranche 2). Circle USDC is the USD rail; nothing is bridged.
+sequenceDiagram
+  autonumber
+  actor Inv as Investor (legal entity)
+  participant PC as Pool contract (Stellar)
+  participant Koy as Koywe
+  actor Exp as Exporter
+  actor Buy as Buyer
+  participant Br as Bridge
+  participant Col as Collection account
+
+  Inv->>PC: subscribe: Circle USDC on Stellar
+  PC-->>Inv: TRU3 minted in the same transaction
+  Note over PC: TruMarket attests the receivable (attest)
+  PC->>Koy: release: 90% of face in USDC to the payout account
+  Koy->>Exp: USDC to PEN or CLP, paid locally
+  Note over Exp,Buy: Goods shipped, buyer pays at term
+  Buy->>Br: USD to the buyer's virtual account
+  Br->>Col: USD to USDC on Stellar (memo matched)
+  Br-->>PC: HMAC-signed webhook, then settle
+  Col->>PC: settle: principal, investor amount, balance
+  PC->>Inv: distribute monthly, pro rata
+  Inv->>PC: redeem at the 3-month term
+  PC-->>Inv: USDC at NAV, shares burned

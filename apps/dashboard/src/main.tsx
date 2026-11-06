@@ -1,10 +1,11 @@
 import { StrictMode, useCallback, useEffect, useState, type ReactNode } from "react";
+import { Compliance } from "./reports";
 import { createRoot } from "react-dom/client";
 import "./theme/tokens.css";
 import "./theme/components.css";
 import "./style.css";
 import { AppCtx } from "./ctx";
-import { PERSONAS, X, isInteractive, postAction, short, txLinks, type ActionBody, type Persona, type Store } from "./lib";
+import { PERSONAS, X, isInteractive, postAction, settlementLabel, short, txLinks, type ActionBody, type Persona, type Store } from "./lib";
 import { DealPage, Marketplace, Portfolio } from "./investor";
 import { Ops } from "./ops";
 import { ProofDetail, Proofs } from "./proofs";
@@ -112,8 +113,8 @@ function App() {
 
   const isInvestor = persona !== "ops";
   const nav: [string, string][] = isInvestor
-    ? [["#/invest", "Invest"], ["#/portfolio", "My portfolio"], ["#/proofs", "Shipment records"]]
-    : [["#/ops", "SPV operations"], ["#/proofs", "Shipment records"]];
+    ? [["#/invest", "Invest"], ["#/portfolio", "My portfolio"], ["#/proofs", "Shipment records"], ["#/compliance", "Compliance log"]]
+    : [["#/ops", "SPV operations"], ["#/proofs", "Shipment records"], ["#/compliance", "Compliance log"]];
   const deal = hash.match(/^#\/deal\/(SHP-\d{4})$/);
   const proof = hash.match(/^#\/shipment\/(SHP-\d{4})$/);
 
@@ -123,6 +124,7 @@ function App() {
   else if (hash.startsWith("#/portfolio")) page = <Portfolio />;
   else if (hash.startsWith("#/proofs")) page = <Proofs />;
   else if (hash.startsWith("#/ops")) page = <Ops />;
+  else if (hash.startsWith("#/compliance")) page = <Compliance />;
   else if (hash.startsWith("#/ui")) page = <Showcase />;
   else page = isInvestor ? <Marketplace /> : <Ops />;
 
@@ -151,7 +153,7 @@ function App() {
       </header>
       <div className="banner">
         <div className="wrap">
-          <span><b>Testnet demo.</b> SPV, KYB and insurance are simulated · TUSDC is test USDC</span>
+          <span><b>Per-shipment prototype on testnet.</b> One offering per shipment; the pilot uses one pool share, TRU3, with an attestation per receivable. SPV, KYB and insurance are simulated · v0.2 offerings settled in TUSDC, v0.3 offerings in {settlementLabel(store)}</span>
           <span className="chip" style={{ marginLeft: "auto", background: interactive ? "var(--tm-primary)" : "#3b5a4e", color: "#fff" }}>
             {interactive ? "Live: buttons sign testnet transactions" : "Read-only snapshot"}
           </span>

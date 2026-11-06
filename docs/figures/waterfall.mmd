@@ -1,0 +1,10 @@
+%% Payment waterfall on a USD 100,000 invoice (design, pool contract v1)
+flowchart TB
+  B["Buyer pays USD 100,000"] --> S["settle(key, 100,000)"]
+  S --> P1["1. Principal to the pool<br/>USD 90,000<br/>(the 90% advanced at release)"]
+  S --> P2["2. Investor amount to the pool<br/>USD 3,000<br/>(fixed in the subscription agreement)"]
+  S --> P3["3. Balance USD 7,000<br/>(the exporter's retained 10%,<br/>after the investor amount)"]
+  P3 --> E["Exporter USD 2,000<br/>(plus 90,000 advanced = 92,000)"]
+  P3 --> T["TruMarket fee USD 5,000"]
+  P1 --> POOL["Pool total USD 93,000"]
+  P2 --> POOL

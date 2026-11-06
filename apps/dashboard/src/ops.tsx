@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "./ctx";
-import { COMMODITY, OUTCOMES, isApproved, money, num, offeringFor, outcomeAttested, offeringStatus, units, usd, type Deal } from "./lib";
+import { PilotMetrics } from "./reports";
+import { COMMODITY, OUTCOMES, balanceOf, isApproved, settlementCode, money, num, offeringFor, outcomeAttested, offeringStatus, units, usd, type Deal } from "./lib";
 
 function DealOps({ d }: { d: Deal }) {
   const { store, interactive, busy, run } = useApp();
@@ -51,14 +52,14 @@ function DealOps({ d }: { d: Deal }) {
           <input type="number" value={insured} onChange={(e) => setInsured(e.target.value)} className="money-in" aria-label="Insurance payout" />
           <button className="gold" disabled={off} onClick={() => run(`Insurer pays ${ref}`, { action: "distribute", ref, usd: insured, outcome: "4" })}>Shipment failed: insurer paid</button>
         </div>
-        <span className="tiny muted">Owed to investors at APY: {usd(c.owed)}</span>
+        <span className="tiny muted">Owed to investors under the subscription agreement: {usd(c.owed)}</span>
       </div>
     );
   else if (c.status === "Distributing" && !(allRedeemed && surplus === 0n && outcomeAttested(store, ref)))
     next = (
       <div className="row">
         {!allRedeemed && <span className="small muted">Waiting for investors to redeem ({num(c.redeemed_shares)} / {num(c.shares_at_close)} shares)</span>}
-        {allRedeemed && surplus > 0n && <button className="secondary" disabled={off} onClick={() => run(`Sweep surplus ${ref}`, { action: "sweep", ref })}>Return {usd(surplus.toString())} surplus to SPV</button>}
+        {allRedeemed && surplus > 0n && <button className="secondary" disabled={off} onClick={() => run(`Sweep surplus ${ref}`, { action: "sweep", ref })}>Send {usd(surplus.toString())} surplus to SPV</button>}
         {allRedeemed && !outcomeAttested(store, ref) && <button disabled={off} onClick={() => run(`Record outcome ${ref}`, { action: "attest-outcome", ref })}>Record outcome on Stellar</button>}
       </div>
     );
@@ -72,16 +73,17 @@ function DealOps({ d }: { d: Deal }) {
       </td>
       <td><span className={`chip ${tone}`}>{label}</span></td>
       <td className="small num">
-        {o?.tokens ? `${num(o.tokens.minted)} / ${num(o.tokens.outstanding)} / ${num(o.tokens.burned)}` : "–"}
+        {o?.tokens ? `${num(o.tokens.minted)} / ${num(o.tokens.outstanding)} / ${num(o.tokens.burned)}` : "-"}
       </td>
-      <td className="small num">{c && c.total_collected !== "0" ? <>{usd(c.total_collected)}<div className="tiny muted">{OUTCOMES[String(c.outcome_code)]}</div></> : "–"}</td>
-      <td style={{ whiteSpace: "normal", minWidth: 300 }}>{next ?? <span className="muted">–</span>}</td>
+      <td className="small num">{c && c.total_collected !== "0" ? <>{usd(c.total_collected)}<div className="tiny muted">{OUTCOMES[String(c.outcome_code)]}</div></> : "-"}</td>
+      <td style={{ whiteSpace: "normal", minWidth: 300 }}>{next ?? <span className="muted">-</span>}</td>
     </tr>
   );
 }
 
 export function Ops() {
   const { store } = useApp();
+  const sc = settlementCode(store);
   const t = store.accounts.treasury;
   return (
     <div className="stack-lg">
@@ -90,10 +92,11 @@ export function Ops() {
         <p className="muted">Run each deal's SPV, step by step. Every button signs a real testnet transaction.</p>
       </div>
       <div className="kpis">
-        <div className="kpi"><div className="v">{money(units(t.tusdc))}</div><div className="l">SPV treasury (TUSDC)</div></div>
+        <div className="kpi"><div className="v">{money(units(balanceOf(t)))}</div><div className="l">SPV treasury ({sc})</div></div>
         <div className="kpi"><div className="v">{store.deals.filter((d) => d.has_offering).length}</div><div className="l">Offerings opened</div></div>
         <div className="kpi"><div className="v">{store.attestations.filter((a) => a.event !== "outcome").length}</div><div className="l">Verifiable shipments</div></div>
       </div>
+      <PilotMetrics />
       <div className="card" style={{ padding: 0 }}>
         <div className="scroll">
           <table className="ops-table">

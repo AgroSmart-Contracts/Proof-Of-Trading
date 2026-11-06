@@ -1,0 +1,17 @@
+%% v0.2 prototype: per-shipment offering state machine in contracts/offering (Status enum) and the outcome record
+stateDiagram-v2
+  [*] --> Open: create_offering (admin)
+  Open --> Open: subscribe (approved investor),<br/>shares minted
+  Open --> Closed: subscribe reaches the cap
+  Open --> Refunding: start_refunds (admin),<br/>after the deadline, cap not reached
+  Closed --> Funded: fund (admin),<br/>escrow to SPV treasury
+  Funded --> Distributing: deposit_distribution (treasury),<br/>outcome code 1-5
+  Distributing --> Distributing: redeem (investor),<br/>shares burned
+  Refunding --> Refunding: refund (investor),<br/>shares burned
+  Distributing --> Recorded: record_outcome Repaid (codes 1-2)<br/>or InsuredLoss (code 4), recorder
+  Refunding --> Recorded: record_outcome Refunded, recorder
+  Recorded --> [*]: sweep_surplus once all redeemed,<br/>then transfer_share_admin at close
+  note right of Recorded
+    Recorded is not a Status value: the outcome
+    record is written once, beside the offering.
+  end note

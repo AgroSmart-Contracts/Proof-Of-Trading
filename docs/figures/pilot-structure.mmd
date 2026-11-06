@@ -1,0 +1,21 @@
+%% Pilot structure: one vehicle, one pool share, many attested receivables (design, Tranche 1)
+flowchart TB
+  INV["Investors<br/>legal entities, KYB<br/>min. USD 50,000"]
+  subgraph VEH["Receivables-portfolio SPV"]
+    PC["Pool contract on Stellar<br/>TRU3 pool share, 1 TRU3 = USD 1"]
+    COL["Collection account<br/>2-of-3 multisig"]
+  end
+  EXP["Exporter<br/>Peru, Chile"]
+  BUY["Buyer<br/>importer"]
+  TM["TruMarket<br/>screens, attests, services"]
+  INS["Credit insurer<br/>SPV named on the policy"]
+
+  INV -- "USDC in, TRU3 out" --> PC
+  PC -- "monthly distributions,<br/>redemption at NAV" --> INV
+  PC -- "advance: 90% of face" --> EXP
+  EXP -- "assigns the receivable" --> VEH
+  BUY -- "pays the invoice in USD" --> COL
+  COL -- "settle: waterfall" --> PC
+  TM -- "attest: one record per receivable" --> PC
+  INS -. "covers buyer default,<br/>70 to 90%" .-> VEH
+  PC -- "fee from the balance" --> TM

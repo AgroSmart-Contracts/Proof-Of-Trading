@@ -1,5 +1,8 @@
 # Sunday/Monday runbook
 
+> **Historical record (HackMeridian, Oct 2026).** Rates appear as the fixed rate of the time; current docs describe the investor amount fixed in the subscription agreement. Since v0.3 the pilot uses one pool share with per-receivable attestations (see [pool contract v1](../pool-contract-v1.md)). Since v0.3, offerings are fixed-amount trade receivables, not loans. Lending, borrowing and collateral (including the Blend stretch goal mentioned here) are out of scope. See [README](../../README.md) for the current scope.
+
+
 ## Status, Sun Oct 25 ~12:00 (event work)
 | Item | State |
 |---|---|
@@ -16,14 +19,14 @@ _The plan below was written before the event (Sat Oct 24)._
 ## Timeline (from brief 2, adjusted)
 | When | Work | Done when |
 |---|---|---|
-| Sun 09:00–09:15 | Pull, `npm install`, `npm test`, `cargo test`, `npm run verify` (testnet still alive?) | All green |
-| 09:15–13:00 | `contracts/offering` + 12 tests (`v0.2-test-plan.md`) | `cargo test` green; revert-and-check on tests 3, 8, 10 |
-| 13:00–15:00 | `deploy-offering.ts`, `handover.ts`, `create-offering.ts` | Contract ID in `contracts.json`; TM0247 SAC admin = contract |
-| 15:00–18:00 | `trustlines.ts`, `approve.ts`, `subscribe.ts`, `fund.ts` | A 60k + B 40k on TM0247, offering `Closed`, then `Funded` |
-| 18:00–20:00 | Dashboard offerings + investor view; **backup video** | Recording saved |
-| Mon 07:00–08:30 | `distribute.ts`, `redeem.ts`, `demo-failure.ts`, outcome attestations, `refund-demo.ts` | Both endings on testnet |
-| 08:30–09:30 | README v0.2, architecture, final video, tag `v0.2` | No new features after 08:30 |
-| 09:30–10:00 | Submit | Confirmed |
+| Sun 09:00-09:15 | Pull, `npm install`, `npm test`, `cargo test`, `npm run verify` (testnet still alive?) | All green |
+| 09:15-13:00 | `contracts/offering` + 12 tests (`v0.2-test-plan.md`) | `cargo test` green; revert-and-check on tests 3, 8, 10 |
+| 13:00-15:00 | `deploy-offering.ts`, `handover.ts`, `create-offering.ts` | Contract ID in `contracts.json`; TM0247 SAC admin = contract |
+| 15:00-18:00 | `trustlines.ts`, `approve.ts`, `subscribe.ts`, `fund.ts` | A 60k + B 40k on TM0247, offering `Closed`, then `Funded` |
+| 18:00-20:00 | Dashboard offerings + investor view; **backup video** | Recording saved |
+| Mon 07:00-08:30 | `distribute.ts`, `redeem.ts`, `demo-failure.ts`, outcome attestations, `refund-demo.ts` | Both endings on testnet |
+| 08:30-09:30 | README v0.2, architecture, final video, tag `v0.2` | No new features after 08:30 |
+| 09:30-10:00 | Submit | Confirmed |
 
 ## Who signs what (from the spike: make the signer the tx source and simulation fills the auth)
 | Call | Tx source / signer | Helper |

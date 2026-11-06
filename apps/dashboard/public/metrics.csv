@@ -1,0 +1,8 @@
+# network=testnet launch_at=2026-11-05T20:03:07.532Z
+metric,value,threshold,met
+t3_gate_largest_institution_usd,60,50000,false
+t3_gate_receivables_repaid,1,1,true
+t3_gate,,,false
+target_usd_within_60_days,100,250000,false
+target_institutional_wallets,2,3,false
+target,,,false

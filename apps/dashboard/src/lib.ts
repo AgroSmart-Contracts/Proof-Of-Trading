@@ -31,6 +31,10 @@ export type Offering = {
   offering_id: number;
   share_code: string;
   share_sac: string;
+  /** v0.3 exports only: the contract the offering ran on and what it settled in. */
+  contract_id?: string;
+  settlement_code?: string;
+  version?: "v0.2" | "v0.3";
   on_chain: Record<string, any> | null;
   tokens: Tokens | null;
   investors: Record<string, Position>;
@@ -49,7 +53,7 @@ export type Deal = {
   has_offering: boolean;
   stuck: boolean;
 };
-export type Account = { role: string; public_key: string; tusdc: string };
+export type Account = { role: string; public_key: string; balance?: string; tusdc: string };
 export type ShipmentSummary = { shipment_ref: string; commodity: string; destination_region: string; epoch: string; financed: boolean };
 export type Store = {
   generated_at: string;
@@ -61,7 +65,18 @@ export type Store = {
   shares: Share[];
   offerings: Offering[];
   tusdc: { code: string; issuer: string; sac_id: string } | null;
+  /** What offerings settle in (Circle USDC on the v0.3 contract, TUSDC on v0.2). Absent in older exports. */
+  settlement?: { code: string; sac_id: string } | null;
 };
+
+/** Code of the asset offerings settle in. */
+/** Settlement asset code; an offering's own code when given (v0.2 offerings settled in TUSDC). */
+export const settlementCode = (s: Store, o?: { settlement_code?: string }) => o?.settlement_code ?? s.settlement?.code ?? s.tusdc?.code ?? "USDC";
+/** An account's settlement-asset balance in base units. */
+export const balanceOf = (a?: Account) => a?.balance ?? a?.tusdc ?? "0";
+/** Banner text for the settlement asset. */
+export const settlementLabel = (s: Store) =>
+  settlementCode(s) === "USDC" ? "Circle testnet USDC" : `${settlementCode(s)} (our test USDC)`;
 
 export type Persona = "A" | "B" | "U" | "ops";
 export const PERSONAS: Record<Persona, string> = { A: "Investor A", B: "Investor B", U: "Unapproved wallet", ops: "TruMarket ops (SPV)" };
@@ -88,7 +103,7 @@ export const short = (s: string, n = 6) => (s && s.length > n * 2 + 1 ? `${s.sli
 export const units = (base: string | number) => Number(base) / 1e7;
 export const money = (n: number, dp = 2) =>
   `$${n.toLocaleString("en-US", { minimumFractionDigits: dp > 0 && n % 1 !== 0 ? 2 : 0, maximumFractionDigits: dp })}`;
-export const usd = (base: string | number | null | undefined, dp = 2) => (base == null ? "–" : money(units(base), dp));
+export const usd = (base: string | number | null | undefined, dp = 2) => (base == null ? "-" : money(units(base), dp));
 export const num = (base: string | number) => units(base).toLocaleString("en-US", { maximumFractionDigits: 2 });
 export const date = (iso: string) => new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
 export const dateS = (secs: string | number) => new Date(Number(secs) * 1000).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
@@ -113,11 +128,19 @@ export function shipmentTitle(s: Store, ref: string): string {
   return x ? `${COMMODITY[x.commodity] ?? x.commodity} shipment · Peru → ${REGION[x.destination_region] ?? x.destination_region}` : ref;
 }
 export const offeringFor = (s: Store, ref: string) => s.offerings.find((o) => o.shipment_ref === ref);
+/**
+ * The investor amount fixed in the subscription agreement for the full raise, as the contract computes it
+ * (`owed_total`): face × (1 + rate × term / 365). Investors receive this, pro rata, when it is collected.
+ */
+export const fixedAmount = (d: { face_value_usd: number; apy_bps: number; term_days: number }) =>
+  d.face_value_usd * (1 + (d.apy_bps / 10_000) * (d.term_days / 365));
+/** The rate and term behind the fixed amount, e.g. "12.0% for 120 days". */
+export const termsLine = (d: { apy_bps: number; term_days: number }) => `${(d.apy_bps / 100).toFixed(1)}% for ${d.term_days} days`;
 export const dealFor = (s: Store, ref: string) => s.deals.find((d) => d.shipment_ref === ref);
 export const isApproved = (o: Offering | undefined, p: Persona) => !!o?.steps.some((s) => s.step === `approve ${stepName(p)}`);
 export const outcomeAttested = (s: Store, ref: string) => s.attestations.some((a) => a.shipment_ref === ref && a.event === "outcome");
 
-/** Value of a position at the deal's fixed APY, accrued from funding up to the term (estimate, before collection). */
+/** Value of a position under the subscription agreement, accrued from funding up to the term (estimate, before collection). */
 export function accruedValue(o: Offering, shares: number): number {
   const c = o.on_chain;
   if (!c || !Number(c.funded_at)) return shares;
@@ -147,9 +170,9 @@ export function stepLabel(s: Step, code: string): string {
     case "create_offering": return `Offering opened: up to ${Number(s.detail?.cap_usd ?? 0).toLocaleString("en-US")} ${code} at $1 each`;
     case "trustline": return `${investor} opens a ${code} trustline`;
     case "approve": return `${investor} approved to hold ${code} (KYB, simulated)`;
-    case "subscribe": return `${investor} pays $${Number(qty).toLocaleString("en-US")} TUSDC → ${s.detail?.shares ?? qty} ${code} minted`;
+    case "subscribe": return `${investor} pays $${Number(qty).toLocaleString("en-US")} → ${s.detail?.shares ?? qty} ${code} minted`;
     case "certificate": return `SPV share certificate ${s.detail?.register_entry ?? ""} issued off-chain to ${investor}; hash anchored on Stellar`;
-    case "fund": return "Fully subscribed → escrowed TUSDC sent to the SPV treasury";
+    case "fund": return "Fully subscribed → escrowed funds sent to the SPV treasury";
     case "deposit_distribution": return `SPV deposits $${Number(actor).toLocaleString("en-US")} collected (${OUTCOMES[s.step.split(" ").pop()!] ?? "outcome"})`;
     case "redeem": return `${investor} redeems → ${amount(s.detail?.payout)} paid, ${s.detail?.shares_burned ?? "?"} ${code} cancelled`;
     case "sweep_surplus": return `Surplus ${amount(s.detail?.amount)} returned to the SPV`;

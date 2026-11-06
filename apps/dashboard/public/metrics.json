@@ -1,0 +1,15 @@
+{
+  "network": "testnet",
+  "launch_at": "2026-11-05T20:03:07.532Z",
+  "generated_at": "2026-11-06T12:52:12.175Z",
+  "gate": {
+    "met": false,
+    "largestInstitutionUsd": 60,
+    "receivablesRepaid": 1
+  },
+  "target": {
+    "met": false,
+    "usdWithin60Days": 100,
+    "institutionalWallets": 2
+  }
+}

@@ -1,0 +1,15 @@
+%% Lifecycle of one receivable in the pool contract (design, Tranche 1). Statuses are appended, never edited.
+stateDiagram-v2
+  [*] --> Screened: TruMarket checks documents,<br/>buyer, limits (off-chain)
+  Screened --> Attested: attest(key, hash),<br/>recorder + second approver
+  Attested --> Funded: release(key), admin multisig,<br/>90% of face to the payout account
+  Funded --> Repaid: settle(key, amount),<br/>waterfall applied
+  Repaid --> [*]
+  Funded --> Overdue: set_status overdue
+  Overdue --> Repaid: buyer pays late, settle
+  Overdue --> Claim: set_status claim,<br/>insurance claim filed
+  Claim --> Loss: set_status loss,<br/>uncovered part written down in NAV
+  Funded --> Claim: quality claim
+  Attested --> Revoked: set_status revoked,<br/>never funded
+  Loss --> [*]
+  Revoked --> [*]

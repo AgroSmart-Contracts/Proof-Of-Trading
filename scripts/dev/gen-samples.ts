@@ -33,7 +33,7 @@ const rows: [number, C, string, number, number, number, boolean, boolean, string
 ];
 const ports = ["PECLL", "PEPAI"]; // Callao, Paita (UN/LOCODE)
 
-const shipments = rows.map(([n, commodity, region, face, term, apy, consented, financed, cram], i) => {
+const shipments = rows.map(([n, commodity, region, face, term, rate, consented, financed, cram], i) => {
   const ref = `SHP-0${n}`;
   const customs = {
     data_basis: "synthetic",
@@ -58,7 +58,7 @@ const shipments = rows.map(([n, commodity, region, face, term, apy, consented, f
     destination_region: region,
     face_value_usd: face,
     term_days: term,
-    apy_bps: apy,
+    apy_bps: rate,
     epoch: "2026-Q4",
     customs_record_file: `customs/${ref}.json`,
   };

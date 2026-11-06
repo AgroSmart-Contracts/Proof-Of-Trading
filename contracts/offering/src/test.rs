@@ -16,6 +16,7 @@ fn usd(n: i128) -> i128 {
 struct T<'a> {
     env: Env,
     admin: Address,
+    recorder: Address,
     treasury: Address,
     a: Address,
     b: Address,
@@ -65,6 +66,7 @@ fn setup<'a>() -> T<'a> {
     env.mock_all_auths();
     env.ledger().set_timestamp(NOW);
     let admin = Address::generate(&env);
+    let recorder = Address::generate(&env);
     let treasury = Address::generate(&env);
     let a = Address::generate(&env);
     let b = Address::generate(&env);
@@ -82,7 +84,7 @@ fn setup<'a>() -> T<'a> {
     share.issuer().set_flag(IssuerFlags::ClawbackEnabledFlag);
     let share_sac = StellarAssetClient::new(&env, &share.address());
 
-    let id = env.register(OfferingContract, (admin.clone(),));
+    let id = env.register(OfferingContract, (admin.clone(), recorder.clone(), usdc.address()));
     share_sac.set_admin(&id);
     T {
         usdc: TokenClient::new(&env, &usdc.address()),
@@ -91,6 +93,7 @@ fn setup<'a>() -> T<'a> {
         c: OfferingContractClient::new(&env, &id),
         env,
         admin,
+        recorder,
         treasury,
         a,
         b,
@@ -357,4 +360,166 @@ fn share_admin_can_be_handed_back() {
     assert_eq!(t.share_sac.admin(), issuer);
     // The contract is no longer SAC admin, so it can't open offerings on this asset.
     assert_eq!(t.c.try_create_offering(&1, &t.params(100_000, 1200, 120)), Err(Ok(Error::NotSacAdmin)));
+}
+
+#[test]
+fn records_repaid_outcome_once() {
+    let t = setup();
+    t.distributing(100_000, 1200, 120, 60_000, 40_000, usd(105_000), 1);
+    let h = BytesN::from_array(&t.env, &[3; 32]);
+    assert_eq!(t.c.get_record(&1), None);
+    t.c.record_outcome(&1, &h, &Outcome::Repaid);
+    assert_eq!(t.env.auths()[0].0, t.recorder);
+    let ev = OutcomeRecorded { id: 1, record_hash: h.clone(), outcome: Outcome::Repaid };
+    assert!(t.env.events().all().filter_by_contract(&t.c.address).events().contains(&ev.to_xdr(&t.env, &t.c.address)));
+    let rec = t.c.get_record(&1).unwrap();
+    assert_eq!(rec.record_hash, h);
+    assert_eq!(rec.outcome, Outcome::Repaid);
+    assert_eq!(rec.recorded_at, NOW);
+    // Written once: a second record is refused.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::AlreadyRecorded)));
+}
+
+#[test]
+fn records_insured_loss_and_refunded() {
+    let t = setup();
+    t.distributing(60_000, 1100, 90, 36_000, 24_000, usd(54_000), 4);
+    let h = BytesN::from_array(&t.env, &[4; 32]);
+    t.c.record_outcome(&1, &h, &Outcome::InsuredLoss);
+    assert_eq!(t.c.get_record(&1).unwrap().outcome, Outcome::InsuredLoss);
+
+    let r = setup();
+    r.open(150_000, 1300, 120);
+    r.c.subscribe(&1, &r.a, &usd(10_000), &r.hash());
+    r.env.ledger().set_timestamp(DEADLINE + 1);
+    r.c.start_refunds(&1);
+    r.c.record_outcome(&1, &BytesN::from_array(&r.env, &[4; 32]), &Outcome::Refunded);
+    assert_eq!(r.c.get_record(&1).unwrap().outcome, Outcome::Refunded);
+}
+
+#[test]
+fn outcome_must_match_offering_state() {
+    let t = setup();
+    let h = BytesN::from_array(&t.env, &[5; 32]);
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::NotFound)));
+    t.open(100_000, 1200, 120);
+    // Still open: no outcome yet.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::BadOutcome)));
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Refunded), Err(Ok(Error::BadOutcome)));
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    t.c.subscribe(&1, &t.b, &usd(40_000), &t.hash());
+    t.c.fund(&1);
+    t.c.deposit_distribution(&1, &usd(90_000), &4);
+    // Insurer paid (code 4): not a repayment.
+    assert_eq!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid), Err(Ok(Error::BadOutcome)));
+    t.c.record_outcome(&1, &h, &Outcome::InsuredLoss);
+}
+
+#[test]
+fn only_recorder_records_and_admin_replaces_it() {
+    let t = setup();
+    t.distributing(100_000, 1200, 120, 60_000, 40_000, usd(105_000), 1);
+    let h = BytesN::from_array(&t.env, &[6; 32]);
+    for who in [&t.admin, &t.stranger] {
+        t.env.mock_auths(&[MockAuth {
+            address: who,
+            invoke: &MockAuthInvoke {
+                contract: &t.c.address,
+                fn_name: "record_outcome",
+                args: (1u32, h.clone(), Outcome::Repaid).into_val(&t.env),
+                sub_invokes: &[],
+            },
+        }]);
+        assert!(t.c.try_record_outcome(&1, &h, &Outcome::Repaid).is_err());
+    }
+    t.env.mock_all_auths();
+    t.c.set_recorder(&t.stranger);
+    assert_eq!(t.env.auths()[0].0, t.admin);
+    assert_eq!(t.c.recorder(), t.stranger);
+    t.c.record_outcome(&1, &h, &Outcome::Repaid);
+    assert_eq!(t.env.auths()[0].0, t.stranger);
+}
+
+#[test]
+fn offerings_must_settle_in_the_configured_token() {
+    let t = setup();
+    assert_eq!(t.c.settlement_token(), t.usdc.address);
+    let other = t.env.register_stellar_asset_contract_v2(Address::generate(&t.env)).address();
+    let mut p = t.params(100_000, 1200, 120);
+    p.usdc_token = other;
+    assert_eq!(t.c.try_create_offering(&1, &p), Err(Ok(Error::WrongSettlementAsset)));
+    t.c.create_offering(&1, &t.params(100_000, 1200, 120));
+}
+
+fn signers(t: &T) -> (Address, Address, Address) {
+    let (s1, s2, s3) = (Address::generate(&t.env), Address::generate(&t.env), Address::generate(&t.env));
+    t.c.set_compliance_signers(&soroban_sdk::vec![&t.env, s1.clone(), s2.clone(), s3.clone()], &2);
+    (s1, s2, s3)
+}
+fn has_event(t: &T, ev: ComplianceAction) -> bool {
+    t.env.events().all().filter_by_contract(&t.c.address).events().contains(&ev.to_xdr(&t.env, &t.c.address))
+}
+
+#[test]
+fn compliance_actions_need_configured_signers() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    let v = soroban_sdk::vec![&t.env, t.admin.clone()];
+    assert_eq!(t.c.try_freeze(&1, &t.a, &Reason::Sanctions, &v), Err(Ok(Error::ComplianceNotConfigured)));
+    let x = Address::generate(&t.env);
+    let y = Address::generate(&t.env);
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), y.clone()], &1), Err(Ok(Error::BadSigners)));
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), y.clone()], &3), Err(Ok(Error::BadSigners)));
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), x.clone(), y.clone()], &2), Err(Ok(Error::BadSigners)));
+}
+
+#[test]
+fn freeze_needs_two_of_three_and_emits_the_reason() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    let (s1, s2, _) = signers(&t);
+    let one = soroban_sdk::vec![&t.env, s1.clone()];
+    let twice = soroban_sdk::vec![&t.env, s1.clone(), s1.clone()];
+    let outsider = soroban_sdk::vec![&t.env, s1.clone(), t.stranger.clone()];
+    for v in [&one, &twice, &outsider] {
+        assert_eq!(t.c.try_freeze(&1, &t.a, &Reason::Sanctions, v), Err(Ok(Error::NotEnoughApprovals)));
+    }
+    let two = soroban_sdk::vec![&t.env, s1.clone(), s2.clone()];
+    t.c.freeze(&1, &t.a, &Reason::Sanctions, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "frozen"), holder: t.a.clone(), amount: 0, reason: Reason::Sanctions, approvers: two.clone() };
+    assert!(has_event(&t, ev));
+    let signed: std::vec::Vec<Address> = t.env.auths().iter().map(|a| a.0.clone()).collect();
+    assert!(signed.contains(&s1) && signed.contains(&s2));
+    assert!(!t.share_sac.authorized(&t.a));
+    assert!(t.share.try_transfer(&t.a, &t.b, &usd(1)).is_err());
+    t.c.unfreeze(&1, &t.a, &Reason::Sanctions, &two);
+    assert!(t.share_sac.authorized(&t.a));
+}
+
+#[test]
+fn revoke_and_clawback_with_reasons() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    let (_, s2, s3) = signers(&t);
+    let two = soroban_sdk::vec![&t.env, s2.clone(), s3.clone()];
+    t.c.clawback(&1, &t.a, &usd(10_000), &Reason::CourtOrder, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "clawback"), holder: t.a.clone(), amount: usd(10_000), reason: Reason::CourtOrder, approvers: two.clone() };
+    assert!(has_event(&t, ev));
+    assert_eq!(t.share.balance(&t.a), usd(50_000));
+    assert_eq!(t.c.try_clawback(&1, &t.a, &0, &Reason::CourtOrder, &two), Err(Ok(Error::BadAmount)));
+    t.c.revoke(&1, &t.a, &Reason::KybLapse, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "revoked"), holder: t.a.clone(), amount: 0, reason: Reason::KybLapse, approvers: two };
+    assert!(has_event(&t, ev));
+    assert!(!t.share_sac.authorized(&t.a));
+}
+
+// Pool contract v1 (docs/pool-contract-v1.md), Tranche 1. Written first, so it fails until `attest` exists.
+// When it does: attest(key, h1) succeeds; attest(key, h2) is rejected as a duplicate; the stored hash
+// and status are still h1 and `attested`. key = sha256(export declaration no. | invoice no. | buyer tax ID).
+#[test]
+#[ignore = "pool contract v1 is not built yet (Tranche 1)"]
+fn duplicate_attestation_rejected() {
+    todo!("pool contract v1: attest(key, hash) must reject a key that is already attested");
 }
