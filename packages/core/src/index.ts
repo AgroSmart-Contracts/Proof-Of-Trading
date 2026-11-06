@@ -7,3 +7,7 @@ export * from "./arc.js";
 export * from "./store.js";
 export * from "./settlement.js";
 export * from "./stellar-toml.js";
+export * from "./pool.js";
+export * from "./attestation.js";
+export * from "./account-holder.js";
+export * from "./metrics.js";
