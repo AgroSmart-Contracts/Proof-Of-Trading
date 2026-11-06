@@ -22,6 +22,16 @@ export type TomlOrg = {
   github?: string;
 };
 
+/** The SPV that issues the pool share. Fields left out are written as a placeholder until it is incorporated. */
+export type TomlSpv = {
+  legalName?: string;
+  physicalAddress?: string;
+  licensingAuthority?: string;
+  licenseType?: string;
+  licenseNumber?: string;
+};
+export const SPV_TOML_PLACEHOLDER = "Updated when the SPV is incorporated";
+
 const q = (s: string) => `"${s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n")}"`;
 
 export function renderStellarToml(input: {
@@ -29,6 +39,7 @@ export function renderStellarToml(input: {
   issuer: string;
   org: TomlOrg;
   shares: TomlShare[];
+  spv?: TomlSpv;
   status?: "live" | "dead" | "test" | "private";
 }): string {
   const issuers = new Set(input.shares.map((s) => s.issuer));
@@ -47,6 +58,16 @@ export function renderStellarToml(input: {
     `ORG_DESCRIPTION = ${q(input.org.description)}`,
     ...(input.org.email ? [`ORG_OFFICIAL_EMAIL = ${q(input.org.email)}`] : []),
     ...(input.org.github ? [`ORG_GITHUB = ${q(input.org.github)}`] : []),
+    ...(input.spv
+      ? [
+          "# SPV fields: placeholders are updated when the SPV is incorporated.",
+          `ORG_DBA = ${q(input.spv.legalName ?? SPV_TOML_PLACEHOLDER)}`,
+          `ORG_PHYSICAL_ADDRESS = ${q(input.spv.physicalAddress ?? SPV_TOML_PLACEHOLDER)}`,
+          `ORG_LICENSING_AUTHORITY = ${q(input.spv.licensingAuthority ?? SPV_TOML_PLACEHOLDER)}`,
+          `ORG_LICENSE_TYPE = ${q(input.spv.licenseType ?? SPV_TOML_PLACEHOLDER)}`,
+          `ORG_LICENSE_NUMBER = ${q(input.spv.licenseNumber ?? SPV_TOML_PLACEHOLDER)}`,
+        ]
+      : []),
   ];
   for (const s of input.shares) {
     const what = [s.commodity, s.destination_region && `to ${s.destination_region}`].filter(Boolean).join(" ");

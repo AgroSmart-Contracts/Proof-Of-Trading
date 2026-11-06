@@ -36,6 +36,14 @@ const toml = renderStellarToml({
     email: optionalEnv("ORG_OFFICIAL_EMAIL"),
     github: "AgroSmart-Contracts",
   },
+  // SPV_* env vars fill the SPV fields; until the SPV is incorporated they are placeholders.
+  spv: {
+    legalName: optionalEnv("SPV_LEGAL_NAME"),
+    physicalAddress: optionalEnv("SPV_PHYSICAL_ADDRESS"),
+    licensingAuthority: optionalEnv("SPV_LICENSING_AUTHORITY"),
+    licenseType: optionalEnv("SPV_LICENSE_TYPE"),
+    licenseNumber: optionalEnv("SPV_LICENSE_NUMBER"),
+  },
   shares,
 });
 mkdirSync(path.dirname(out), { recursive: true });

@@ -37,4 +37,11 @@ describe("renderStellarToml", () => {
     const other = { ...base, shares: [{ ...base.shares[0], issuer: "GBV6QFVVWJHJHZUWCZPGEZFEEE74YKLWESZ5QP353V2PDZM3OPB2SVZM" }] };
     expect(() => renderStellarToml(other)).toThrow(/issuer/);
   });
+
+  it("writes SPV fields as placeholders until the SPV is incorporated", () => {
+    const toml = renderStellarToml({ ...base, spv: { legalName: "TRU3 Receivables SPV" } });
+    expect(toml).toContain('ORG_DBA = "TRU3 Receivables SPV"');
+    expect(toml).toContain('ORG_LICENSE_NUMBER = "Updated when the SPV is incorporated"');
+    expect(renderStellarToml(base)).not.toContain("ORG_DBA");
+  });
 });

@@ -8,6 +8,12 @@ ORG_NAME = "TruMarket"
 ORG_URL = "https://trumarket.tech"
 ORG_DESCRIPTION = "Agri-export trade receivables from Peru, recorded on Stellar. On testnet: the v0.2 per-shipment prototype, where each financed shipment is held by an SPV whose shares only approved investors can hold. The pilot issues one pool share with an attestation per receivable."
 ORG_GITHUB = "AgroSmart-Contracts"
+# SPV fields: placeholders are updated when the SPV is incorporated.
+ORG_DBA = "Updated when the SPV is incorporated"
+ORG_PHYSICAL_ADDRESS = "Updated when the SPV is incorporated"
+ORG_LICENSING_AUTHORITY = "Updated when the SPV is incorporated"
+ORG_LICENSE_TYPE = "Updated when the SPV is incorporated"
+ORG_LICENSE_NUMBER = "Updated when the SPV is incorporated"
 
 [[CURRENCIES]]
 code = "TM0247"
