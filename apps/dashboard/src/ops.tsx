@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApp } from "./ctx";
+import { PilotMetrics } from "./reports";
 import { COMMODITY, OUTCOMES, balanceOf, isApproved, settlementCode, money, num, offeringFor, outcomeAttested, offeringStatus, units, usd, type Deal } from "./lib";
 
 function DealOps({ d }: { d: Deal }) {
@@ -95,6 +96,7 @@ export function Ops() {
         <div className="kpi"><div className="v">{store.deals.filter((d) => d.has_offering).length}</div><div className="l">Offerings opened</div></div>
         <div className="kpi"><div className="v">{store.attestations.filter((a) => a.event !== "outcome").length}</div><div className="l">Verifiable shipments</div></div>
       </div>
+      <PilotMetrics />
       <div className="card" style={{ padding: 0 }}>
         <div className="scroll">
           <table className="ops-table">

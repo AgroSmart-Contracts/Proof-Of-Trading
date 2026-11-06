@@ -1,4 +1,5 @@
 import { StrictMode, useCallback, useEffect, useState, type ReactNode } from "react";
+import { Compliance } from "./reports";
 import { createRoot } from "react-dom/client";
 import "./theme/tokens.css";
 import "./theme/components.css";
@@ -112,8 +113,8 @@ function App() {
 
   const isInvestor = persona !== "ops";
   const nav: [string, string][] = isInvestor
-    ? [["#/invest", "Invest"], ["#/portfolio", "My portfolio"], ["#/proofs", "Shipment records"]]
-    : [["#/ops", "SPV operations"], ["#/proofs", "Shipment records"]];
+    ? [["#/invest", "Invest"], ["#/portfolio", "My portfolio"], ["#/proofs", "Shipment records"], ["#/compliance", "Compliance log"]]
+    : [["#/ops", "SPV operations"], ["#/proofs", "Shipment records"], ["#/compliance", "Compliance log"]];
   const deal = hash.match(/^#\/deal\/(SHP-\d{4})$/);
   const proof = hash.match(/^#\/shipment\/(SHP-\d{4})$/);
 
@@ -123,6 +124,7 @@ function App() {
   else if (hash.startsWith("#/portfolio")) page = <Portfolio />;
   else if (hash.startsWith("#/proofs")) page = <Proofs />;
   else if (hash.startsWith("#/ops")) page = <Ops />;
+  else if (hash.startsWith("#/compliance")) page = <Compliance />;
   else if (hash.startsWith("#/ui")) page = <Showcase />;
   else page = isInvestor ? <Marketplace /> : <Ops />;
 

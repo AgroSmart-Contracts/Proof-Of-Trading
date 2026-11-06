@@ -158,6 +158,7 @@ details.tech summary { cursor: pointer; font-weight: 600; color: var(--muted); }
 .deal-title { font-weight: 700; color: var(--ink); font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .deal-amount { display: flex; align-items: baseline; gap: 10px; }
 .g3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 
 /* Ops table: controls sized to the 13px table text, so actions don't outweigh the data. */
 .ops-table td { vertical-align: middle; padding: 12px 14px; font-size: 13px; }

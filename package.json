@@ -22,6 +22,7 @@
     "demo:refund": "tsx scripts/refund-demo.ts",
     "spike": "tsx scripts/spike.ts",
     "export": "tsx scripts/export-public.ts",
+    "report": "tsx scripts/report.ts",
     "topup": "tsx scripts/topup-xlm.ts",
     "ttl:keeper": "tsx scripts/ttl-keeper.ts",
     "governance:setup": "tsx scripts/governance-setup.ts",
