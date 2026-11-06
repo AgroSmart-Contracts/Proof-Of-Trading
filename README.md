@@ -95,7 +95,7 @@ npm run verify -- SHP-0247
 ### v0.3 (SCF #46 review feedback)
 - **Outcome records in contract storage.** The recorder writes each offering's outcome (`Repaid`, `InsuredLoss`, `Refunded`) and its proof hash once, with an `OutcomeRecorded` event. `verify` now checks contract storage first, then Horizon, then RPC: 20/20 PASS (7 from contract storage, 13 from Horizon).
 - **Circle testnet USDC.** The settlement asset is fixed at deploy (constructor) and set by `SETTLEMENT_ASSET`; the default is Circle's testnet USDC. TUSDC stays for the v0.2 record.
-- **`cargo test`: 22 offering tests and 2 spike tests pass, 1 pool test ignored** (24 passed, 1 ignored), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
+- **`cargo test`: 25 offering tests and 2 spike tests pass, 1 pool test ignored** (27 passed, 1 ignored), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
 - **Pool model:** [pool contract v1](docs/pool-contract-v1.md), [integrations](docs/integrations.md), pool figures, and the first Tranche 1 test, `duplicate_attestation_rejected`, written first and ignored until `attest` exists.
 - **Docs:** [ADR 0001](docs/adr/0001-share-asset-structure.md), [figures](docs/figures), [rent and TTL](docs/rent-and-ttl.md) with a TTL keeper, [governance](docs/governance.md), a [SEP-1 `stellar.toml`](apps/dashboard/public/.well-known/stellar.toml) generator, and a [SEP-57 / SEP-8 note](docs/spikes/sep57-sep8.md).
 

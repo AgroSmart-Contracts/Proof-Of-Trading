@@ -5,7 +5,7 @@
 use soroban_sdk::{
     contract, contracterror, contractevent, contractimpl, contracttype,
     token::{StellarAssetClient, TokenClient},
-    Address, BytesN, Env, String,
+    Address, BytesN, Env, String, Symbol, Vec,
 };
 
 const UNIT: i128 = 10_000_000; // 7 decimals
@@ -36,6 +36,9 @@ pub enum Error {
     AlreadyRecorded = 12,
     BadOutcome = 13,
     WrongSettlementAsset = 14,
+    ComplianceNotConfigured = 15,
+    NotEnoughApprovals = 16,
+    BadSigners = 17,
 }
 
 /// Final result of an offering, written once by the recorder.
@@ -102,6 +105,7 @@ pub struct Offering {
 
 #[contracttype]
 enum DataKey {
+    Compliance,
     Admin,
     Offering(u32),
     Redeemed(u32, Address),
@@ -134,6 +138,63 @@ pub struct Swept { #[topic] pub id: u32, pub to: Address, pub amount: i128 }
 pub struct OutcomeRecorded { #[topic] pub id: u32, pub record_hash: BytesN<32>, pub outcome: Outcome }
 #[contractevent]
 pub struct RecorderSet { pub recorder: Address }
+
+/// Why a compliance action was taken. A closed set of codes, so no free text (or personal data) goes on-chain.
+#[contracttype]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum Reason {
+    Sanctions = 1,
+    KybLapse = 2,
+    CourtOrder = 3,
+    UnapprovedTransfer = 4,
+}
+
+/// The compliance signers and how many of them must approve each action (2 of 3 in production).
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ComplianceSigners {
+    pub signers: Vec<Address>,
+    pub threshold: u32,
+}
+
+#[contractevent]
+pub struct ComplianceSignersSet { pub signers: Vec<Address>, pub threshold: u32 }
+/// One event per action: `action` is frozen, unfrozen, revoked or clawback. Carries the holder's
+/// address, the amount (clawback only), the reason code and who approved. Nothing else.
+#[contractevent]
+pub struct ComplianceAction {
+    #[topic] pub id: u32,
+    #[topic] pub action: Symbol,
+    pub holder: Address,
+    pub amount: i128,
+    pub reason: Reason,
+    pub approvers: Vec<Address>,
+}
+
+/// Each approver must sign, be a configured compliance signer and be counted once; at least
+/// `threshold` of them are needed.
+fn approve_action(env: &Env, approvers: &Vec<Address>) -> Result<(), Error> {
+    let cfg: ComplianceSigners = env.storage().instance().get(&DataKey::Compliance).ok_or(Error::ComplianceNotConfigured)?;
+    let mut counted: Vec<Address> = Vec::new(env);
+    for a in approvers.iter() {
+        if cfg.signers.contains(&a) && !counted.contains(&a) {
+            a.require_auth();
+            counted.push_back(a);
+        }
+    }
+    if counted.len() < cfg.threshold {
+        return Err(Error::NotEnoughApprovals);
+    }
+    Ok(())
+}
+
+fn set_auth(env: &Env, id: u32, holder: Address, authorize: bool, reason: Reason, approvers: Vec<Address>, action: &str) -> Result<(), Error> {
+    approve_action(env, &approvers)?;
+    let o = load(env, id)?;
+    StellarAssetClient::new(env, &o.p.share_token).set_authorized(&holder, &authorize);
+    ComplianceAction { id, action: Symbol::new(env, action), holder, amount: 0, reason, approvers }.publish(env);
+    Ok(())
+}
 
 fn admin(env: &Env) -> Address {
     let a: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
@@ -200,6 +261,57 @@ impl OfferingContract {
         admin(&env);
         env.storage().instance().set(&DataKey::Recorder, &recorder);
         RecorderSet { recorder }.publish(&env);
+    }
+
+    /// Admin-only: set the compliance signers and the threshold. The threshold must be at least 2
+    /// and at most the number of signers, with no duplicates.
+    pub fn set_compliance_signers(env: Env, signers: Vec<Address>, threshold: u32) -> Result<(), Error> {
+        admin(&env);
+        let n = signers.len();
+        if threshold < 2 || threshold > n {
+            return Err(Error::BadSigners);
+        }
+        for i in 0..n {
+            for j in (i + 1)..n {
+                if signers.get_unchecked(i) == signers.get_unchecked(j) {
+                    return Err(Error::BadSigners);
+                }
+            }
+        }
+        env.storage().instance().set(&DataKey::Compliance, &ComplianceSigners { signers: signers.clone(), threshold });
+        ComplianceSignersSet { signers, threshold }.publish(&env);
+        Ok(())
+    }
+
+    pub fn compliance_signers(env: Env) -> Option<ComplianceSigners> {
+        env.storage().instance().get(&DataKey::Compliance)
+    }
+
+    /// Freeze a holder's shares (deauthorize the trustline). Needs `threshold` compliance signers.
+    pub fn freeze(env: Env, id: u32, holder: Address, reason: Reason, approvers: Vec<Address>) -> Result<(), Error> {
+        set_auth(&env, id, holder, false, reason, approvers, "frozen")
+    }
+
+    /// Lift a freeze. The reason is the one the freeze was taken for.
+    pub fn unfreeze(env: Env, id: u32, holder: Address, reason: Reason, approvers: Vec<Address>) -> Result<(), Error> {
+        set_auth(&env, id, holder, true, reason, approvers, "unfrozen")
+    }
+
+    /// Revoke a holder's approval (for example on a KYB lapse): the trustline is deauthorized.
+    pub fn revoke(env: Env, id: u32, holder: Address, reason: Reason, approvers: Vec<Address>) -> Result<(), Error> {
+        set_auth(&env, id, holder, false, reason, approvers, "revoked")
+    }
+
+    /// Recover `amount` shares from a holder (SAC clawback). Needs `threshold` compliance signers.
+    pub fn clawback(env: Env, id: u32, holder: Address, amount: i128, reason: Reason, approvers: Vec<Address>) -> Result<(), Error> {
+        if amount <= 0 {
+            return Err(Error::BadAmount);
+        }
+        approve_action(&env, &approvers)?;
+        let o = load(&env, id)?;
+        StellarAssetClient::new(&env, &o.p.share_token).clawback(&holder, &amount);
+        ComplianceAction { id, action: Symbol::new(&env, "clawback"), holder, amount, reason, approvers }.publish(&env);
+        Ok(())
     }
 
     /// Recorder-only, once per offering: store the outcome and the hash of its proof payload.

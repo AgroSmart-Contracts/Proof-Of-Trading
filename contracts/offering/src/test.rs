@@ -451,6 +451,70 @@ fn offerings_must_settle_in_the_configured_token() {
     t.c.create_offering(&1, &t.params(100_000, 1200, 120));
 }
 
+fn signers(t: &T) -> (Address, Address, Address) {
+    let (s1, s2, s3) = (Address::generate(&t.env), Address::generate(&t.env), Address::generate(&t.env));
+    t.c.set_compliance_signers(&soroban_sdk::vec![&t.env, s1.clone(), s2.clone(), s3.clone()], &2);
+    (s1, s2, s3)
+}
+fn has_event(t: &T, ev: ComplianceAction) -> bool {
+    t.env.events().all().filter_by_contract(&t.c.address).events().contains(&ev.to_xdr(&t.env, &t.c.address))
+}
+
+#[test]
+fn compliance_actions_need_configured_signers() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    let v = soroban_sdk::vec![&t.env, t.admin.clone()];
+    assert_eq!(t.c.try_freeze(&1, &t.a, &Reason::Sanctions, &v), Err(Ok(Error::ComplianceNotConfigured)));
+    let x = Address::generate(&t.env);
+    let y = Address::generate(&t.env);
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), y.clone()], &1), Err(Ok(Error::BadSigners)));
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), y.clone()], &3), Err(Ok(Error::BadSigners)));
+    assert_eq!(t.c.try_set_compliance_signers(&soroban_sdk::vec![&t.env, x.clone(), x.clone(), y.clone()], &2), Err(Ok(Error::BadSigners)));
+}
+
+#[test]
+fn freeze_needs_two_of_three_and_emits_the_reason() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    let (s1, s2, _) = signers(&t);
+    let one = soroban_sdk::vec![&t.env, s1.clone()];
+    let twice = soroban_sdk::vec![&t.env, s1.clone(), s1.clone()];
+    let outsider = soroban_sdk::vec![&t.env, s1.clone(), t.stranger.clone()];
+    for v in [&one, &twice, &outsider] {
+        assert_eq!(t.c.try_freeze(&1, &t.a, &Reason::Sanctions, v), Err(Ok(Error::NotEnoughApprovals)));
+    }
+    let two = soroban_sdk::vec![&t.env, s1.clone(), s2.clone()];
+    t.c.freeze(&1, &t.a, &Reason::Sanctions, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "frozen"), holder: t.a.clone(), amount: 0, reason: Reason::Sanctions, approvers: two.clone() };
+    assert!(has_event(&t, ev));
+    let signed: std::vec::Vec<Address> = t.env.auths().iter().map(|a| a.0.clone()).collect();
+    assert!(signed.contains(&s1) && signed.contains(&s2));
+    assert!(!t.share_sac.authorized(&t.a));
+    assert!(t.share.try_transfer(&t.a, &t.b, &usd(1)).is_err());
+    t.c.unfreeze(&1, &t.a, &Reason::Sanctions, &two);
+    assert!(t.share_sac.authorized(&t.a));
+}
+
+#[test]
+fn revoke_and_clawback_with_reasons() {
+    let t = setup();
+    t.open(100_000, 1200, 120);
+    t.c.subscribe(&1, &t.a, &usd(60_000), &t.hash());
+    let (_, s2, s3) = signers(&t);
+    let two = soroban_sdk::vec![&t.env, s2.clone(), s3.clone()];
+    t.c.clawback(&1, &t.a, &usd(10_000), &Reason::CourtOrder, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "clawback"), holder: t.a.clone(), amount: usd(10_000), reason: Reason::CourtOrder, approvers: two.clone() };
+    assert!(has_event(&t, ev));
+    assert_eq!(t.share.balance(&t.a), usd(50_000));
+    assert_eq!(t.c.try_clawback(&1, &t.a, &0, &Reason::CourtOrder, &two), Err(Ok(Error::BadAmount)));
+    t.c.revoke(&1, &t.a, &Reason::KybLapse, &two);
+    let ev = ComplianceAction { id: 1, action: Symbol::new(&t.env, "revoked"), holder: t.a.clone(), amount: 0, reason: Reason::KybLapse, approvers: two };
+    assert!(has_event(&t, ev));
+    assert!(!t.share_sac.authorized(&t.a));
+}
+
 // Pool contract v1 (docs/pool-contract-v1.md), Tranche 1. Written first, so it fails until `attest` exists.
 // When it does: attest(key, h1) succeeds; attest(key, h2) is rejected as a duplicate; the stored hash
 // and status are still h1 and `attested`. key = sha256(export declaration no. | invoice no. | buyer tax ID).
