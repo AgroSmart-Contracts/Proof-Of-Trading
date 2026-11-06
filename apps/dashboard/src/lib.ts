@@ -31,6 +31,10 @@ export type Offering = {
   offering_id: number;
   share_code: string;
   share_sac: string;
+  /** v0.3 exports only: the contract the offering ran on and what it settled in. */
+  contract_id?: string;
+  settlement_code?: string;
+  version?: "v0.2" | "v0.3";
   on_chain: Record<string, any> | null;
   tokens: Tokens | null;
   investors: Record<string, Position>;
@@ -66,7 +70,8 @@ export type Store = {
 };
 
 /** Code of the asset offerings settle in. */
-export const settlementCode = (s: Store) => s.settlement?.code ?? s.tusdc?.code ?? "USDC";
+/** Settlement asset code; an offering's own code when given (v0.2 offerings settled in TUSDC). */
+export const settlementCode = (s: Store, o?: { settlement_code?: string }) => o?.settlement_code ?? s.settlement?.code ?? s.tusdc?.code ?? "USDC";
 /** An account's settlement-asset balance in base units. */
 export const balanceOf = (a?: Account) => a?.balance ?? a?.tusdc ?? "0";
 /** Banner text for the settlement asset. */

@@ -190,7 +190,7 @@ export function Marketplace() {
 
 function InvestPanel({ d, o }: { d: Deal; o?: Offering }) {
   const { persona, interactive, busy, run, store } = useApp();
-  const sc = settlementCode(store);
+  const sc = settlementCode(store, o);
   const c = o?.on_chain;
   const cap = c ? units(c.p.cap_shares) : d.face_value_usd;
   const sold = c ? units(c.sold_shares) : 0;
@@ -414,7 +414,7 @@ function Certificate({ cert, agreement, burned }: { cert: Doc; agreement?: Doc; 
 
 function PositionCard({ o, label }: { o: Offering; label: Persona }) {
   const { store, interactive, busy, run } = useApp();
-  const sc = settlementCode(store);
+  const sc = settlementCode(store, o);
   const p = o.investors[label];
   const d = dealFor(store, o.shipment_ref)!;
   const c = o.on_chain!;

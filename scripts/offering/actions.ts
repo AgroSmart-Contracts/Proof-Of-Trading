@@ -63,6 +63,8 @@ export type OfferingRecord = {
   offering_id: number;
   share_code: string;
   share_sac: string;
+  /** Contract the offering ran on. Missing on v0.2 records, which all ran on the v0.2 contract. */
+  contract_id?: string;
   steps: { step: string; tx: string; at: string; detail?: Record<string, string> }[];
 };
 export const contracts = () => readStore<ContractsFile>("contracts.json", {});
@@ -74,6 +76,12 @@ export const offeringContract = () => {
   return c;
 };
 export const offerings = () => readStore<Record<string, OfferingRecord>>("offerings.json", {});
+/** The contract an offering ran on: its own record, else the v0.2 contract (v0.2 records predate the field). */
+export const contractFor = (ref: string) =>
+  offerings()[ref]?.contract_id ?? contracts().offering?.contract_id ?? offeringContract();
+/** Settlement asset code of an offering: USDC on the v0.3 contract, TUSDC on v0.2. */
+export const settlementCodeFor = (ref: string) =>
+  contractFor(ref) === contracts().offering_v3?.contract_id ? settlement().code : "TUSDC";
 
 export function shareFor(ref: string): ShareAssetRecord {
   const s = readStore<AssetsFile>("assets.json", { shares: [] }).shares.find((x) => x.shipment_ref === ref);
@@ -95,7 +103,7 @@ export const offeringId = (ref: string) => Number(ref.split("-")[1]);
 function record(ref: string, step: string, tx: Submitted, detail?: Record<string, string>) {
   const all = offerings();
   const s = shareFor(ref);
-  const rec = all[ref] ?? { shipment_ref: ref, offering_id: offeringId(ref), share_code: s.code, share_sac: s.sac_id, steps: [] };
+  const rec = all[ref] ?? { shipment_ref: ref, offering_id: offeringId(ref), share_code: s.code, share_sac: s.sac_id, contract_id: offeringContract(), steps: [] };
   rec.steps.push({ step, tx: tx.hash, at: new Date().toISOString(), ...(detail && { detail }) });
   all[ref] = rec;
   writeStore("offerings.json", all);
@@ -278,8 +286,9 @@ const scv = (tx: Submitted) => scValToNative(tx.returnValue!);
 
 /** On-chain state of an offering (no logging). */
 export async function onChain(ref: string): Promise<Record<string, any>> {
-  const o = (await view(offeringContract(), "get_offering", [u32(offeringId(ref))])) as Record<string, any>;
-  const owed = (await view(offeringContract(), "owed_total", [u32(offeringId(ref))])) as bigint;
+  const c = contractFor(ref);
+  const o = (await view(c, "get_offering", [u32(offeringId(ref))])) as Record<string, any>;
+  const owed = (await view(c, "owed_total", [u32(offeringId(ref))])) as bigint;
   return { ...o, status: Array.isArray(o.status) ? o.status[0] : o.status, owed };
 }
 

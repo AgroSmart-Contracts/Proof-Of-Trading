@@ -25,7 +25,8 @@
     "topup": "tsx scripts/topup-xlm.ts",
     "ttl:keeper": "tsx scripts/ttl-keeper.ts",
     "governance:setup": "tsx scripts/governance-setup.ts",
-    "stellar-toml": "tsx scripts/stellar-toml.ts"
+    "stellar-toml": "tsx scripts/stellar-toml.ts",
+    "home-domain": "tsx scripts/set-home-domain.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

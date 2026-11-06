@@ -9,7 +9,7 @@ import {
   type AssetsFile, type AttestationRecord,
 } from "@pot/core";
 import { loadSamples, kp } from "./lib.js";
-import { contracts, offerings, onChain, settlement, shareBalance, type OfferingRecord } from "./offering/actions.js";
+import { contractFor, contracts, offerings, onChain, settlement, settlementCodeFor, shareBalance, type OfferingRecord } from "./offering/actions.js";
 
 const atts = readStore<AttestationRecord[]>("attestations.json", []);
 const assets = readStore<AssetsFile>("assets.json", { shares: [] });
@@ -84,6 +84,9 @@ async function exportOffering(rec: OfferingRecord) {
     offering_id: rec.offering_id,
     share_code: rec.share_code,
     share_sac: rec.share_sac,
+    contract_id: contractFor(rec.shipment_ref),
+    settlement_code: settlementCodeFor(rec.shipment_ref),
+    version: contractFor(rec.shipment_ref) === contracts().offering_v3?.contract_id ? "v0.3" : "v0.2",
     on_chain: chain ? json(chain) : null,
     tokens: chain ? { minted: minted.toString(), outstanding: outstanding.toString(), burned: (minted - outstanding).toString() } : null,
     investors,
