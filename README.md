@@ -25,15 +25,17 @@ Design: [`docs/pool-contract-v1.md`](docs/pool-contract-v1.md) · integrations: 
 
 ![Pilot structure](docs/figures/pilot-structure.svg)
 
-## Deployments (v0.2 per-shipment prototype)
-Everything deployed on testnet (HackMeridian, TUSDC), with what each artifact proves and an explorer link: **[`docs/DEPLOYMENTS.md`](docs/DEPLOYMENTS.md)**.
+## Deployments
+Everything deployed on testnet (v0.3 on Circle testnet USDC, and the v0.2 per-shipment prototype on TUSDC), with what each artifact proves and an explorer link: **[`docs/DEPLOYMENTS.md`](docs/DEPLOYMENTS.md)**.
 
-| Check (2 Nov 2026) | Result |
+| Check (5 to 6 Nov 2026) | Result |
 |---|---|
-| Contracts exist on testnet | **12/12** |
+| Contracts exist on testnet | **15/15** (12 v0.2, 3 v0.3) |
 | Accounts exist on testnet | **9/9** |
-| Transactions confirmed | **72/72** |
-| `npm run verify` | **19/19 PASS** |
+| Transactions confirmed | **101/101** (72 v0.2, 29 v0.3) |
+| `npm run verify` | **20/20 PASS** |
+
+- **Offering contract (v0.3, Circle testnet USDC):** [`CAYNSQPZFYTH3WYW5SNKYXAQI7NL7SKLUDMJGQSRCFISUT3MUOFEMQ3B`](https://stellar.expert/explorer/testnet/contract/CAYNSQPZFYTH3WYW5SNKYXAQI7NL7SKLUDMJGQSRCFISUT3MUOFEMQ3B): SHP-0280 ran subscribe, fund, buyer payment, redeem and the outcome record in storage ([DEPLOYMENTS.md](docs/DEPLOYMENTS.md#v03-circle-testnet-usdc)).
 
 - **Offering contract (v0.2):** [`CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7`](https://stellar.expert/explorer/testnet/contract/CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7)
 - **Key transactions (SHP-0247):**
@@ -41,7 +43,7 @@ Everything deployed on testnet (HackMeridian, TUSDC), with what each artifact pr
   - [Investor subscribes 60,000 TUSDC, contract mints 60,000 shares](https://stellar.expert/explorer/testnet/tx/e7ea02bb2f8d66883694cc8c0fa2834a64fb803907518224bd1968409afdae99)
   - [Investor paid the investor amount fixed in the subscription agreement, shares burned](https://stellar.expert/explorer/testnet/tx/fbfcc98464208dc18a2aa0f2ff2aef817f1949f4a8dc65d954be9aa510f900bc)
 
-The deployed IDs are the v0.2 record, and they don't change. The pool contract is not deployed yet. The v0.3 contract (outcome records in storage, settlement asset pinned at deploy, Circle USDC by default) is in [`contracts/offering`](contracts/offering) and is **not deployed yet**; `npm run offering -- deploy` records it separately as `offering_v3`.
+The v0.2 IDs don't change. The v0.3 contract is recorded separately as `offering_v3`. The pool contract is not deployed yet.
 
 ## How to verify a v0.2 offering
 No keys or local records needed. For SHP-0247 (offering 247):
@@ -91,7 +93,7 @@ npm run verify -- SHP-0247
 
 ## Status
 ### v0.3 (SCF #46 review feedback)
-- **Outcome records in contract storage.** The recorder writes each offering's outcome (`Repaid`, `InsuredLoss`, `Refunded`) and its proof hash once, with an `OutcomeRecorded` event. `verify` now checks contract storage first, then Horizon, then RPC: 19/19 PASS (5 from contract storage, 14 from Horizon).
+- **Outcome records in contract storage.** The recorder writes each offering's outcome (`Repaid`, `InsuredLoss`, `Refunded`) and its proof hash once, with an `OutcomeRecorded` event. `verify` now checks contract storage first, then Horizon, then RPC: 20/20 PASS (7 from contract storage, 13 from Horizon).
 - **Circle testnet USDC.** The settlement asset is fixed at deploy (constructor) and set by `SETTLEMENT_ASSET`; the default is Circle's testnet USDC. TUSDC stays for the v0.2 record.
 - **`cargo test`: 22 offering tests and 2 spike tests pass, 1 pool test ignored** (24 passed, 1 ignored), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
 - **Pool model:** [pool contract v1](docs/pool-contract-v1.md), [integrations](docs/integrations.md), pool figures, and the first Tranche 1 test, `duplicate_attestation_rejected`, written first and ignored until `attest` exists.

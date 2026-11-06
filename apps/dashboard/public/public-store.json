@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-25T19:07:59.272Z",
+  "generated_at": "2026-11-06T12:45:46.990Z",
   "shipments": [
     {
       "shipment_ref": "SHP-0247",
@@ -107,36 +107,42 @@
       "financed": true
     }
   ],
-  "offering_contract": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+  "offering_contract": "CAYNSQPZFYTH3WYW5SNKYXAQI7NL7SKLUDMJGQSRCFISUT3MUOFEMQ3B",
   "accounts": {
     "A": {
       "role": "investor_a",
       "public_key": "GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG",
-      "tusdc": "1004130136984"
+      "balance": "623671232",
+      "tusdc": "623671232"
     },
     "B": {
       "role": "investor_b",
       "public_key": "GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD",
-      "tusdc": "1002753424656"
+      "balance": "415780821",
+      "tusdc": "415780821"
     },
     "U": {
       "role": "unapproved",
       "public_key": "GBF5V63D2QN5QCOLVABLFOSAXNIZIOE6ZRQ5DEWIPYLPOLOTV3IT2HNT",
-      "tusdc": "1000000000000"
+      "balance": "100000000",
+      "tusdc": "100000000"
     },
     "treasury": {
       "role": "spv_treasury",
       "public_key": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
-      "tusdc": "493116438360"
+      "balance": "60547947",
+      "tusdc": "60547947"
     },
     "issuer": {
       "role": "issuer",
       "public_key": "GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F",
+      "balance": "0",
       "tusdc": "0"
     },
     "registrar": {
       "role": "attestor",
       "public_key": "GBI6NQWAPIYVQRHNBPPRPFNDTFOUEWFCI5SGZ3246CKDOJZVDOHTOVTQ",
+      "balance": "0",
       "tusdc": "0"
     }
   },
@@ -270,7 +276,7 @@
         "sac_deploy_tx": "e2b37d93f916d1807d631259022efe097b70afaf91c6d92620d396ca872922be",
         "created_at": "2026-10-25T14:12:52.930Z"
       },
-      "has_offering": false,
+      "has_offering": true,
       "stuck": false
     },
     {
@@ -851,12 +857,45 @@
       "arc_stub": false,
       "created_at": "2026-10-25T18:55:02.569Z",
       "verified": true
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "event": "outcome",
+      "payload": {
+        "v": 1,
+        "event": "outcome",
+        "shipment_ref": "SHP-0280",
+        "epoch": "2026-Q4",
+        "exporter_pseudonym": "96e4880a51c079acb43df8dd0498fb6e411186e3d4a49f8816e3851c29263468",
+        "buyer_pseudonym": "3d701a0cbfc3512ac9fb4061ea615947491cc3c68e14d5150621f4bacb605850",
+        "customs": {
+          "record_id": "CUS-0280",
+          "record_version": 1,
+          "record_digest": "11dc1a0b297d4c5e24f6de8120ec32c56f5e458183233accd344870b53d4598d"
+        },
+        "outcome": {
+          "code": 1,
+          "amount_collected": "1050000000",
+          "amount_owed": "1039452054",
+          "redemption_confirmation_digest": "5b90b45efb2383e951fd6c362f889be18d57fb01e228445b70c82158cad7b270"
+        }
+      },
+      "proof_hash": "fa30da411d05afcf443a7ce1d678af082adfda6239e3147fd7a33d0746a9659c",
+      "tx_hash": "5a6dcc2a9879c9cc04bdd120acab1871aa1ad060b8affe639918feb2ff0b7029",
+      "ledger": 5577125,
+      "arc_stub": false,
+      "created_at": "2026-11-05T20:07:50.160Z",
+      "verified": true
     }
   ],
   "tusdc": {
     "code": "TUSDC",
     "issuer": "GBV6QFVVWJHJHZUWCZPGEZFEEE74YKLWESZ5QP353V2PDZM3OPB2SVZM",
     "sac_id": "CC3GZE5HDQGVXAMGRSERDGQPQUQH64ZVRMXUZ7KQZ6M5DUVF2WTVT2D6"
+  },
+  "settlement": {
+    "code": "USDC",
+    "sac_id": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA"
   },
   "shares": [
     {
@@ -946,6 +985,9 @@
       "offering_id": 270,
       "share_code": "TM0270",
       "share_sac": "CCG2RER3UVIYLDUFAOARFS57RNJ2WQ4W2PEEJL7P6FIZJNEJCC7RJXHD",
+      "contract_id": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+      "settlement_code": "TUSDC",
+      "version": "v0.2",
       "on_chain": {
         "funded_at": "1792928327",
         "outcome_code": 1,
@@ -1158,6 +1200,9 @@
       "offering_id": 251,
       "share_code": "TM0251",
       "share_sac": "CDBZJSLOF4CSBIWN6WPV7B5KO5TQAPJT2OCBCEHUKOQVBQUUUU72OXJX",
+      "contract_id": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+      "settlement_code": "TUSDC",
+      "version": "v0.2",
       "on_chain": {
         "funded_at": "1792928437",
         "outcome_code": 4,
@@ -1362,6 +1407,9 @@
       "offering_id": 258,
       "share_code": "TM0258",
       "share_sac": "CA66HDEMZOSMNHPYQZ4CXLDYG7J4JFJ5VZTIA22SYU6GQ7IBIIRCC4C5",
+      "contract_id": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+      "settlement_code": "TUSDC",
+      "version": "v0.2",
       "on_chain": {
         "funded_at": "0",
         "outcome_code": 0,
@@ -1485,6 +1533,9 @@
       "offering_id": 247,
       "share_code": "TM0247",
       "share_sac": "CCUFHZ634GXOIDRDQVSL2OQCQBRQIGUFIBKHX5NA5P26N44COZSE5JVE",
+      "contract_id": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+      "settlement_code": "TUSDC",
+      "version": "v0.2",
       "on_chain": {
         "funded_at": "1792936487",
         "outcome_code": 1,
@@ -1697,6 +1748,9 @@
       "offering_id": 282,
       "share_code": "TM0282",
       "share_sac": "CCOERLKU7QFBN4TZASPYYJI6OZNHKDGHWL6RZ3MX3THAK77USTWABX3S",
+      "contract_id": "CDY4E5QNPU4GEAQG6RI526DSUK3TTRI6ONGWVTBKUZQY5XTZFF3BFVK7",
+      "settlement_code": "TUSDC",
+      "version": "v0.2",
       "on_chain": {
         "funded_at": "1792954452",
         "outcome_code": 1,
@@ -1945,6 +1999,278 @@
           "detail": {
             "proof_hash": "fdad8dd14934cb4b377973b7fe11742167d0bfdf19203b5683f7c2aed56a33db"
           }
+        }
+      ]
+    },
+    {
+      "shipment_ref": "SHP-0280",
+      "offering_id": 280,
+      "share_code": "TM0280",
+      "share_sac": "CCQ4VJIEK2PNB2SS7LXD33ZDOPPGK7HA2ON7ZLDUHXNDE3EKTL65T2AQ",
+      "contract_id": "CAYNSQPZFYTH3WYW5SNKYXAQI7NL7SKLUDMJGQSRCFISUT3MUOFEMQ3B",
+      "settlement_code": "USDC",
+      "version": "v0.3",
+      "on_chain": {
+        "funded_at": "1793909161",
+        "outcome_code": 1,
+        "p": {
+          "apy_bps": 1200,
+          "cap_shares": "1000000000",
+          "deadline": "1793916197",
+          "proof_hash": "efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc",
+          "share_token": "CCQ4VJIEK2PNB2SS7LXD33ZDOPPGK7HA2ON7ZLDUHXNDE3EKTL65T2AQ",
+          "shipment_ref": "SHP-0280",
+          "term_secs": "10368000",
+          "treasury": "GBS4BAE2XCPTJHLVTT66TVOP4XR7I6IS5INBHNZ4WGJJJK5B5MNAXJ45",
+          "unit_price": "10000000",
+          "usdc_token": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA"
+        },
+        "paid_out": "1050000000",
+        "redeemed_shares": "1000000000",
+        "shares_at_close": "1000000000",
+        "sold_shares": "1000000000",
+        "status": "Distributing",
+        "total_collected": "1050000000",
+        "owed": "1039452054"
+      },
+      "tokens": {
+        "minted": "1000000000",
+        "outstanding": "0",
+        "burned": "1000000000"
+      },
+      "investors": {
+        "A": {
+          "subscribed_usd": 60,
+          "shares_held": "0",
+          "pct_of_spv": 60,
+          "owed_at_apy": "623671232",
+          "payout": "62.3671232",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "f57ef4a19683e7a018d0c8ca5604f0959389f96e343a3d42a7cdbdd3b27a5bbc",
+              "hash": "8768c19da4dbd42937ed1db02e9156aef1c4380307efd036c78a6c37f6aa1a99",
+              "text": "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo without legal effect)\nSPV: Proof of Trading SPV SHP-0280 (simulated; legal structure under counsel review)\nSubscriber wallet: GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG\nSubscription: 60 USD (paid in USDC) for 60 ordinary shares at 1.00 USD each\nPayment: the investor amount fixed in the subscription agreement (12% for 120 days), paid from collections; pro rata if less is collected\nUnderlying: receivable and insurance of shipment SHP-0280; customs attestation proof hash efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc\nOn-chain receipt: TM0280 tokens (issuer GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F)\nNonce: aeeb22553312df72\n"
+            }
+          ],
+          "certificates": [
+            {
+              "tx": "bf8f557d266b0abbecdf6c3c709061d7b9189127d2325e7411c085fdf371c547",
+              "hash": "097efe7944a9202290d04ff2346401fd4e99d87b7c182c74404a34da7060f8dc",
+              "entry": "SHP-0280-001",
+              "text": "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo without legal effect)\nIssuer: Proof of Trading SPV SHP-0280 (simulated)\nRegister entry: SHP-0280-001\nRegistered holder: GDZ5RNHG2CAE3QWLN36ZBLU6AY6OTDLVZZDLXU5JTHYH5XV44G5CSCSG\nShares: 60 ordinary shares, fully paid (1.00 USD each)\nSubscription agreement sha256: 8768c19da4dbd42937ed1db02e9156aef1c4380307efd036c78a6c37f6aa1a99\nOn-chain receipt: TM0280 tokens minted in subscription tx f57ef4a19683e7a018d0c8ca5604f0959389f96e343a3d42a7cdbdd3b27a5bbc\nIssued: 2026-11-05T20:04:56.611Z\n"
+            }
+          ],
+          "txs": [
+            {
+              "step": "trustline investor_a",
+              "tx": "bf294cbc8daa407153af0b537cb76c34a477b6081c3b67dea8236db57b7c2b73"
+            },
+            {
+              "step": "approve investor_a",
+              "tx": "9fcbf41cd81175e45a2b456f2ca9e04324914726f084fd2ed3bdd467ee2ab397"
+            },
+            {
+              "step": "subscribe investor_a 60",
+              "tx": "f57ef4a19683e7a018d0c8ca5604f0959389f96e343a3d42a7cdbdd3b27a5bbc"
+            },
+            {
+              "step": "certificate investor_a",
+              "tx": "bf8f557d266b0abbecdf6c3c709061d7b9189127d2325e7411c085fdf371c547"
+            },
+            {
+              "step": "redeem investor_a",
+              "tx": "db927af86dd2fd1677dd8e9c4ce012a817936a71a778433e81b7e37fadb8d7de"
+            }
+          ]
+        },
+        "B": {
+          "subscribed_usd": 40,
+          "shares_held": "0",
+          "pct_of_spv": 40,
+          "owed_at_apy": "415780821",
+          "payout": "41.5780821",
+          "refund": null,
+          "agreements": [
+            {
+              "tx": "4c952fe60d9ffa4cabdb61e0c33dc6b31aa77798ddbbb07388e7f1da1847d851",
+              "hash": "fb78bcaa4e18eb0d3fb8d11c2bbd16216fd2106c716976ee04b21e88b09c518b",
+              "text": "SUBSCRIPTION AGREEMENT (PLACEHOLDER: testnet demo without legal effect)\nSPV: Proof of Trading SPV SHP-0280 (simulated; legal structure under counsel review)\nSubscriber wallet: GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD\nSubscription: 40 USD (paid in USDC) for 40 ordinary shares at 1.00 USD each\nPayment: the investor amount fixed in the subscription agreement (12% for 120 days), paid from collections; pro rata if less is collected\nUnderlying: receivable and insurance of shipment SHP-0280; customs attestation proof hash efb88e9b8af4929ca02a086cae120b48a9ac60fc46d0b7f59df58278c4cdfbdc\nOn-chain receipt: TM0280 tokens (issuer GCGN654QTVW22WCIUFF3CSGHHHPQQ2L4AG7LQHUZQ4FKB4BWSF4R3W3F)\nNonce: a4d586e9287595dd\n"
+            }
+          ],
+          "certificates": [
+            {
+              "tx": "79636da8634319d0121dba53224c42246e35ca4fa6f56557b3519d503009d17f",
+              "hash": "0b3ac20e2326ba6cdf5a42bcac493b9286d241525a70138582f87db2e8b09eba",
+              "entry": "SHP-0280-002",
+              "text": "SPV SHARE CERTIFICATE (PLACEHOLDER: testnet demo without legal effect)\nIssuer: Proof of Trading SPV SHP-0280 (simulated)\nRegister entry: SHP-0280-002\nRegistered holder: GCOASYQOWWJI2HHHB3KNQABUAKVRWYIM2ZSH2LQSHB3Z6UL3KVKICSWD\nShares: 40 ordinary shares, fully paid (1.00 USD each)\nSubscription agreement sha256: fb78bcaa4e18eb0d3fb8d11c2bbd16216fd2106c716976ee04b21e88b09c518b\nOn-chain receipt: TM0280 tokens minted in subscription tx 4c952fe60d9ffa4cabdb61e0c33dc6b31aa77798ddbbb07388e7f1da1847d851\nIssued: 2026-11-05T20:05:19.045Z\n"
+            }
+          ],
+          "txs": [
+            {
+              "step": "trustline investor_b",
+              "tx": "217a4375141419fc5607d9b7bb1dfc2e8a8019f8b318e9aa475153e77b05db9c"
+            },
+            {
+              "step": "approve investor_b",
+              "tx": "5d064551611221cb30e1a7ce2f071b6f14a6326f69eafe390668930bd6161ffc"
+            },
+            {
+              "step": "subscribe investor_b 40",
+              "tx": "4c952fe60d9ffa4cabdb61e0c33dc6b31aa77798ddbbb07388e7f1da1847d851"
+            },
+            {
+              "step": "certificate investor_b",
+              "tx": "79636da8634319d0121dba53224c42246e35ca4fa6f56557b3519d503009d17f"
+            },
+            {
+              "step": "redeem investor_b",
+              "tx": "9fdb7777f311e904f0fded2164466a15434c053334a761ec4231711fff60bed7"
+            }
+          ]
+        }
+      },
+      "steps": [
+        {
+          "step": "handover",
+          "tx": "6383a9c566b0ba38085cb0c7f994d8e82c1e7a5abe65c71875ddced2c5013725",
+          "at": "2026-11-05T20:03:17.978Z",
+          "detail": {
+            "new_admin": "CAYNSQPZFYTH3WYW5SNKYXAQI7NL7SKLUDMJGQSRCFISUT3MUOFEMQ3B"
+          }
+        },
+        {
+          "step": "create_offering",
+          "tx": "a63470e49cbc6207549ab8f95e4591af8fdeffa563321dd2213e28a62e55ccf1",
+          "at": "2026-11-05T20:03:34.567Z",
+          "detail": {
+            "cap_usd": "100",
+            "apy_bps": "1200",
+            "term_days": "120",
+            "deadline": "2026-11-05T22:03:17.000Z"
+          }
+        },
+        {
+          "step": "trustline investor_a",
+          "tx": "bf294cbc8daa407153af0b537cb76c34a477b6081c3b67dea8236db57b7c2b73",
+          "at": "2026-11-05T20:03:47.145Z"
+        },
+        {
+          "step": "trustline investor_b",
+          "tx": "217a4375141419fc5607d9b7bb1dfc2e8a8019f8b318e9aa475153e77b05db9c",
+          "at": "2026-11-05T20:03:59.594Z"
+        },
+        {
+          "step": "trustline unapproved",
+          "tx": "45daf67f39d9f054d58a814e42b17c89bd33ccdbff1402cd57f313abae1e3b42",
+          "at": "2026-11-05T20:04:13.261Z"
+        },
+        {
+          "step": "approve investor_a",
+          "tx": "9fcbf41cd81175e45a2b456f2ca9e04324914726f084fd2ed3bdd467ee2ab397",
+          "at": "2026-11-05T20:04:31.389Z"
+        },
+        {
+          "step": "approve investor_b",
+          "tx": "5d064551611221cb30e1a7ce2f071b6f14a6326f69eafe390668930bd6161ffc",
+          "at": "2026-11-05T20:04:36.609Z"
+        },
+        {
+          "step": "subscribe investor_a 60",
+          "tx": "f57ef4a19683e7a018d0c8ca5604f0959389f96e343a3d42a7cdbdd3b27a5bbc",
+          "at": "2026-11-05T20:04:56.610Z",
+          "detail": {
+            "agreement_hash": "8768c19da4dbd42937ed1db02e9156aef1c4380307efd036c78a6c37f6aa1a99",
+            "agreement_file": "SHP-0280-investor_a-1793909083379.txt",
+            "shares": "60"
+          }
+        },
+        {
+          "step": "certificate investor_a",
+          "tx": "bf8f557d266b0abbecdf6c3c709061d7b9189127d2325e7411c085fdf371c547",
+          "at": "2026-11-05T20:05:07.837Z",
+          "detail": {
+            "certificate_hash": "097efe7944a9202290d04ff2346401fd4e99d87b7c182c74404a34da7060f8dc",
+            "certificate_file": "SHP-0280-001-investor_a.txt",
+            "register_entry": "SHP-0280-001"
+          }
+        },
+        {
+          "step": "subscribe investor_b 40",
+          "tx": "4c952fe60d9ffa4cabdb61e0c33dc6b31aa77798ddbbb07388e7f1da1847d851",
+          "at": "2026-11-05T20:05:19.044Z",
+          "detail": {
+            "agreement_hash": "fb78bcaa4e18eb0d3fb8d11c2bbd16216fd2106c716976ee04b21e88b09c518b",
+            "agreement_file": "SHP-0280-investor_b-1793909107841.txt",
+            "shares": "40"
+          }
+        },
+        {
+          "step": "certificate investor_b",
+          "tx": "79636da8634319d0121dba53224c42246e35ca4fa6f56557b3519d503009d17f",
+          "at": "2026-11-05T20:05:35.361Z",
+          "detail": {
+            "certificate_hash": "0b3ac20e2326ba6cdf5a42bcac493b9286d241525a70138582f87db2e8b09eba",
+            "certificate_file": "SHP-0280-002-investor_b.txt",
+            "register_entry": "SHP-0280-002"
+          }
+        },
+        {
+          "step": "fund",
+          "tx": "288ab24789e0c7bf11482bdaca9568693a3197745fe90d61bfd60ee3c51b03dc",
+          "at": "2026-11-05T20:06:01.688Z"
+        },
+        {
+          "step": "deposit_distribution 105 outcome 1",
+          "tx": "be9953620cb785d32ce50311aefef28adf4c7c840fc1233fd023ef14d3adf1f7",
+          "at": "2026-11-05T20:06:17.275Z"
+        },
+        {
+          "step": "redeem investor_a",
+          "tx": "db927af86dd2fd1677dd8e9c4ce012a817936a71a778433e81b7e37fadb8d7de",
+          "at": "2026-11-05T20:06:42.403Z",
+          "detail": {
+            "shares_burned": "60",
+            "payout": "62.3671232"
+          }
+        },
+        {
+          "step": "redeem investor_b",
+          "tx": "9fdb7777f311e904f0fded2164466a15434c053334a761ec4231711fff60bed7",
+          "at": "2026-11-05T20:07:04.885Z",
+          "detail": {
+            "shares_burned": "40",
+            "payout": "41.5780821"
+          }
+        },
+        {
+          "step": "sweep_surplus",
+          "tx": "f1fc03f7729bd3b821430d40737023cacf2850eb171437fe78df099974cc1eb8",
+          "at": "2026-11-05T20:07:19.439Z",
+          "detail": {
+            "amount": "1.0547947"
+          }
+        },
+        {
+          "step": "outcome attested (code 1)",
+          "tx": "5a6dcc2a9879c9cc04bdd120acab1871aa1ad060b8affe639918feb2ff0b7029",
+          "at": "2026-11-05T20:07:50.161Z",
+          "detail": {
+            "proof_hash": "fa30da411d05afcf443a7ce1d678af082adfda6239e3147fd7a33d0746a9659c"
+          }
+        },
+        {
+          "step": "outcome recorded in contract (Repaid)",
+          "tx": "4af30c254d0aefea6581304d0828c724b0e14b7d4637faadbae0d36a27119562",
+          "at": "2026-11-05T20:08:08.970Z",
+          "detail": {
+            "record_hash": "fa30da411d05afcf443a7ce1d678af082adfda6239e3147fd7a33d0746a9659c"
+          }
+        },
+        {
+          "step": "hand back SAC admin to issuer",
+          "tx": "fa079af2507697d8e5575520ec8a9892b6dff2feaae2e0c9c577584a24878429",
+          "at": "2026-11-05T20:08:44.789Z"
         }
       ]
     }
