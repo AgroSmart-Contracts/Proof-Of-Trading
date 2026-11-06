@@ -29,7 +29,7 @@ Circle USDC on Stellar is the pilot's USD rail. Nothing is bridged.
 | Building block | Role |
 |---|---|
 | Stellar Wallets Kit | One wallet picker for the investor interface |
-| Freighter Connect | Browser wallet for investors who hold their own keys |
+| Varial (formerly Freighter) | Browser wallet for investors who hold their own keys (`@stellar/varial-sdk`, `@stellar/freighter-api` as fallback) |
 | Privy | Embedded wallets for investor staff, with sponsored reserves and fee-bump |
 | Bridge | A USD virtual account per buyer; the buyer's USD arrives as USDC on Stellar |
 | Koywe | Pays exporters: USDC to PEN or CLP |
@@ -135,7 +135,7 @@ Offerings and redemption flags are persistent entries. Testnet rent is currently
 ## SCF #46 build plan
 ![Build plan](figures/build-plan.svg)
 
-1. **Tranche 1 (31/01/2027):** investor interface; wallets (Stellar Wallets Kit, Freighter Connect, Privy); pool contract v1.
+1. **Tranche 1 (31/01/2027):** investor interface; wallets (Stellar Wallets Kit, Varial (formerly Freighter), Privy); pool contract v1.
 2. **Tranche 2 (15/03/2027):** Bridge and Koywe; exception handling; threat model and monitoring.
 3. **Tranche 3 (12/06/2027):** mainnet pilot, with launch by 10/04/2027.
 

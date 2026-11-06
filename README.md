@@ -19,7 +19,7 @@ TruMarket finances agri-export shipments, mostly from Peru: **287 deals since Ju
 - **Money.** 90% of face is advanced to the exporter; the buyer's payment is applied as principal, then the investor amount fixed in the subscription agreement, then the balance (exporter's retained 10% and the TruMarket fee). Monthly distributions; redemption at NAV at the 3-month term.
 - **Credit insurance** to be bound and endorsed, with the vehicle named on the policy, before the first pool receivable.
 - **Rails.** Circle USDC on Stellar is the USD rail. Bridge turns the buyer's USD into USDC; Koywe pays exporters in PEN or CLP. Nothing is bridged.
-- **Integrations:** Stellar Wallets Kit, Freighter Connect, Privy, Bridge and Koywe.
+- **Integrations:** Stellar Wallets Kit, Varial (formerly Freighter), Privy, Bridge and Koywe.
 
 Design: [`docs/pool-contract-v1.md`](docs/pool-contract-v1.md) · integrations: [`docs/integrations.md`](docs/integrations.md) · decision: [ADR 0001](docs/adr/0001-share-asset-structure.md)
 
@@ -142,7 +142,7 @@ Details: [`docs/architecture.md`](docs/architecture.md) · v0.2 payload format: 
 
 ## SCF #46 roadmap
 One line per tranche. The plan, budget and deliverables are in the SCF #46 submission.
-- **Tranche 1 (31/01/2027):** investor interface, wallets (Stellar Wallets Kit, Freighter, Privy), pool contract v1.
+- **Tranche 1 (31/01/2027):** investor interface, wallets (Stellar Wallets Kit, Varial (formerly Freighter), Privy), pool contract v1.
 - **Tranche 2 (15/03/2027):** Bridge, Koywe, exception handling, threat model and monitoring.
 - **Tranche 3 (12/06/2027):** mainnet pilot, with launch by 10/04/2027.
 - **Metric:** at least USD 250,000 in USDC from at least 3 independent institutional investor wallets within 60 days of mainnet launch.

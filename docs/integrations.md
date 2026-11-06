@@ -1,13 +1,13 @@
 # Integrations (design)
 
-The pilot uses five building blocks: **Stellar Wallets Kit, Freighter Connect, Privy, Bridge and Koywe**. Circle USDC on Stellar is the USD rail between them; nothing is bridged from another chain. Wallets are Tranche 1; Bridge and Koywe are Tranche 2. None of them is integrated yet.
+The pilot uses five building blocks: **Stellar Wallets Kit, Varial (formerly Freighter), Privy, Bridge and Koywe**. Circle USDC on Stellar is the USD rail between them; nothing is bridged from another chain. Wallets are Tranche 1; Bridge and Koywe are Tranche 2. None of them is integrated yet.
 
 Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). The flow end to end: [money flow](figures/money-flow.svg).
 
 | Building block | Role | Tranche |
 |---|---|---|
 | Stellar Wallets Kit | One wallet picker and signing interface for the investor app | 1 |
-| Freighter Connect | Browser wallet for investors who hold their own keys | 1 |
+| Varial (formerly Freighter) | Browser wallet for investors who hold their own keys | 1 |
 | Privy | Embedded wallets for investor staff who don't run a Stellar wallet | 1 |
 | Bridge | Buyer's USD in, as USDC on Stellar | 2 |
 | Koywe | Exporter payouts: USDC to PEN or CLP | 2 |
@@ -21,12 +21,12 @@ Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). T
 - **Webhook.** None; the app reads results from RPC.
 - **Reconciliation.** The app shows the transaction hash and the contract event (`subscribed`, `redeemed`); the app's records, rebuilt from an indexer or history archive (for example Mercury), store both against the investor's account.
 
-## Freighter Connect
+## Varial (formerly Freighter)
 
-- **Role.** The default self-custody wallet, offered through the Wallets Kit.
+- **Role.** The default self-custody wallet, offered through the Wallets Kit. Shown as "Varial (formerly Freighter)" in the app.
 - **Flow.** Same as above. On first use, the investor opens a TRU3 trustline; TruMarket then authorizes it after KYB.
-- **SDK.** `@stellar/freighter-api`, used through the Wallets Kit module.
-- **Signing.** In Freighter, by the investor. Network passphrase checked before signing, so a testnet transaction can't be signed for mainnet or the reverse.
+- **SDK.** `@stellar/varial-sdk` (Varial is Freighter's new name; the package is published by Stellar from the Freighter repository), used through the Wallets Kit module. `@stellar/freighter-api` stays as the fallback for installs that still run the Freighter extension.
+- **Signing.** In Varial, by the investor. Network passphrase checked before signing, so a testnet transaction can't be signed for mainnet or the reverse.
 - **Webhook.** None.
 - **Reconciliation.** As for the Wallets Kit.
 
@@ -56,6 +56,10 @@ Contract calls named here are from [pool-contract-v1.md](pool-contract-v1.md). T
 - **Signing.** `release` is signed by 2 of 3 admin signers. The payout account sends USDC to Koywe for the order.
 - **Webhook.** Koywe's order status webhook (completed or failed), verified before use. A failed payout is retried or returned to the pool; it is never left unrecorded.
 - **Reconciliation.** Each payout is tied to the `release` transaction on Stellar, the Koywe order ID and quote, and the exporter's bank reference, so every PEN or CLP payment traces back to one attested receivable.
+
+## Account holder
+
+Partner accounts (Bridge virtual accounts, Koywe payouts) are opened in the name of one legal entity, set by `ACCOUNT_HOLDER`: **Agro Smart Contracts Lda** by default, switched to the SPV (`ACCOUNT_HOLDER=spv`, named by `SPV_LEGAL_NAME`) once it is incorporated (`accountHolder()` in `packages/core`).
 
 ## Fallbacks
 
