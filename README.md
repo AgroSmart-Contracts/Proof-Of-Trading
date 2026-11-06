@@ -6,7 +6,7 @@ Agri-export trade receivables, financed through **one pool share, TRU3**, on Ste
 
 - **Repository:** https://github.com/AgroSmart-Contracts/Proof-Of-Trading
 - **Demo app:** https://proof-of-trading.vercel.app
-- **Pilot design:** [pool contract v1](docs/pool-contract-v1.md) · [integrations](docs/integrations.md)
+- **Pilot design:** [pool contract v1](docs/pool-contract-v1.md) · [integrations](docs/integrations.md) · [compliance actions](docs/compliance-actions.md) · [deployments](docs/DEPLOYMENTS.md)
 - **Hackathon record (HackMeridian, Oct 2026):** [`docs/hackathon-overview.md`](docs/hackathon-overview.md)
 
 ## The problem
@@ -85,7 +85,7 @@ npm run verify -- SHP-0247
 - **Who can do what** is enforced in the contract and tested (auth-matrix tests): the admin runs the offering lifecycle, the SPV treasury alone deposits collections, investors alone subscribe, redeem and refund their own position, and the recorder alone writes outcome records, once each. Details: [`docs/governance.md`](docs/governance.md).
 - **KYB gate in the protocol:** share assets have AUTH_REQUIRED, so an unapproved wallet's subscription is rejected by the asset itself as well as by the app.
 - **No minting without payment:** the offering contract is the only minter (SAC admin), and it mints in the same transaction that takes the investor's USDC. Escrow is tracked per offering, and arithmetic is checked (`checked_*`, `overflow-checks = true`).
-- **Freeze and clawback** (AUTH_REVOCABLE, AUTH_CLAWBACK_ENABLED) are limited by a written policy and need 2 of 3 issuer signers: [`docs/governance.md`](docs/governance.md).
+- **Freeze and clawback** (AUTH_REVOCABLE, AUTH_CLAWBACK_ENABLED) run through the contract with a reason code and 2 of 3 compliance signers, under a written policy: [`docs/compliance-actions.md`](docs/compliance-actions.md), [`docs/governance.md`](docs/governance.md).
 - **Keys:** testnet keys sit in a gitignored `.env`. Before pilots, the issuer/admin and treasury move to a 2-of-3 multisig with the master key locked (`npm run governance:setup`, dry run by default).
 - **Data:** only hashes, pseudonyms, balances and USDC movements are on-chain. Customs records, salts and identities stay with TruMarket.
 - **Pilot additions** ([pool contract v1](docs/pool-contract-v1.md)): two-person approval for attestations, concentration limits checked on every release, a reason stored for every pause, freeze and clawback, and upgrades only with 2 of 3 signers and 30 days' notice.
@@ -93,6 +93,9 @@ npm run verify -- SHP-0247
 
 ## Status
 ### v0.3 (SCF #46 review feedback)
+- **On testnet with Circle USDC.** SHP-0280 ran end to end on the v0.3 contract in Circle testnet USDC: subscribe, fund, buyer payment, redeem, outcome record in storage ([DEPLOYMENTS.md](docs/DEPLOYMENTS.md#v03-circle-testnet-usdc)). The issuer's `home_domain` points at the published `stellar.toml`.
+- **Compliance actions.** `freeze`, `unfreeze`, `revoke` and `clawback` take a reason code (SANCTIONS, KYB_LAPSE, COURT_ORDER, UNAPPROVED_TRANSFER), need 2 of 3 compliance signers and emit one event each; public compliance log on the dashboard ([compliance-actions.md](docs/compliance-actions.md)).
+- **Pool reference model.** NAV, redemption at term with outstanding entitlements, attestation keys and payment-instruction hashes, tested in `packages/core` ([pool contract v1](docs/pool-contract-v1.md)).
 - **Outcome records in contract storage.** The recorder writes each offering's outcome (`Repaid`, `InsuredLoss`, `Refunded`) and its proof hash once, with an `OutcomeRecorded` event. `verify` now checks contract storage first, then Horizon, then RPC: 20/20 PASS (7 from contract storage, 13 from Horizon).
 - **Circle testnet USDC.** The settlement asset is fixed at deploy (constructor) and set by `SETTLEMENT_ASSET`; the default is Circle's testnet USDC. TUSDC stays for the v0.2 record.
 - **`cargo test`: 25 offering tests and 2 spike tests pass, 1 pool test ignored** (27 passed, 1 ignored), with exact base-unit assertions (e.g. $100,000 at 12% for 120 days owes `1_039_452_054_794`). Key tests were checked by temporarily breaking the contract and confirming they fail.
@@ -145,7 +148,10 @@ One line per tranche. The plan, budget and deliverables are in the SCF #46 submi
 - **Tranche 1 (31/01/2027):** investor interface, wallets (Stellar Wallets Kit, Varial (formerly Freighter), Privy), pool contract v1.
 - **Tranche 2 (15/03/2027):** Bridge, Koywe, exception handling, threat model and monitoring.
 - **Tranche 3 (12/06/2027):** mainnet pilot, with launch by 10/04/2027.
-- **Metric:** at least USD 250,000 in USDC from at least 3 independent institutional investor wallets within 60 days of mainnet launch.
+- **T3 gate:** at least USD 50,000 from 1 institution, and at least 1 receivable repaid.
+- **Target metric:** at least USD 250,000 in USDC from at least 3 independent institutional investor wallets within 60 days of mainnet launch.
+
+The gate and the target are reported separately, on the dashboard and as CSV (`npm run report`).
 
 ![Build plan](docs/figures/build-plan.svg)
 
@@ -160,7 +166,7 @@ npm run attest -- --dry-run
 npm run attest             # one MEMO_HASH tx per consented shipment (idempotent; --only SHP-0247, --force)
 npm run verify             # PASS/FAIL per record: contract storage, then Horizon, then RPC
 npm run issue:shares       # share asset + SAC per financed shipment
-npm test                   # core unit tests
+npm test                   # core unit tests (33)
 (cd contracts && cargo test && stellar contract build)
 (cd apps/dashboard && npm run dev)
 ```
@@ -173,7 +179,10 @@ npm run demo:failure -- SHP-0251  # insurer pays 90% (outcome 4), pro-rata redem
 npm run demo:refund -- SHP-0258   # 5-minute offering, partial subscription, refund
 npm run offering -- status SHP-0247
 npm run ttl:keeper -- --days 120  # entry states and rent estimate (dry run)
-npm run stellar-toml              # regenerates apps/dashboard/public/.well-known/stellar.toml
+npm run stellar-toml              # regenerates apps/dashboard/public/.well-known/stellar.toml (SPV_* fields: placeholders until incorporation)
+npm run home-domain               # points the issuer's home_domain at it (dry run; --submit)
+npm run setup:circle-usdc         # small amounts of Circle testnet USDC for the demo roles
+npm run report                    # T3 gate and target (metrics.json, metrics.csv) and the compliance log
 ```
 Investors need Circle testnet USDC from https://faucet.circle.com (Stellar testnet) to subscribe on the v0.3 contract. Each step prints an explorer link and is logged to `data/store/offerings.json`; `npm run offering` lists the subcommands.
 
