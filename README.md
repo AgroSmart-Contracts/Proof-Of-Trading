@@ -15,7 +15,7 @@ TruMarket finances agri-export shipments, mostly from Peru: **287 deals since Ju
 ## The pilot: one pool share (TRU3), an attestation per receivable
 - **Pool share.** The receivables-portfolio SPV issues one share asset, **TRU3** (1 TRU3 = USD 1), AUTH_REQUIRED, AUTH_REVOCABLE and AUTH_CLAWBACK_ENABLED, with the pool contract as SAC admin. Investors subscribe in Circle USDC and shares are minted in the same transaction.
 - **Investors.** Legal entities only, after KYB, minimum ticket USD 50,000. No natural persons, no US persons.
-- **Receivables.** Each one is attested under its export declaration no., invoice no. and buyer tax ID, and can't be attested twice. Its status (paid, overdue, claim, loss, revoked) is appended, never edited.
+- **Receivables.** Each one is attested under its export declaration no., invoice no. and buyer tax ID, and no receivable is financed twice within the pool. Its status (paid, overdue, claim, loss, revoked) is appended, never edited.
 - **Money.** 90% of face is advanced to the exporter; the buyer's payment is applied as principal, then the investor amount fixed in the subscription agreement, then the balance (exporter's retained 10% and the TruMarket fee). Monthly distributions; redemption at NAV at the 3-month term.
 - **Credit insurance** to be bound and endorsed, with the vehicle named on the policy, before the first pool receivable.
 - **Rails.** Circle USDC on Stellar is the USD rail. Bridge turns the buyer's USD into USDC; Koywe pays exporters in PEN or CLP. Nothing is bridged.

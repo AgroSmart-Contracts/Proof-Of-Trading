@@ -45,7 +45,7 @@ The pilot has **one share asset, TRU3**, issued by the receivables-portfolio SPV
 
 - **One trustline, one asset.** Investors open one trustline and hold one asset, however many receivables the pool funds. `stellar.toml` lists one currency.
 - **Diversification by rule.** Concentration limits (20% per receivable, 25% per buyer, 30% per exporter, 50% per product) and a fixed loss waterfall replace per-shipment isolation.
-- **Audit per receivable.** Each receivable still has its own on-chain record (key, document hash, status history), and the same invoice can't be attested twice.
+- **Audit per receivable.** Each receivable still has its own on-chain record (key, document hash, status history), and no receivable is financed twice within the pool; the same invoice can't be attested twice.
 
 This answers the review point that per-shipment assets fragment liquidity and reporting: an investor would have held dozens of small assets, each with its own trustline, `stellar.toml` entry and redemption.
 

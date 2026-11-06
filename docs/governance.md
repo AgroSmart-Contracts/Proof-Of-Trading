@@ -75,7 +75,7 @@ Share assets have AUTH_REVOCABLE (freeze) and AUTH_CLAWBACK_ENABLED (recover sha
 - a provable operational error (shares minted or sent to the wrong account);
 - reissuing shares to a holder who has lost their key, at their request, after KYB re-verification. The clawed-back amount is reissued to the holder's new, approved account.
 
-**Never** to settle a commercial dispute, to change the terms of an offering or of the pool, or to move value between investors. In the pool contract, `freeze` and `clawback` each store and emit their reason.
+**Never** to settle a commercial dispute, to change the terms of an offering or of the pool, or to move value between investors. `freeze`, `unfreeze`, `revoke` and `clawback` each take a reason code and need 2 of 3 compliance signers: [compliance-actions.md](compliance-actions.md).
 
 **Process:**
 

@@ -24,20 +24,21 @@ The pilot finances many export receivables through **one pool**. Investors hold 
 
 | Function | Who can call | What it does |
 |---|---|---|
-| `attest(key, hash)` | Recorder, with two-person approval | Records a receivable: its key and the hash of its document set. Rejects a key that is already attested. Stores the hash and the status `attested`. |
-| `set_status(key, state)` | Recorder | Appends `paid`, `overdue`, `claim`, `loss` or `revoked` to the receivable's history. It never edits or removes an earlier entry. |
+| `attest(key, hash, payment_instruction_hash)` | Recorder, with two-person approval | Records a receivable: its key, the hash of its document set and the hash of its payment instruction (the collection account the buyer is told to pay). Rejects a key that is already attested. Stores the hashes and the status `attested`. |
+| `set_status(key, state)` | Recorder | Appends `paid`, `overdue`, `claim`, `loss` or `revoked` to the receivable's history as a new signed state. It never edits or removes an earlier entry. |
+| `get_attestation(key)` | Anyone | Verifier lookup: returns the attestation for a key, or nothing. Answers "already attested?" from the declaration, invoice and buyer tax ID. |
 | `subscribe(investor, amount)` | Approved investor | Takes `amount` USDC and mints the same number of TRU3 in the same transaction. |
 | `release(key)` | Admin multisig | Sends 90% of face value for an attested receivable to the payout account. Fails for a key that isn't attested, was already released, or would break a concentration limit. |
 | `settle(key, amount)` | Admin multisig | Applies the collected amount through the waterfall below and marks the receivable `paid`. |
 | `distribute()` | Admin multisig | Monthly: pays the USDC due to holders, pro rata to their shares. |
-| `redeem(investor)` | Approved investor, at the 3-month term | Burns the investor's shares and pays their value at the current NAV. |
-| `pause()`, `freeze(holder)`, `clawback(holder, amount)` | Admin multisig | Each takes a reason, which is stored and emitted, so every use is on the record. Freeze and clawback follow [governance.md](governance.md). |
+| `redeem(investor)` | Approved investor, at the 3-month term | Burns the investor's shares. Pays their NAV share from collected cash now, and records any rest as an outstanding entitlement on-chain (see below). |
+| `pause(reason)`, `freeze(holder, reason)`, `unfreeze(holder, reason)`, `revoke(holder, reason)`, `clawback(holder, amount, reason)` | 2 of 3 compliance signers | Each takes a reason code (SANCTIONS, KYB_LAPSE, COURT_ORDER, UNAPPROVED_TRANSFER), emitted in its event, so every use is on the record. No personal data on-chain. See [compliance-actions.md](compliance-actions.md); already in the v0.3 offering contract. |
 
 ### Attestation key
 
 `key = sha256(export declaration no. | invoice no. | buyer tax ID)`
 
-The three fields identify one shipment invoice. The same invoice can't be attested twice, so it can't be financed twice by the pool. Only the hash is on-chain; the documents stay with TruMarket.
+The three fields identify one shipment invoice, normalized for spacing and case. A key can be attested once, so **no receivable is financed twice within the pool**. The payment-instruction hash stored with it shows if the collection account in the buyer's instructions ever changes. Only hashes are on-chain; the documents stay with TruMarket. Reference implementation: `attestationKey`, `paymentInstructionHash` and `alreadyAttested` in [`packages/core/src/attestation.ts`](../packages/core/src/attestation.ts).
 
 ## Payment waterfall
 
@@ -66,6 +67,17 @@ On a USD 100,000 invoice:
 | **Buyer default** | Credit insurance (70 to 90% of the loss), then a TruMarket reserve of 1%, then holders pro rata, by writing down NAV |
 
 Credit insurance is to be bound and endorsed, with the vehicle named on the policy, before the first pool receivable.
+
+## Redemption at term and NAV
+
+`redeem` pays from **collected cash**: an investor never waits for a receivable to be paid to get the cash part of their NAV.
+
+- **NAV** = cash + marks of the open receivables + the reserve, applied to shortfalls first, less the entitlements still owed to earlier redeemers.
+- **Marks:** funded and overdue receivables at par (the 90% advanced); claims at the expected indemnity; losses at the expected recovery (written down). The 1% TruMarket reserve covers the shortfall before holders do.
+- **At redemption:** the investor is entitled to `shares × NAV / total shares`. The cash part, `shares × cash / total shares`, is paid now; the rest is recorded on-chain as an **outstanding entitlement**.
+- **Later settlements:** when a receivable settles, the collected amount pays outstanding entitlements first, pro rata, in proportion to their share of the value it replaces. The rest stays in the pool for current holders.
+
+The reference model, with tests for a partial collection, an open claim and a write-down, is [`packages/core/src/pool.ts`](../packages/core/src/pool.ts); the Tranche 1 contract must match it.
 
 ## Concentration limits
 
